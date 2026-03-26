@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>The Six</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --card: #fffdf8;
+      --text: #1f1b16;
+      --muted: #6e655a;
+      --line: #ddd4c8;
+      --accent: #567352;
+      --accent-soft: #ebe6dc;
+      --danger: #a05544;
+      --radius: 20px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      max-width: 760px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+      padding-bottom: 48px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .top {
+      display: grid;
+      gap: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.1rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .divider {
+      color: var(--line);
+      font-weight: 500;
+    }
+
+    .kg-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    .kg-input {
+      width: 74px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+    }
+
+    .subline {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+
+    .exercise {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .exercise-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .exercise-kicker {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+
+    .exercise-name {
+      margin: 0;
+      font-size: 1.85rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .exercise-meta {
+      text-align: right;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .pill {
+      display: inline-block;
+      margin-top: 2px;
+      margin-bottom: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--accent-soft);
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .counter-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--bg);
+    }
+
+    .counter-title {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .counter-sub {
+      color: var(--muted);
+      font-size: 0.96rem;
+      line-height: 1.35;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .count {
+      min-width: 28px;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    button, .stepper {
+      border: 0;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform 0.04s ease, opacity 0.2s ease;
+    }
+
+    button:active, .stepper:active {
+      transform: scale(0.98);
+    }
+
+    .stepper {
+      width: 64px;
+      height: 64px;
+      font-size: 2rem;
+      font-weight: 800;
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .stepper.secondary {
+      background: #e7e1d6;
+      color: var(--text);
+    }
+
+    .plan-box {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .plan-title {
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 12px;
+    }
+
+    .action {
+      width: 100%;
+      padding: 18px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .action.secondary {
+      background: #e7e1d6;
+      color: var(--text);
+    }
+
+    .action.ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .action.danger {
+      background: var(--danger);
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 12px; }
+      .panel { padding: 16px; }
+      h1 { font-size: 1.95rem; }
+      .meta-row { font-size: 1.15rem; }
+      .exercise-name { font-size: 1.65rem; }
+      .exercise-top { display: grid; }
+      .exercise-meta { text-align: left; }
+      .counter-row { grid-template-columns: 1fr; }
+      .controls { justify-content: flex-end; }
+    }
+  
+    .check-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      margin-top:14px;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:var(--panel-soft);
+    }
+    .check-text{
+      font-size:15px;
+      color:var(--muted);
+    }
+    .check-toggle{
+      width:28px;
+      height:28px;
+      accent-color: var(--green);
+      flex:0 0 auto;
+    }
+
+
+    .compact-list {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--bg);
+    }
+
+    .compact-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .compact-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .compact-row:first-child {
+      padding-top: 0;
+    }
+
+    .compact-name {
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    .compact-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    .compact-check {
+      width: 24px;
+      height: 24px;
+      accent-color: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .last-wrap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .muted-mini {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+
+    details.warmup-accordion {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+      padding: 0;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .warmup-summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px 20px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .warmup-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .warmup-kicker {
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .warmup-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .warmup-sub {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+
+    .warmup-body {
+      border-top: 1px solid var(--line);
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 14px;
+      background: var(--bg);
+    }
+
+    .warmup-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .warmup-item {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel-soft);
+      line-height: 1.35;
+    }
+
+    .warmup-note {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+</style>
+</head>
+<body>
+  <main class="app">
+    <section class="panel top">
+      <h1>The Six>
+      <div class="meta-row">
+        <span id="trainingCode">0.1.1</span>
+        <span class="divider">•</span>
+        <label class="kg-wrap">KB:
+          <input id="kbInput" class="kg-input" type="number" inputmode="decimal" min="0" step="1" value="16" />
+          <span>kg</span>
+        </label>
+      </div>
+      <div class="subline" id="topLine">Start: Get-up • Laatste: Snatch</div>
+      <div class="subline" id="phaseLine"></div>
+      <div class="subline">Nieuwe fase: vanaf fase 1 gaat KB automatisch +4 kg omhoog per fase.</div>
+    </section>
+
+    
+    <details class="warmup-accordion">
+      <summary class="warmup-summary">
+        <div class="warmup-kicker">Optioneel</div>
+        <div class="warmup-title">Mobility warm-up</div>
+        <div class="warmup-sub">10–15 minuten. Standaard dicht.</div>
+      </summary>
+      <div class="warmup-body">
+        <div class="plan-box">
+          <div class="plan-title">Algemene regels</div>
+          <div>Doe deze drills voor je training of in de ochtend.</div>
+          <div>Beweeg vloeiend, ongeveer 1 rep per 2 seconden.</div>
+          <div>Stop zodra ROM niet verder verbetert of vermoeidheid opkomt.</div>
+          <div>Richtlijn: 5–10 rustige reps per oefening, of meerdere korte rondes.</div>
+        </div>
+        <div class="warmup-grid">
+          <div class="warmup-item">Three-Way Neck</div>
+          <div class="warmup-item">Fingers and Wrists</div>
+          <div class="warmup-item">Elbow Circles</div>
+          <div class="warmup-item">Kettlebell Halo</div>
+          <div class="warmup-item">Egyptian</div>
+          <div class="warmup-item">Hip Circles</div>
+          <div class="warmup-item">Knee Circles</div>
+          <div class="warmup-item">Toes, Feet, and Ankles</div>
+          <div class="warmup-item">Crocodile Breathing</div>
+          <div class="warmup-item">Prying Cobra / Down Dog</div>
+          <div class="warmup-item">Frog</div>
+          <div class="warmup-item">Tug-of-War Squats</div>
+        </div>
+      </div>
+    </details>
+
+<section class="panel" id="workoutList"></section>
+
+    <section class="panel actions">
+      <button id="completedBtn" class="action" type="button">✅ Sessie gelukt</button>
+      <button id="repeatBtn" class="action secondary" type="button">⚠️ Sessie afgerond</button>
+      <button id="resetCountersBtn" class="action ghost" type="button">Reset tellers van deze training</button>
+      <button id="hardResetBtn" class="action danger" type="button">Volledige reset</button>
+      <div class="footer-note">Sessie gelukt = naar de volgende training. Sessie afgerond = dezelfde training opnieuw. De week gaat pas omhoog als alle 6 trainingen gelukt zijn.</div>
+    </section>
+  </main>
+
+  <script>
+    const EXERCISES = [
+      { id: 'getup', name: 'Get-up', fullName: 'Turkish Get-up', reps: '1 per zijde', type: 'Grind' },
+      { id: 'swing', name: 'One-arm Swing', fullName: 'One-arm Swing', reps: '10 per zijde', type: 'Ballistic' },
+      { id: 'press', name: 'Military Press', fullName: 'Military Press', reps: '5 per zijde', type: 'Grind' },
+      { id: 'clean', name: 'Double Clean', fullName: 'Double Clean', reps: '10 totaal', type: 'Ballistic' },
+      { id: 'squat', name: 'Front Squat', fullName: 'Double Front Squat', reps: '5 totaal', type: 'Grind' },
+      { id: 'snatch', name: 'Snatch', fullName: 'Snatch', reps: '10 per zijde', type: 'Ballistic' }
+    ];
+
+    const STORAGE_KEY = 'six-pillars-state-v2';
+
+    function defaultState() {
+      return {
+        phase: 0,
+        week: 1,
+        session: 1,
+        kbWeight: 16,
+        counters: {}
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        return {
+          phase: Number.isInteger(parsed.phase) ? parsed.phase : 0,
+          week: Number.isInteger(parsed.week) ? parsed.week : 1,
+          session: Number.isInteger(parsed.session) ? parsed.session : 1,
+          kbWeight: Number.isFinite(parsed.kbWeight) ? parsed.kbWeight : 16,
+          counters: parsed.counters && typeof parsed.counters === 'object' ? parsed.counters : {}
+        };
+      } catch {
+        return defaultState();
+      }
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getTrainingCode() {
+      return `${state.phase}.${state.week}.${state.session}`;
+    }
+
+    function getSessionKey() {
+      return getTrainingCode();
+    }
+
+    function getWorkoutOrder(session) {
+      const startIndex = (session - 1) % EXERCISES.length;
+      return EXERCISES.map((_, i) => EXERCISES[(startIndex + i) % EXERCISES.length]);
+    }
+
+    function getCurrentWorkout() {
+      return getWorkoutOrder(state.session);
+    }
+
+    function ensureCounterBucket() {
+      const key = getSessionKey();
+      if (!state.counters[key]) state.counters[key] = {};
+      return state.counters[key];
+    }
+
+    function getCount(exerciseId, bucket = 'sets') {
+      const counters = ensureCounterBucket();
+      const exerciseCounters = counters[exerciseId] || {};
+      return exerciseCounters[bucket] || 0;
+    }
+
+    function setCount(exerciseId, bucket, value) {
+      const counters = ensureCounterBucket();
+      if (!counters[exerciseId]) counters[exerciseId] = {};
+      counters[exerciseId][bucket] = Math.max(0, value);
+      saveState();
+      render();
+    }
+
+    function getLastExercisePlan() {
+      if (state.phase === 0) {
+        const total = Math.min(5, Math.max(1, state.week));
+        return {
+          total,
+          normalTarget: total,
+          plusTarget: 0,
+          normalLabel: total === 1 ? 'set 1 op normaal gewicht' : `sets 1-${total} op normaal gewicht`,
+          plusLabel: 'geen + gewicht in break-in'
+        };
+      }
+
+      const plusTarget = Math.min(5, Math.max(1, state.week));
+      const total = 5;
+      const plusStart = plusTarget === 5 ? 1 : 2;
+      const plusEnd = plusTarget === 5 ? 5 : plusTarget + 1;
+      const normalSets = [];
+      for (let i = 1; i <= 5; i++) {
+        if (i < plusStart || i > plusEnd) normalSets.push(i);
+      }
+      const normalLabel = normalSets.length
+        ? `normaal gewicht: ${formatSetList(normalSets)}`
+        : 'normaal gewicht: geen';
+      const plusLabel = `+ gewicht: ${plusStart === plusEnd ? `set ${plusStart}` : `set ${plusStart}-${plusEnd}`}`;
+
+      return {
+        total,
+        normalTarget: normalSets.length,
+        plusTarget,
+        normalLabel,
+        plusLabel
+      };
+    }
+
+    function formatSetList(list) {
+      if (list.length === 1) return `set ${list[0]}`;
+      if (list.length === 2) return `set ${list[0]} en ${list[1]}`;
+      return `sets ${list.join(', ')}`;
+    }
+
+    function getPhaseLine() {
+      const plan = getLastExercisePlan();
+      if (state.phase === 0) {
+        return `Break-in. Laatste oefening: maximaal ${plan.total} ${plan.total === 1 ? 'set' : 'sets'} totaal deze week.`;
+      }
+      return `Laatste oefening: 5 sets totaal. ${plan.plusLabel}.`;
+    }
+
+    function getMaxFor(exerciseId, bucket, isLast) {
+      if (!isLast) return 1;
+      const plan = getLastExercisePlan();
+      if (bucket === 'normalSets') return plan.normalTarget;
+      if (bucket === 'plusSets') return plan.plusTarget;
+      return plan.total;
+    }
+
+    function changeCount(exerciseId, bucket, delta, isLast) {
+      const current = getCount(exerciseId, bucket);
+      const max = getMaxFor(exerciseId, bucket, isLast);
+
+      if (!isLast) {
+        setCount(exerciseId, bucket, Math.min(max, Math.max(0, current + delta)));
+        return;
+      }
+
+      const plan = getLastExercisePlan();
+      const otherBucket = bucket === 'normalSets' ? 'plusSets' : 'normalSets';
+      const otherCount = getCount(exerciseId, otherBucket);
+      const target = Math.max(0, current + delta);
+      const cappedByBucket = Math.min(max, target);
+      const cappedByTotal = Math.min(cappedByBucket, Math.max(0, plan.total - otherCount));
+      setCount(exerciseId, bucket, cappedByTotal);
+    }
+
+    function advanceSuccess() {
+      const oldSessionKey = getSessionKey();
+
+      if (state.session < 6) {
+        state.session += 1;
+      } else {
+        state.session = 1;
+        if (state.phase === 0) {
+          if (state.week < 5) {
+            state.week += 1;
+          } else {
+            state.phase = 1;
+            state.week = 1;
+          }
+        } else {
+          if (state.week < 5) {
+            state.week += 1;
+          } else {
+            state.phase += 1;
+            state.week = 1;
+            state.kbWeight = Number(state.kbWeight || 16) + 4;
+          }
+        }
+      }
+
+      state.counters[getSessionKey()] = {};
+      if (oldSessionKey !== getSessionKey() && !state.counters[oldSessionKey]) {
+        state.counters[oldSessionKey] = {};
+      }
+
+      saveState();
+      render();
+    }
+
+    function repeatSession() {
+      saveState();
+      render();
+    }
+
+    function resetCurrentCounters() {
+      state.counters[getSessionKey()] = {};
+      saveState();
+      render();
+    }
+
+    function hardReset() {
+      if (!confirm('Weet je zeker dat je alles wilt resetten?')) return;
+      state = defaultState();
+      saveState();
+      render();
+    }
+
+    function counterRow({ title, sub, value, minusHandler, plusHandler }) {
+      return `
+        <div class="counter-row">
+          <div>
+            <div class="counter-title">${title}</div>
+            <div class="counter-sub">${sub}</div>
+          </div>
+          <div class="controls">
+            <button class="stepper secondary" type="button" onclick="${minusHandler}">−</button>
+            <div class="count">${value}</div>
+            <button class="stepper" type="button" onclick="${plusHandler}">+</button>
+          </div>
+        </div>
+      `;
+    }
+
+
+    function isChecked(exerciseId) {
+      return getCount(exerciseId, 'sets') > 0;
+    }
+
+    function toggleSet(exerciseId) {
+      const next = isChecked(exerciseId) ? 0 : 1;
+      setCount(exerciseId, 'sets', next);
+    }
+
+    function renderWorkout() {
+      const workout = getCurrentWorkout();
+      const lastExercise = workout[workout.length - 1];
+      const firstFive = workout.slice(0, 5);
+      const plan = getLastExercisePlan();
+
+      const checklist = `
+        <article class="exercise">
+          <div class="exercise-top">
+            <div>
+              <div class="exercise-kicker">1–5 / 6</div>
+              <h2 class="exercise-name">Basisblokken</h2>
+            </div>
+            <div class="exercise-meta">
+              <div>Elke oefening = 1 set</div>
+            </div>
+          </div>
+          <div class="compact-list">
+            ${firstFive.map((exercise, index) => `
+              <label class="compact-row">
+                <div>
+                  <div class="compact-name">${index + 1}. ${exercise.name}</div>
+                  <div class="compact-sub">${exercise.reps}</div>
+                </div>
+                <input
+                  class="compact-check"
+                  type="checkbox"
+                  ${isChecked(exercise.id) ? 'checked' : ''}
+                  onchange="toggleSet('${exercise.id}')"
+                />
+              </label>
+            `).join('')}
+          </div>
+        </article>
+      `;
+
+      const showPlusWeight = state.phase >= 1;
+
+      const lastExerciseCard = `
+        <article class="exercise">
+          <div class="exercise-top">
+            <div>
+              <div class="exercise-kicker">6 / 6 • laatste oefening</div>
+              <h2 class="exercise-name">${lastExercise.name}</h2>
+            </div>
+            <div class="exercise-meta">
+              <div class="pill">${lastExercise.type}</div>
+              <div>Max reps: ${lastExercise.reps}</div>
+            </div>
+          </div>
+          <div class="last-wrap">
+            <div class="plan-box">
+              <div class="plan-title">Plan voor laatste oefening</div>
+              <div>Doel: ${plan.total} ${plan.total === 1 ? 'set' : 'sets'} totaal.</div>
+              <div>${showPlusWeight ? plan.normalLabel + '.' : 'Alles op trainingsgewicht.'}</div>
+              <div>${showPlusWeight ? plan.plusLabel + '.' : 'Nog geen + gewicht in break-in.'}</div>
+            </div>
+            ${counterRow({
+              title: 'Normaal gewicht',
+              sub: `Max ${plan.normalTarget}`,
+              value: getCount(lastExercise.id, 'normalSets'),
+              minusHandler: `changeCount('${lastExercise.id}','normalSets',-1,true)`,
+              plusHandler: `changeCount('${lastExercise.id}','normalSets',1,true)`
+            })}
+            ${showPlusWeight ? counterRow({
+              title: '+ Gewicht',
+              sub: `Max ${plan.plusTarget}`,
+              value: getCount(lastExercise.id, 'plusSets'),
+              minusHandler: `changeCount('${lastExercise.id}','plusSets',-1,true)`,
+              plusHandler: `changeCount('${lastExercise.id}','plusSets',1,true)`
+            }) : ''}
+          </div>
+        </article>
+      `;
+
+      return checklist + lastExerciseCard;
+    }
+
+    function render() {
+      const workout = getCurrentWorkout();
+      document.getElementById('trainingCode').textContent = getTrainingCode();
+      document.getElementById('kbInput').value = state.kbWeight;
+      document.getElementById('topLine').textContent = `Start: ${workout[0].name} • Laatste: ${workout[workout.length - 1].name}`;
+      document.getElementById('phaseLine').textContent = getPhaseLine();
+      document.getElementById('workoutList').innerHTML = renderWorkout();
+    }
+
+    document.getElementById('completedBtn').addEventListener('click', advanceSuccess);
+    document.getElementById('repeatBtn').addEventListener('click', repeatSession);
+    document.getElementById('resetCountersBtn').addEventListener('click', resetCurrentCounters);
+    document.getElementById('hardResetBtn').addEventListener('click', hardReset);
+    document.getElementById('kbInput').addEventListener('input', (e) => {
+      const value = Number(e.target.value);
+      state.kbWeight = Number.isFinite(value) && value >= 0 ? value : 0;
+      saveState();
+    });
+
+    saveState();
+    render();
+  </script>
+</body>
+</html>
