@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title> The Six</title>
   <style>
     :root {
-      --bg: #f4f1ea;
-      --card: #fffdf8;
-      --text: #1f1b16;
-      --muted: #6e655a;
-      --line: #ddd4c8;
-      --accent: #567352;
-      --accent-soft: #ebe6dc;
+      --bg: #f5f2ea;
+      --bg-top: #faf8f3;
+      --card: rgba(255, 253, 248, 0.88);
+      --card-strong: #fffdf9;
+      --text: #1d1a15;
+      --muted: #6d6459;
+      --line: rgba(109, 100, 89, 0.16);
+      --line-strong: rgba(109, 100, 89, 0.24);
+      --accent: #4f6f54;
+      --accent-2: #8c6a43;
+      --accent-soft: #f1ece2;
       --danger: #a05544;
-      --radius: 20px;
-      --shadow: 0 8px 24px rgba(0,0,0,0.05);
+      --radius: 24px;
+      --shadow: 0 18px 45px rgba(31, 27, 22, 0.08);
+      --shadow-soft: 0 8px 24px rgba(31, 27, 22, 0.05);
     }
 
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
       padding: 0;
-      background: var(--bg);
+      min-height: 100%;
       color: var(--text);
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(140, 106, 67, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(79, 111, 84, 0.14), transparent 32%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 100%);
     }
 
     body {
-      padding: 16px;
+      padding: 20px 16px 32px;
       -webkit-font-smoothing: antialiased;
     }
 
     .app {
-      max-width: 760px;
+      max-width: 780px;
       margin: 0 auto;
       display: grid;
-      gap: 14px;
-      padding-bottom: 48px;
+      gap: 18px;
+      padding-bottom: 56px;
     }
 
     .panel {
@@ -45,19 +54,40 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 18px;
+      padding: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .top {
       display: grid;
-      gap: 10px;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,253,248,0.92)),
+        linear-gradient(180deg, rgba(79,111,84,0.08), rgba(140,106,67,0.04));
+      border-color: var(--line-strong);
+    }
+
+    .top::after {
+      content: '';
+      position: absolute;
+      inset: auto -40px -60px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(79, 111, 84, 0.12), transparent 70%);
+      pointer-events: none;
     }
 
     h1 {
       margin: 0;
-      font-size: 2.1rem;
-      line-height: 1;
-      letter-spacing: -0.04em;
+      font-size: 2.6rem;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      position: relative;
+      z-index: 1;
     }
 
     .meta-row {
@@ -65,33 +95,57 @@
       align-items: center;
       gap: 12px;
       flex-wrap: wrap;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    #trainingCode {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(79, 111, 84, 0.09);
+      border: 1px solid rgba(79, 111, 84, 0.12);
+      font-size: 0.98rem;
+      letter-spacing: 0.02em;
     }
 
     .divider {
-      color: var(--line);
+      color: #cbbfae;
       font-weight: 500;
     }
 
     .kg-wrap {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-weight: 700;
+      padding: 8px 10px 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.74);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
     }
 
     .kg-input {
-      width: 74px;
+      width: 78px;
       border: 1px solid var(--line);
       background: #fff;
       color: var(--text);
       border-radius: 14px;
-      padding: 10px 12px;
+      padding: 11px 12px;
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       text-align: center;
       outline: none;
+      box-shadow: inset 0 1px 1px rgba(31,27,22,0.03);
+    }
+
+    .kg-input:focus {
+      border-color: rgba(79,111,84,0.5);
+      box-shadow: 0 0 0 4px rgba(79,111,84,0.12);
     }
 
     .subline {
@@ -102,51 +156,57 @@
 
     .exercise {
       display: grid;
-      gap: 12px;
-      padding: 16px;
+      gap: 14px;
+      padding: 18px;
       border: 1px solid var(--line);
-      border-radius: 18px;
-      background: #fff;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,252,246,0.95));
+      box-shadow: var(--shadow-soft);
     }
 
     .exercise-top {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: 16px;
       align-items: flex-start;
     }
 
     .exercise-kicker {
       color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 4px;
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
     }
 
     .exercise-name {
       margin: 0;
-      font-size: 1.85rem;
+      font-size: 1.9rem;
       line-height: 1;
-      letter-spacing: -0.04em;
+      letter-spacing: -0.045em;
     }
 
     .exercise-meta {
       text-align: right;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.93rem;
       line-height: 1.45;
+      min-width: 118px;
     }
 
     .pill {
       display: inline-block;
       margin-top: 2px;
-      margin-bottom: 6px;
-      padding: 6px 12px;
+      margin-bottom: 8px;
+      padding: 7px 12px;
       border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--accent-soft);
-      color: var(--muted);
-      font-size: 0.92rem;
-      font-weight: 700;
+      border: 1px solid rgba(79,111,84,0.12);
+      background: rgba(79,111,84,0.08);
+      color: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
     }
 
     .counter-row {
@@ -157,7 +217,7 @@
       padding: 14px;
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: var(--bg);
+      background: rgba(245,242,234,0.9);
     }
 
     .counter-title {
@@ -188,9 +248,10 @@
 
     button, .stepper {
       border: 0;
-      border-radius: 16px;
+      border-radius: 18px;
       cursor: pointer;
-      transition: transform 0.04s ease, opacity 0.2s ease;
+      transition: transform 0.04s ease, opacity 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      font-family: inherit;
     }
 
     button:active, .stepper:active {
@@ -198,24 +259,27 @@
     }
 
     .stepper {
-      width: 64px;
-      height: 64px;
-      font-size: 2rem;
+      width: 60px;
+      height: 60px;
+      font-size: 1.9rem;
       font-weight: 800;
-      background: var(--accent);
+      background: linear-gradient(180deg, #5a7d60, var(--accent));
       color: #fff;
+      box-shadow: 0 12px 18px rgba(79,111,84,0.18);
     }
 
     .stepper.secondary {
-      background: #e7e1d6;
+      background: linear-gradient(180deg, #f2ede3, #e5ddd1);
       color: var(--text);
+      box-shadow: none;
+      border: 1px solid var(--line);
     }
 
     .plan-box {
       padding: 14px;
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: var(--bg);
+      background: rgba(245,242,234,0.9);
       color: var(--text);
       line-height: 1.5;
     }
@@ -233,43 +297,57 @@
     .action {
       width: 100%;
       padding: 18px;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 800;
       color: #fff;
-      background: var(--accent);
+      background: linear-gradient(180deg, #5a7d60, var(--accent));
+      box-shadow: 0 14px 24px rgba(79,111,84,0.18);
+      letter-spacing: -0.01em;
+    }
+
+    .action:hover {
+      box-shadow: 0 16px 28px rgba(79,111,84,0.22);
     }
 
     .action.secondary {
-      background: #e7e1d6;
+      background: linear-gradient(180deg, #f2ede3, #e5ddd1);
       color: var(--text);
-    }
-
-    .action.ghost {
-      background: transparent;
-      color: var(--muted);
+      box-shadow: none;
       border: 1px solid var(--line);
     }
 
+    .action.ghost {
+      background: rgba(255,255,255,0.45);
+      color: var(--muted);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
     .action.danger {
-      background: var(--danger);
+      background: linear-gradient(180deg, #b06453, var(--danger));
+      box-shadow: 0 14px 24px rgba(160,85,68,0.18);
     }
 
     .footer-note {
       color: var(--muted);
       font-size: 0.95rem;
-      line-height: 1.5;
+      line-height: 1.6;
+      padding: 2px 4px 0;
     }
 
     @media (max-width: 640px) {
       body { padding: 12px; }
-      .panel { padding: 16px; }
-      h1 { font-size: 1.95rem; }
-      .meta-row { font-size: 1.15rem; }
-      .exercise-name { font-size: 1.65rem; }
+      .app { gap: 16px; }
+      .panel { padding: 16px; border-radius: 22px; }
+      h1 { font-size: 2.2rem; }
+      .meta-row { font-size: 1.08rem; }
+      .kg-wrap { width: 100%; justify-content: flex-start; }
+      .exercise-name { font-size: 1.62rem; }
       .exercise-top { display: grid; }
-      .exercise-meta { text-align: left; }
+      .exercise-meta { text-align: left; min-width: 0; }
       .counter-row { grid-template-columns: 1fr; }
       .controls { justify-content: flex-end; }
+      .action { padding: 17px 16px; }
     }
   
     .check-row{
@@ -281,7 +359,7 @@
       padding:14px 16px;
       border:1px solid var(--line);
       border-radius:18px;
-      background:var(--panel-soft);
+      background:var(--accent-soft);
     }
     .check-text{
       font-size:15px;
@@ -290,7 +368,7 @@
     .check-toggle{
       width:28px;
       height:28px;
-      accent-color: var(--green);
+      accent-color: var(--accent);
       flex:0 0 auto;
     }
 
@@ -301,7 +379,7 @@
       padding: 14px;
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: var(--bg);
+      background: rgba(245,242,234,0.78);
     }
 
     .compact-row {
@@ -309,7 +387,7 @@
       grid-template-columns: 1fr auto;
       gap: 12px;
       align-items: center;
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 1px solid var(--line);
     }
 
@@ -326,7 +404,7 @@
       font-size: 1rem;
       font-weight: 800;
       line-height: 1.2;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
 
     .compact-sub {
@@ -336,10 +414,61 @@
     }
 
     .compact-check {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       accent-color: var(--accent);
       flex: 0 0 auto;
+    }
+
+    .set-list {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(245,242,234,0.78);
+    }
+
+    .set-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .set-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .set-row:first-child {
+      padding-top: 0;
+    }
+
+    .set-name {
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    .set-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    .set-check {
+      width: 26px;
+      height: 26px;
+      accent-color: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .set-row.disabled {
+      opacity: 0.45;
     }
 
     .last-wrap {
@@ -356,11 +485,12 @@
 
     details.warmup-accordion {
       border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--panel);
+      border-radius: 24px;
+      background: var(--card);
       padding: 0;
       overflow: hidden;
-      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 4px;
     }
 
     .warmup-summary {
@@ -369,6 +499,27 @@
       padding: 18px 20px;
       display: grid;
       gap: 6px;
+      position: relative;
+    }
+
+    .warmup-summary::after {
+      content: '+';
+      position: absolute;
+      right: 20px;
+      top: 22px;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(79,111,84,0.08);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    details[open] .warmup-summary::after {
+      content: '–';
     }
 
     .warmup-summary::-webkit-details-marker {
@@ -383,9 +534,10 @@
     }
 
     .warmup-title {
-      font-size: 1.3rem;
+      font-size: 1.28rem;
       font-weight: 800;
       line-height: 1.2;
+      letter-spacing: -0.02em;
     }
 
     .warmup-sub {
@@ -399,7 +551,7 @@
       padding: 18px 20px 20px;
       display: grid;
       gap: 14px;
-      background: var(--bg);
+      background: rgba(245,242,234,0.82);
     }
 
     .warmup-grid {
@@ -411,8 +563,9 @@
       padding: 10px 12px;
       border: 1px solid var(--line);
       border-radius: 14px;
-      background: var(--panel-soft);
+      background: var(--accent-soft);
       line-height: 1.35;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
     }
 
     .warmup-note {
@@ -421,39 +574,57 @@
       line-height: 1.45;
     }
 
+
+    .confetti-piece {
+      position: fixed;
+      top: -12px;
+      width: 10px;
+      height: 16px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.95;
+      animation: confetti-fall linear forwards;
+    }
+
+    @keyframes confetti-fall {
+      to {
+        transform: translate3d(var(--tx), 105vh, 0) rotate(var(--rot));
+        opacity: 1;
+      }
+    }
+
 </style>
 </head>
 <body>
   <main class="app">
     <section class="panel top">
       <h1>The Six</h1>
+      <div class="subline">A clean progression tracker for your six foundational kettlebell lifts.</div>
       <div class="meta-row">
-        <span id="trainingCode">0.1.1</span>
+        <span id="trainingCode">0.1.4</span>
         <span class="divider">•</span>
         <label class="kg-wrap">KB:
           <input id="kbInput" class="kg-input" type="number" inputmode="decimal" min="0" step="1" value="16" />
           <span>kg</span>
         </label>
       </div>
-      <div class="subline" id="topLine">Start: Get-up • Laatste: Snatch</div>
-      <div class="subline" id="phaseLine"></div>
-      <div class="subline">Nieuwe fase: vanaf fase 1 gaat KB automatisch +4 kg omhoog per fase.</div>
     </section>
 
     
     <details class="warmup-accordion">
       <summary class="warmup-summary">
-        <div class="warmup-kicker">Optioneel</div>
+        <div class="warmup-kicker">Optional</div>
         <div class="warmup-title">Mobility warm-up</div>
-        <div class="warmup-sub">10–15 minuten. Standaard dicht.</div>
+        <div class="warmup-sub">10–15 minutes. Closed by default.</div>
       </summary>
       <div class="warmup-body">
         <div class="plan-box">
-          <div class="plan-title">Algemene regels</div>
-          <div>Doe deze drills voor je training of in de ochtend.</div>
-          <div>Beweeg vloeiend, ongeveer 1 rep per 2 seconden.</div>
-          <div>Stop zodra ROM niet verder verbetert of vermoeidheid opkomt.</div>
-          <div>Richtlijn: 5–10 rustige reps per oefening, of meerdere korte rondes.</div>
+          <div class="plan-title">General rules</div>
+          <div>Do these drills before training or in the morning.</div>
+          <div>Move smoothly, about 1 rep every 2 seconds.</div>
+          <div>Stop when ROM no longer improves or fatigue starts to build.</div>
+          <div>Guideline: 5–10 easy reps per drill, or several short rounds.</div>
         </div>
         <div class="warmup-grid">
           <div class="warmup-item">Three-Way Neck</div>
@@ -475,22 +646,22 @@
 <section class="panel" id="workoutList"></section>
 
     <section class="panel actions">
-      <button id="completedBtn" class="action" type="button">✅ Sessie gelukt</button>
-      <button id="repeatBtn" class="action secondary" type="button">⚠️ Sessie afgerond</button>
-      <button id="resetCountersBtn" class="action ghost" type="button">Reset tellers van deze training</button>
-      <button id="hardResetBtn" class="action danger" type="button">Volledige reset</button>
-      <div class="footer-note">Sessie gelukt = naar de volgende training. Sessie afgerond = dezelfde training opnieuw. De week gaat pas omhoog als alle 6 trainingen gelukt zijn.</div>
+      <button id="completedBtn" class="action" type="button">✅ Session successful</button>
+      <button id="repeatBtn" class="action secondary" type="button">⚠️ Session completed</button>
+      <button id="resetCountersBtn" class="action ghost" type="button">Reset counters for this session</button>
+      <button id="hardResetBtn" class="action danger" type="button">Full reset</button>
+      <div class="footer-note">Session successful = mark this workout as passed and rotate forward. Session completed = rotate forward without a pass. The week only advances after all 6 workouts are successful.</div>
     </section>
   </main>
 
   <script>
     const EXERCISES = [
-      { id: 'getup', name: 'Get-up', fullName: 'Turkish Get-up', reps: '1 per zijde', type: 'Grind' },
-      { id: 'swing', name: 'One-arm Swing', fullName: 'One-arm Swing', reps: '10 per zijde', type: 'Ballistic' },
-      { id: 'press', name: 'Military Press', fullName: 'Military Press', reps: '5 per zijde', type: 'Grind' },
-      { id: 'clean', name: 'Double Clean', fullName: 'Double Clean', reps: '10 totaal', type: 'Ballistic' },
-      { id: 'squat', name: 'Front Squat', fullName: 'Double Front Squat', reps: '5 totaal', type: 'Grind' },
-      { id: 'snatch', name: 'Snatch', fullName: 'Snatch', reps: '10 per zijde', type: 'Ballistic' }
+      { id: 'getup', name: 'Get-Up', fullName: 'Turkish Get-Up', reps: '1 per side', type: 'Grind' },
+      { id: 'swing', name: 'One-arm Swing', fullName: 'One-arm Swing', reps: '10 per side', type: 'Ballistic' },
+      { id: 'press', name: 'Military Press', fullName: 'Military Press', reps: '5 per side', type: 'Grind' },
+      { id: 'clean', name: 'Double Clean', fullName: 'Double Clean', reps: '10 total', type: 'Ballistic' },
+      { id: 'squat', name: 'Front Squat', fullName: 'Double Front Squat', reps: '5 total', type: 'Grind' },
+      { id: 'snatch', name: 'Snatch', fullName: 'Snatch', reps: '10 per side', type: 'Ballistic' }
     ];
 
     const STORAGE_KEY = 'six-pillars-state-v2';
@@ -501,7 +672,8 @@
         week: 1,
         session: 1,
         kbWeight: 16,
-        counters: {}
+        counters: {},
+        successes: {}
       };
     }
 
@@ -515,7 +687,8 @@
           week: Number.isInteger(parsed.week) ? parsed.week : 1,
           session: Number.isInteger(parsed.session) ? parsed.session : 1,
           kbWeight: Number.isFinite(parsed.kbWeight) ? parsed.kbWeight : 16,
-          counters: parsed.counters && typeof parsed.counters === 'object' ? parsed.counters : {}
+          counters: parsed.counters && typeof parsed.counters === 'object' ? parsed.counters : {},
+          successes: parsed.successes && typeof parsed.successes === 'object' ? parsed.successes : {}
         };
       } catch {
         return defaultState();
@@ -534,6 +707,53 @@
 
     function getSessionKey() {
       return getTrainingCode();
+    }
+
+    function getWeekKey(phase = state.phase, week = state.week) {
+      return `${phase}.${week}`;
+    }
+
+    function ensureSuccessBucket(phase = state.phase, week = state.week) {
+      const key = getWeekKey(phase, week);
+      if (!state.successes[key]) state.successes[key] = {};
+      return state.successes[key];
+    }
+
+    function markSessionSuccessful(session = state.session, phase = state.phase, week = state.week) {
+      const bucket = ensureSuccessBucket(phase, week);
+      bucket[session] = true;
+    }
+
+    function isWeekComplete(phase = state.phase, week = state.week) {
+      const bucket = ensureSuccessBucket(phase, week);
+      for (let session = 1; session <= 6; session += 1) {
+        if (!bucket[session]) return false;
+      }
+      return true;
+    }
+
+    function moveToNextSessionOnly() {
+      state.session = state.session < 6 ? state.session + 1 : 1;
+    }
+
+    function advanceWeekOrPhase() {
+      state.session = 1;
+      if (state.phase === 0) {
+        if (state.week < 5) {
+          state.week += 1;
+        } else {
+          state.phase = 1;
+          state.week = 1;
+        }
+      } else {
+        if (state.week < 5) {
+          state.week += 1;
+        } else {
+          state.phase += 1;
+          state.week = 1;
+          state.kbWeight = Number(state.kbWeight || 16) + 4;
+        }
+      }
     }
 
     function getWorkoutOrder(session) {
@@ -566,14 +786,27 @@
     }
 
     function getLastExercisePlan() {
+      const sets = [];
+
       if (state.phase === 0) {
         const total = Math.min(5, Math.max(1, state.week));
+        for (let i = 1; i <= 5; i += 1) {
+          sets.push({
+            index: i,
+            weight: 'normal',
+            label: 'Training weight',
+            enabled: i <= total
+          });
+        }
+
         return {
           total,
+          activeCount: total,
           normalTarget: total,
           plusTarget: 0,
-          normalLabel: total === 1 ? 'set 1 op normaal gewicht' : `sets 1-${total} op normaal gewicht`,
-          plusLabel: 'geen + gewicht in break-in'
+          normalLabel: total === 1 ? 'Set 1 at training weight' : `Sets 1-${total} at training weight`,
+          plusLabel: 'No heavier sets during break-in',
+          sets
         };
       }
 
@@ -582,98 +815,86 @@
       const plusStart = plusTarget === 5 ? 1 : 2;
       const plusEnd = plusTarget === 5 ? 5 : plusTarget + 1;
       const normalSets = [];
-      for (let i = 1; i <= 5; i++) {
-        if (i < plusStart || i > plusEnd) normalSets.push(i);
+
+      for (let i = 1; i <= 5; i += 1) {
+        const isPlus = i >= plusStart && i <= plusEnd;
+        sets.push({
+          index: i,
+          weight: isPlus ? 'plus' : 'normal',
+          label: isPlus ? '+1 weight' : 'Training weight',
+          enabled: true
+        });
+        if (!isPlus) normalSets.push(i);
       }
+
       const normalLabel = normalSets.length
-        ? `normaal gewicht: ${formatSetList(normalSets)}`
-        : 'normaal gewicht: geen';
-      const plusLabel = `+ gewicht: ${plusStart === plusEnd ? `set ${plusStart}` : `set ${plusStart}-${plusEnd}`}`;
+        ? `Training weight: ${formatSetList(normalSets)}`
+        : 'Training weight: none';
+      const plusLabel = `+1 weight: ${plusStart === plusEnd ? `set ${plusStart}` : `sets ${plusStart}-${plusEnd}`}`;
 
       return {
         total,
+        activeCount: total,
         normalTarget: normalSets.length,
         plusTarget,
         normalLabel,
-        plusLabel
+        plusLabel,
+        sets
       };
     }
 
     function formatSetList(list) {
       if (list.length === 1) return `set ${list[0]}`;
-      if (list.length === 2) return `set ${list[0]} en ${list[1]}`;
+      if (list.length === 2) return `sets ${list[0]} and ${list[1]}`;
       return `sets ${list.join(', ')}`;
     }
 
-    function getPhaseLine() {
-      const plan = getLastExercisePlan();
-      if (state.phase === 0) {
-        return `Break-in. Laatste oefening: maximaal ${plan.total} ${plan.total === 1 ? 'set' : 'sets'} totaal deze week.`;
-      }
-      return `Laatste oefening: 5 sets totaal. ${plan.plusLabel}.`;
+    function isLastSetChecked(exerciseId, setIndex) {
+      return getCount(exerciseId, `set${setIndex}`) > 0;
     }
 
-    function getMaxFor(exerciseId, bucket, isLast) {
-      if (!isLast) return 1;
-      const plan = getLastExercisePlan();
-      if (bucket === 'normalSets') return plan.normalTarget;
-      if (bucket === 'plusSets') return plan.plusTarget;
-      return plan.total;
+    function toggleLastSet(exerciseId, setIndex, enabled) {
+      if (!enabled) return;
+      const bucket = `set${setIndex}`;
+      const next = isLastSetChecked(exerciseId, setIndex) ? 0 : 1;
+      setCount(exerciseId, bucket, next);
     }
 
-    function changeCount(exerciseId, bucket, delta, isLast) {
-      const current = getCount(exerciseId, bucket);
-      const max = getMaxFor(exerciseId, bucket, isLast);
-
-      if (!isLast) {
-        setCount(exerciseId, bucket, Math.min(max, Math.max(0, current + delta)));
-        return;
+    function launchConfetti() {
+      const colors = ['#567352', '#c9a227', '#a05544', '#3d6b99', '#8b5e3c', '#e07a5f'];
+      for (let i = 0; i < 120; i += 1) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.setProperty('--tx', `${(Math.random() - 0.5) * 240}px`);
+        piece.style.setProperty('--rot', `${(Math.random() - 0.5) * 1080}deg`);
+        piece.style.animationDuration = `${2.2 + Math.random() * 1.8}s`;
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 4300);
       }
-
-      const plan = getLastExercisePlan();
-      const otherBucket = bucket === 'normalSets' ? 'plusSets' : 'normalSets';
-      const otherCount = getCount(exerciseId, otherBucket);
-      const target = Math.max(0, current + delta);
-      const cappedByBucket = Math.min(max, target);
-      const cappedByTotal = Math.min(cappedByBucket, Math.max(0, plan.total - otherCount));
-      setCount(exerciseId, bucket, cappedByTotal);
     }
 
     function advanceSuccess() {
       const oldSessionKey = getSessionKey();
+      markSessionSuccessful();
 
-      if (state.session < 6) {
-        state.session += 1;
+      if (isWeekComplete()) {
+        advanceWeekOrPhase();
       } else {
-        state.session = 1;
-        if (state.phase === 0) {
-          if (state.week < 5) {
-            state.week += 1;
-          } else {
-            state.phase = 1;
-            state.week = 1;
-          }
-        } else {
-          if (state.week < 5) {
-            state.week += 1;
-          } else {
-            state.phase += 1;
-            state.week = 1;
-            state.kbWeight = Number(state.kbWeight || 16) + 4;
-          }
-        }
+        moveToNextSessionOnly();
       }
 
-      state.counters[getSessionKey()] = {};
-      if (oldSessionKey !== getSessionKey() && !state.counters[oldSessionKey]) {
-        state.counters[oldSessionKey] = {};
-      }
+      if (!state.counters[getSessionKey()]) state.counters[getSessionKey()] = {};
+      if (!state.counters[oldSessionKey]) state.counters[oldSessionKey] = {};
 
       saveState();
       render();
     }
 
     function repeatSession() {
+      moveToNextSessionOnly();
+      if (!state.counters[getSessionKey()]) state.counters[getSessionKey()] = {};
       saveState();
       render();
     }
@@ -685,7 +906,7 @@
     }
 
     function hardReset() {
-      if (!confirm('Weet je zeker dat je alles wilt resetten?')) return;
+      if (!confirm('Are you sure you want to reset everything?')) return;
       state = defaultState();
       saveState();
       render();
@@ -728,10 +949,10 @@
           <div class="exercise-top">
             <div>
               <div class="exercise-kicker">1–5 / 6</div>
-              <h2 class="exercise-name">Basisblokken</h2>
+              <h2 class="exercise-name">Base blocks</h2>
             </div>
             <div class="exercise-meta">
-              <div>Elke oefening = 1 set</div>
+              <div>Each exercise = 1 set</div>
             </div>
           </div>
           <div class="compact-list">
@@ -753,41 +974,36 @@
         </article>
       `;
 
-      const showPlusWeight = state.phase >= 1;
-
       const lastExerciseCard = `
         <article class="exercise">
           <div class="exercise-top">
             <div>
-              <div class="exercise-kicker">6 / 6 • laatste oefening</div>
+              <div class="exercise-kicker">6 / 6 • last exercise</div>
               <h2 class="exercise-name">${lastExercise.name}</h2>
             </div>
             <div class="exercise-meta">
               <div class="pill">${lastExercise.type}</div>
-              <div>Max reps: ${lastExercise.reps}</div>
+              <div>Rep target: ${lastExercise.reps}</div>
             </div>
           </div>
           <div class="last-wrap">
-            <div class="plan-box">
-              <div class="plan-title">Plan voor laatste oefening</div>
-              <div>Doel: ${plan.total} ${plan.total === 1 ? 'set' : 'sets'} totaal.</div>
-              <div>${showPlusWeight ? plan.normalLabel + '.' : 'Alles op trainingsgewicht.'}</div>
-              <div>${showPlusWeight ? plan.plusLabel + '.' : 'Nog geen + gewicht in break-in.'}</div>
+            <div class="set-list">
+              ${plan.sets.map((set) => `
+                <label class="set-row ${set.enabled ? '' : 'disabled'}">
+                  <div>
+                    <div class="set-name">${set.index}. ${set.label}</div>
+                    <div class="set-sub">${lastExercise.reps}</div>
+                  </div>
+                  <input
+                    class="set-check"
+                    type="checkbox"
+                    ${isLastSetChecked(lastExercise.id, set.index) ? 'checked' : ''}
+                    ${set.enabled ? '' : 'disabled'}
+                    onchange="toggleLastSet('${lastExercise.id}', ${set.index}, ${set.enabled})"
+                  />
+                </label>
+              `).join('')}
             </div>
-            ${counterRow({
-              title: 'Normaal gewicht',
-              sub: `Max ${plan.normalTarget}`,
-              value: getCount(lastExercise.id, 'normalSets'),
-              minusHandler: `changeCount('${lastExercise.id}','normalSets',-1,true)`,
-              plusHandler: `changeCount('${lastExercise.id}','normalSets',1,true)`
-            })}
-            ${showPlusWeight ? counterRow({
-              title: '+ Gewicht',
-              sub: `Max ${plan.plusTarget}`,
-              value: getCount(lastExercise.id, 'plusSets'),
-              minusHandler: `changeCount('${lastExercise.id}','plusSets',-1,true)`,
-              plusHandler: `changeCount('${lastExercise.id}','plusSets',1,true)`
-            }) : ''}
           </div>
         </article>
       `;
@@ -799,12 +1015,13 @@
       const workout = getCurrentWorkout();
       document.getElementById('trainingCode').textContent = getTrainingCode();
       document.getElementById('kbInput').value = state.kbWeight;
-      document.getElementById('topLine').textContent = `Start: ${workout[0].name} • Laatste: ${workout[workout.length - 1].name}`;
-      document.getElementById('phaseLine').textContent = getPhaseLine();
       document.getElementById('workoutList').innerHTML = renderWorkout();
     }
 
-    document.getElementById('completedBtn').addEventListener('click', advanceSuccess);
+    document.getElementById('completedBtn').addEventListener('click', () => {
+      launchConfetti();
+      advanceSuccess();
+    });
     document.getElementById('repeatBtn').addEventListener('click', repeatSession);
     document.getElementById('resetCountersBtn').addEventListener('click', resetCurrentCounters);
     document.getElementById('hardResetBtn').addEventListener('click', hardReset);
