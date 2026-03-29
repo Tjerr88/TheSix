@@ -594,6 +594,33 @@
       }
     }
 
+
+
+    .lesson-card {
+      display: grid;
+      gap: 10px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,252,246,0.95));
+      box-shadow: var(--shadow);
+    }
+
+    .lesson-title {
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .lesson-text {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
 </style>
 </head>
 <body>
@@ -611,7 +638,11 @@
       </div>
     </section>
 
-    
+    <section class="lesson-card panel" id="lessonCard">
+      <div class="lesson-title"><strong><strong>Lesson of the day</strong></strong></div>
+      <p class="lesson-text" id="lessonText"></p>
+    </section>
+
     <details class="warmup-accordion">
       <summary class="warmup-summary">
         <div class="warmup-kicker">Optional</div>
@@ -664,7 +695,38 @@
       { id: 'snatch', name: 'Snatch', fullName: 'Snatch', reps: '10 per side', type: 'Ballistic' }
     ];
 
-    const STORAGE_KEY = 'six-pillars-state-v2';
+    const LESSONS = [
+      "Focus on the process, not the reward. Greatness begins with faithfully executing simple daily tasks.",
+      "You are always building your own house. Who you become matters more than what you achieve.",
+      "Dream big. Start small. Be ridiculously faithful. Everyone wants greatness until it’s time to do what greatness requires.",
+      "With one eye on the goal, you only have one eye for the journey. Focus on the next step, not the summit.",
+      "Nothing is a test; everything is an opportunity to learn and grow.",
+      "Your value comes from who you are, not from what you do.",
+      "Achievement without meaning never satisfies. Success alone cannot fill an internal void.",
+      "Discouragement is the most powerful weapon. Guard your mind by choosing what you consume and how you think.",
+      "Train your brain to see what went well. Confidence grows where attention goes.",
+      "You do not shine under bright lights; bright lights reveal your work in the dark. There are no shortcuts to mastery.",
+      "Comparison steals joy. The grass is greener where you water it.",
+      "The rough side shapes your character. Hardship prepares you for sustained success.",
+      "Words create pictures. Pictures influence feelings. Feelings drive actions. Actions shape destiny.",
+      "Mental training is not a quick fix. Small efforts cannot offset daily negative habits.",
+      "Growth happens in plateaus and leaps, not in a straight line. Trust the process during stagnation.",
+      "Everything impacts everything. Mastery is total integration—every detail matters.",
+      "Invisible growth precedes visible success. Without deep roots, height cannot be sustained.",
+      "There are signs that you are on the right path—discipline, growth, and character development.",
+      "Be fully present. Presence is a decision.",
+      "You achieve goals; you live a mission. A mission gives direction when goals fade.",
+      "Release the outcome; commit to the effort. Control the controllables.",
+      "Failure is part of greatness. Persistence separates the great from the average.",
+      "Some goals seem controllable but are not. Focus on behaviors, not outcomes.",
+      "The real battle is internal. Discipline is stronger than motivation.",
+      "Live by principles, not emotions. Feelings change; principles endure.",
+      "You have an internal intensity dial. Learn to consciously turn it up and down.",
+      "‘They’ does not exist. Stop living according to imagined expectations.",
+      "Identity is shaped by choices. You can redefine who you are."
+    ];
+
+    const STORAGE_KEY = 'six-pillars-state-v3';
 
     function defaultState() {
       return {
@@ -673,7 +735,9 @@
         session: 1,
         kbWeight: 16,
         counters: {},
-        successes: {}
+        successes: {},
+        lessonBag: [],
+        lessonIndex: 0
       };
     }
 
@@ -688,14 +752,55 @@
           session: Number.isInteger(parsed.session) ? parsed.session : 1,
           kbWeight: Number.isFinite(parsed.kbWeight) ? parsed.kbWeight : 16,
           counters: parsed.counters && typeof parsed.counters === 'object' ? parsed.counters : {},
-          successes: parsed.successes && typeof parsed.successes === 'object' ? parsed.successes : {}
+          successes: parsed.successes && typeof parsed.successes === 'object' ? parsed.successes : {},
+          lessonBag: Array.isArray(parsed.lessonBag) ? parsed.lessonBag.filter(Number.isInteger) : [],
+          lessonIndex: Number.isInteger(parsed.lessonIndex) ? parsed.lessonIndex : 0
         };
       } catch {
         return defaultState();
       }
     }
 
+    function shuffleArray(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function ensureLessonState() {
+      if (!Array.isArray(state.lessonBag) || state.lessonBag.length !== LESSONS.length) {
+        state.lessonBag = shuffleArray(LESSONS.map((_, index) => index));
+        state.lessonIndex = 0;
+      }
+      if (!Number.isInteger(state.lessonIndex) || state.lessonIndex < 0 || state.lessonIndex >= state.lessonBag.length) {
+        state.lessonIndex = 0;
+      }
+    }
+
+    function getCurrentLesson() {
+      ensureLessonState();
+      return LESSONS[state.lessonBag[state.lessonIndex]] || LESSONS[0];
+    }
+
+    function advanceLesson() {
+      ensureLessonState();
+      if (state.lessonIndex < state.lessonBag.length - 1) {
+        state.lessonIndex += 1;
+      } else {
+        let nextBag = shuffleArray(LESSONS.map((_, index) => index));
+        if (LESSONS.length > 1 && nextBag[0] === state.lessonBag[state.lessonBag.length - 1]) {
+          [nextBag[0], nextBag[1]] = [nextBag[1], nextBag[0]];
+        }
+        state.lessonBag = nextBag;
+        state.lessonIndex = 0;
+      }
+    }
+
     let state = loadState();
+    ensureLessonState();
 
     function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -888,6 +993,7 @@
       if (!state.counters[getSessionKey()]) state.counters[getSessionKey()] = {};
       if (!state.counters[oldSessionKey]) state.counters[oldSessionKey] = {};
 
+      advanceLesson();
       saveState();
       render();
     }
@@ -895,6 +1001,7 @@
     function repeatSession() {
       moveToNextSessionOnly();
       if (!state.counters[getSessionKey()]) state.counters[getSessionKey()] = {};
+      advanceLesson();
       saveState();
       render();
     }
@@ -1012,9 +1119,9 @@
     }
 
     function render() {
-      const workout = getCurrentWorkout();
       document.getElementById('trainingCode').textContent = getTrainingCode();
       document.getElementById('kbInput').value = state.kbWeight;
+      document.getElementById('lessonText').textContent = getCurrentLesson();
       document.getElementById('workoutList').innerHTML = renderWorkout();
     }
 
