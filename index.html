@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title> The Six</title>
+  <meta name="description" content="The Six is a clean progression tracker for six foundational kettlebell lifts." />
+  <title>The Six</title>
   <style>
     :root {
       --bg: #f5f2ea;
       --bg-top: #faf8f3;
       --card: rgba(255, 253, 248, 0.88);
-      --card-strong: #fffdf9;
       --text: #1d1a15;
       --muted: #6d6459;
       --line: rgba(109, 100, 89, 0.16);
@@ -21,10 +21,15 @@
       --radius: 24px;
       --shadow: 0 18px 45px rgba(31, 27, 22, 0.08);
       --shadow-soft: 0 8px 24px rgba(31, 27, 22, 0.05);
+      color-scheme: light;
     }
 
-    * { box-sizing: border-box; }
-    html, body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       margin: 0;
       padding: 0;
       min-height: 100%;
@@ -39,6 +44,22 @@
     body {
       padding: 20px 16px 32px;
       -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: transform 0.04s ease, opacity 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.98);
     }
 
     .app {
@@ -65,13 +86,13 @@
       position: relative;
       overflow: hidden;
       background:
-        linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,253,248,0.92)),
-        linear-gradient(180deg, rgba(79,111,84,0.08), rgba(140,106,67,0.04));
+        linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 253, 248, 0.92)),
+        linear-gradient(180deg, rgba(79, 111, 84, 0.08), rgba(140, 106, 67, 0.04));
       border-color: var(--line-strong);
     }
 
     .top::after {
-      content: '';
+      content: "";
       position: absolute;
       inset: auto -40px -60px auto;
       width: 180px;
@@ -125,8 +146,8 @@
       padding: 8px 10px 8px 12px;
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: rgba(255,255,255,0.74);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
     }
 
     .kg-input {
@@ -140,12 +161,12 @@
       font-weight: 800;
       text-align: center;
       outline: none;
-      box-shadow: inset 0 1px 1px rgba(31,27,22,0.03);
+      box-shadow: inset 0 1px 1px rgba(31, 27, 22, 0.03);
     }
 
     .kg-input:focus {
-      border-color: rgba(79,111,84,0.5);
-      box-shadow: 0 0 0 4px rgba(79,111,84,0.12);
+      border-color: rgba(79, 111, 84, 0.5);
+      box-shadow: 0 0 0 4px rgba(79, 111, 84, 0.12);
     }
 
     .subline {
@@ -154,13 +175,142 @@
       line-height: 1.45;
     }
 
+    .lesson-card {
+      display: grid;
+      gap: 10px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 252, 246, 0.95));
+      box-shadow: var(--shadow);
+    }
+
+    .lesson-title {
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .lesson-text {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    details.warmup-accordion {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--card);
+      padding: 0;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 4px;
+    }
+
+    .warmup-summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 18px 20px;
+      display: grid;
+      gap: 6px;
+      position: relative;
+    }
+
+    .warmup-summary::after {
+      content: "+";
+      position: absolute;
+      right: 20px;
+      top: 22px;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(79, 111, 84, 0.08);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    details[open] .warmup-summary::after {
+      content: "−";
+    }
+
+    .warmup-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .warmup-kicker {
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .warmup-title {
+      font-size: 1.28rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .warmup-sub {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+
+    .warmup-body {
+      border-top: 1px solid var(--line);
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 14px;
+      background: rgba(245, 242, 234, 0.82);
+    }
+
+    .plan-box,
+    .compact-list,
+    .set-list {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(245, 242, 234, 0.78);
+    }
+
+    .plan-box {
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .plan-title {
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .warmup-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .warmup-item {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--accent-soft);
+      line-height: 1.35;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+
     .exercise {
       display: grid;
       gap: 14px;
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,252,246,0.95));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 252, 246, 0.95));
       box-shadow: var(--shadow-soft);
     }
 
@@ -201,92 +351,66 @@
       margin-bottom: 8px;
       padding: 7px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(79,111,84,0.12);
-      background: rgba(79,111,84,0.08);
+      border: 1px solid rgba(79, 111, 84, 0.12);
+      background: rgba(79, 111, 84, 0.08);
       color: var(--accent);
       font-size: 0.88rem;
       font-weight: 800;
       letter-spacing: 0.02em;
     }
 
-    .counter-row {
+    .compact-list,
+    .set-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .compact-row,
+    .set-row {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 12px;
       align-items: center;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(245,242,234,0.9);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
     }
 
-    .counter-title {
+    .compact-row:first-child,
+    .set-row:first-child {
+      padding-top: 0;
+    }
+
+    .compact-row:last-child,
+    .set-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .compact-name,
+    .set-name {
       font-size: 1rem;
       font-weight: 800;
-      margin-bottom: 3px;
+      line-height: 1.2;
+      margin-bottom: 4px;
     }
 
-    .counter-sub {
+    .compact-sub,
+    .set-sub {
       color: var(--muted);
-      font-size: 0.96rem;
+      font-size: 0.95rem;
       line-height: 1.35;
     }
 
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .compact-check,
+    .set-check {
+      width: 26px;
+      height: 26px;
+      accent-color: var(--accent);
+      flex: 0 0 auto;
     }
 
-    .count {
-      min-width: 28px;
-      text-align: center;
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: -0.04em;
-    }
-
-    button, .stepper {
-      border: 0;
-      border-radius: 18px;
-      cursor: pointer;
-      transition: transform 0.04s ease, opacity 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-      font-family: inherit;
-    }
-
-    button:active, .stepper:active {
-      transform: scale(0.98);
-    }
-
-    .stepper {
-      width: 60px;
-      height: 60px;
-      font-size: 1.9rem;
-      font-weight: 800;
-      background: linear-gradient(180deg, #5a7d60, var(--accent));
-      color: #fff;
-      box-shadow: 0 12px 18px rgba(79,111,84,0.18);
-    }
-
-    .stepper.secondary {
-      background: linear-gradient(180deg, #f2ede3, #e5ddd1);
-      color: var(--text);
-      box-shadow: none;
-      border: 1px solid var(--line);
-    }
-
-    .plan-box {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(245,242,234,0.9);
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    .plan-title {
-      font-weight: 800;
-      margin-bottom: 6px;
+    .set-row.disabled {
+      opacity: 0.45;
     }
 
     .actions {
@@ -301,12 +425,12 @@
       font-weight: 800;
       color: #fff;
       background: linear-gradient(180deg, #5a7d60, var(--accent));
-      box-shadow: 0 14px 24px rgba(79,111,84,0.18);
+      box-shadow: 0 14px 24px rgba(79, 111, 84, 0.18);
       letter-spacing: -0.01em;
     }
 
     .action:hover {
-      box-shadow: 0 16px 28px rgba(79,111,84,0.22);
+      box-shadow: 0 16px 28px rgba(79, 111, 84, 0.22);
     }
 
     .action.secondary {
@@ -317,7 +441,7 @@
     }
 
     .action.ghost {
-      background: rgba(255,255,255,0.45);
+      background: rgba(255, 255, 255, 0.45);
       color: var(--muted);
       border: 1px solid var(--line);
       box-shadow: none;
@@ -325,7 +449,7 @@
 
     .action.danger {
       background: linear-gradient(180deg, #b06453, var(--danger));
-      box-shadow: 0 14px 24px rgba(160,85,68,0.18);
+      box-shadow: 0 14px 24px rgba(160, 85, 68, 0.18);
     }
 
     .footer-note {
@@ -334,246 +458,6 @@
       line-height: 1.6;
       padding: 2px 4px 0;
     }
-
-    @media (max-width: 640px) {
-      body { padding: 12px; }
-      .app { gap: 16px; }
-      .panel { padding: 16px; border-radius: 22px; }
-      h1 { font-size: 2.2rem; }
-      .meta-row { font-size: 1.08rem; }
-      .kg-wrap { width: 100%; justify-content: flex-start; }
-      .exercise-name { font-size: 1.62rem; }
-      .exercise-top { display: grid; }
-      .exercise-meta { text-align: left; min-width: 0; }
-      .counter-row { grid-template-columns: 1fr; }
-      .controls { justify-content: flex-end; }
-      .action { padding: 17px 16px; }
-    }
-  
-    .check-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      margin-top:14px;
-      padding:14px 16px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:var(--accent-soft);
-    }
-    .check-text{
-      font-size:15px;
-      color:var(--muted);
-    }
-    .check-toggle{
-      width:28px;
-      height:28px;
-      accent-color: var(--accent);
-      flex:0 0 auto;
-    }
-
-
-    .compact-list {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(245,242,234,0.78);
-    }
-
-    .compact-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .compact-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .compact-row:first-child {
-      padding-top: 0;
-    }
-
-    .compact-name {
-      font-size: 1rem;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 4px;
-    }
-
-    .compact-sub {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.35;
-    }
-
-    .compact-check {
-      width: 26px;
-      height: 26px;
-      accent-color: var(--accent);
-      flex: 0 0 auto;
-    }
-
-    .set-list {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(245,242,234,0.78);
-    }
-
-    .set-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .set-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .set-row:first-child {
-      padding-top: 0;
-    }
-
-    .set-name {
-      font-size: 1rem;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 3px;
-    }
-
-    .set-sub {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.35;
-    }
-
-    .set-check {
-      width: 26px;
-      height: 26px;
-      accent-color: var(--accent);
-      flex: 0 0 auto;
-    }
-
-    .set-row.disabled {
-      opacity: 0.45;
-    }
-
-    .last-wrap {
-      display: grid;
-      gap: 12px;
-    }
-
-    .muted-mini {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.4;
-    }
-
-
-    details.warmup-accordion {
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: var(--card);
-      padding: 0;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      margin-bottom: 4px;
-    }
-
-    .warmup-summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 18px 20px;
-      display: grid;
-      gap: 6px;
-      position: relative;
-    }
-
-    .warmup-summary::after {
-      content: '+';
-      position: absolute;
-      right: 20px;
-      top: 22px;
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: rgba(79,111,84,0.08);
-      color: var(--accent);
-      font-weight: 800;
-      font-size: 1.1rem;
-    }
-
-    details[open] .warmup-summary::after {
-      content: '–';
-    }
-
-    .warmup-summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .warmup-kicker {
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .warmup-title {
-      font-size: 1.28rem;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-    }
-
-    .warmup-sub {
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: 0.95rem;
-    }
-
-    .warmup-body {
-      border-top: 1px solid var(--line);
-      padding: 18px 20px 20px;
-      display: grid;
-      gap: 14px;
-      background: rgba(245,242,234,0.82);
-    }
-
-    .warmup-grid {
-      display: grid;
-      gap: 10px;
-    }
-
-    .warmup-item {
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: var(--accent-soft);
-      line-height: 1.35;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
-    }
-
-    .warmup-note {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-
 
     .confetti-piece {
       position: fixed;
@@ -594,34 +478,62 @@
       }
     }
 
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
 
+      .app {
+        gap: 16px;
+      }
 
-    .lesson-card {
-      display: grid;
-      gap: 10px;
-      padding: 18px 20px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,252,246,0.95));
-      box-shadow: var(--shadow);
+      .panel {
+        padding: 16px;
+        border-radius: 22px;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .meta-row {
+        font-size: 1.08rem;
+      }
+
+      .kg-wrap {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .exercise-name {
+        font-size: 1.62rem;
+      }
+
+      .exercise-top {
+        display: grid;
+      }
+
+      .exercise-meta {
+        text-align: left;
+        min-width: 0;
+      }
+
+      .action {
+        padding: 17px 16px;
+      }
     }
 
-    .lesson-title {
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 800;
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
     }
-
-    .lesson-text {
-      margin: 0;
-      font-size: 1.02rem;
-      line-height: 1.6;
-      color: var(--text);
-    }
-
-</style>
+  </style>
 </head>
 <body>
   <main class="app">
@@ -629,9 +541,9 @@
       <h1>The Six</h1>
       <div class="subline">A clean progression tracker for your six foundational kettlebell lifts.</div>
       <div class="meta-row">
-        <span id="trainingCode">0.1.4</span>
+        <span id="trainingCode" aria-live="polite">0.1.4</span>
         <span class="divider">•</span>
-        <label class="kg-wrap">KB:
+        <label class="kg-wrap" for="kbInput">KB:
           <input id="kbInput" class="kg-input" type="number" inputmode="decimal" min="0" step="1" value="16" />
           <span>kg</span>
         </label>
@@ -639,7 +551,7 @@
     </section>
 
     <section class="lesson-card panel" id="lessonCard">
-      <div class="lesson-title"><strong><strong>Lesson of the day</strong></strong></div>
+      <div class="lesson-title">Lesson of the day</div>
       <p class="lesson-text" id="lessonText"></p>
     </section>
 
@@ -674,7 +586,7 @@
       </div>
     </details>
 
-<section class="panel" id="workoutList"></section>
+    <section class="panel" id="workoutList"></section>
 
     <section class="panel actions">
       <button id="completedBtn" class="action" type="button">✅ Session successful</button>
@@ -687,18 +599,18 @@
 
   <script>
     const EXERCISES = [
-      { id: 'getup', name: 'Get-Up', fullName: 'Turkish Get-Up', reps: '1 per side', type: 'Grind' },
-      { id: 'swing', name: 'One-arm Swing', fullName: 'One-arm Swing', reps: '10 per side', type: 'Ballistic' },
-      { id: 'press', name: 'Military Press', fullName: 'Military Press', reps: '5 per side', type: 'Grind' },
-      { id: 'clean', name: 'Double Clean', fullName: 'Double Clean', reps: '10 total', type: 'Ballistic' },
-      { id: 'squat', name: 'Front Squat', fullName: 'Double Front Squat', reps: '5 total', type: 'Grind' },
-      { id: 'snatch', name: 'Snatch', fullName: 'Snatch', reps: '10 per side', type: 'Ballistic' }
+      { id: "getup", name: "Get-Up", reps: "1 per side", type: "Grind" },
+      { id: "swing", name: "One-arm Swing", reps: "10 per side", type: "Ballistic" },
+      { id: "press", name: "Military Press", reps: "5 per side", type: "Grind" },
+      { id: "clean", name: "Double Clean", reps: "10 total", type: "Ballistic" },
+      { id: "squat", name: "Double Front Squat", reps: "5 total", type: "Grind" },
+      { id: "snatch", name: "Snatch", reps: "10 per side", type: "Ballistic" }
     ];
 
     const LESSONS = [
       "Focus on the process, not the reward. Greatness begins with faithfully executing simple daily tasks.",
       "You are always building your own house. Who you become matters more than what you achieve.",
-      "Dream big. Start small. Be ridiculously faithful. Everyone wants greatness until it’s time to do what greatness requires.",
+      "Dream big. Start small. Be ridiculously faithful. Everyone wants greatness until it's time to do what greatness requires.",
       "With one eye on the goal, you only have one eye for the journey. Focus on the next step, not the summit.",
       "Nothing is a test; everything is an opportunity to learn and grow.",
       "Your value comes from who you are, not from what you do.",
@@ -722,11 +634,20 @@
       "The real battle is internal. Discipline is stronger than motivation.",
       "Live by principles, not emotions. Feelings change; principles endure.",
       "You have an internal intensity dial. Learn to consciously turn it up and down.",
-      "‘They’ does not exist. Stop living according to imagined expectations.",
+      "'They' does not exist. Stop living according to imagined expectations.",
       "Identity is shaped by choices. You can redefine who you are."
     ];
 
-    const STORAGE_KEY = 'six-pillars-state-v3';
+    const STORAGE_KEY = "six-pillars-state-v3";
+
+    const trainingCodeEl = document.getElementById("trainingCode");
+    const kbInputEl = document.getElementById("kbInput");
+    const lessonTextEl = document.getElementById("lessonText");
+    const workoutListEl = document.getElementById("workoutList");
+    const completedBtnEl = document.getElementById("completedBtn");
+    const repeatBtnEl = document.getElementById("repeatBtn");
+    const resetCountersBtnEl = document.getElementById("resetCountersBtn");
+    const hardResetBtnEl = document.getElementById("hardResetBtn");
 
     function defaultState() {
       return {
@@ -745,14 +666,16 @@
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return defaultState();
+
         const parsed = JSON.parse(raw);
+
         return {
           phase: Number.isInteger(parsed.phase) ? parsed.phase : 0,
           week: Number.isInteger(parsed.week) ? parsed.week : 1,
           session: Number.isInteger(parsed.session) ? parsed.session : 1,
           kbWeight: Number.isFinite(parsed.kbWeight) ? parsed.kbWeight : 16,
-          counters: parsed.counters && typeof parsed.counters === 'object' ? parsed.counters : {},
-          successes: parsed.successes && typeof parsed.successes === 'object' ? parsed.successes : {},
+          counters: parsed.counters && typeof parsed.counters === "object" ? parsed.counters : {},
+          successes: parsed.successes && typeof parsed.successes === "object" ? parsed.successes : {},
           lessonBag: Array.isArray(parsed.lessonBag) ? parsed.lessonBag.filter(Number.isInteger) : [],
           lessonIndex: Number.isInteger(parsed.lessonIndex) ? parsed.lessonIndex : 0
         };
@@ -761,12 +684,18 @@
       }
     }
 
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
     function shuffleArray(array) {
       const copy = [...array];
-      for (let i = copy.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
+
+      for (let index = copy.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1));
+        [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
       }
+
       return copy;
     }
 
@@ -775,6 +704,7 @@
         state.lessonBag = shuffleArray(LESSONS.map((_, index) => index));
         state.lessonIndex = 0;
       }
+
       if (!Number.isInteger(state.lessonIndex) || state.lessonIndex < 0 || state.lessonIndex >= state.lessonBag.length) {
         state.lessonIndex = 0;
       }
@@ -787,23 +717,21 @@
 
     function advanceLesson() {
       ensureLessonState();
+
       if (state.lessonIndex < state.lessonBag.length - 1) {
         state.lessonIndex += 1;
-      } else {
-        let nextBag = shuffleArray(LESSONS.map((_, index) => index));
-        if (LESSONS.length > 1 && nextBag[0] === state.lessonBag[state.lessonBag.length - 1]) {
-          [nextBag[0], nextBag[1]] = [nextBag[1], nextBag[0]];
-        }
-        state.lessonBag = nextBag;
-        state.lessonIndex = 0;
+        return;
       }
-    }
 
-    let state = loadState();
-    ensureLessonState();
+      const nextBag = shuffleArray(LESSONS.map((_, index) => index));
+      const lastLesson = state.lessonBag[state.lessonBag.length - 1];
 
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      if (LESSONS.length > 1 && nextBag[0] === lastLesson) {
+        [nextBag[0], nextBag[1]] = [nextBag[1], nextBag[0]];
+      }
+
+      state.lessonBag = nextBag;
+      state.lessonIndex = 0;
     }
 
     function getTrainingCode() {
@@ -825,24 +753,26 @@
     }
 
     function markSessionSuccessful(session = state.session, phase = state.phase, week = state.week) {
-      const bucket = ensureSuccessBucket(phase, week);
-      bucket[session] = true;
+      ensureSuccessBucket(phase, week)[session] = true;
     }
 
     function isWeekComplete(phase = state.phase, week = state.week) {
       const bucket = ensureSuccessBucket(phase, week);
-      for (let session = 1; session <= 6; session += 1) {
+
+      for (let session = 1; session <= EXERCISES.length; session += 1) {
         if (!bucket[session]) return false;
       }
+
       return true;
     }
 
     function moveToNextSessionOnly() {
-      state.session = state.session < 6 ? state.session + 1 : 1;
+      state.session = state.session < EXERCISES.length ? state.session + 1 : 1;
     }
 
     function advanceWeekOrPhase() {
       state.session = 1;
+
       if (state.phase === 0) {
         if (state.week < 5) {
           state.week += 1;
@@ -850,35 +780,35 @@
           state.phase = 1;
           state.week = 1;
         }
-      } else {
-        if (state.week < 5) {
-          state.week += 1;
-        } else {
-          state.phase += 1;
-          state.week = 1;
-          state.kbWeight = Number(state.kbWeight || 16) + 4;
-        }
+        return;
       }
+
+      if (state.week < 5) {
+        state.week += 1;
+        return;
+      }
+
+      state.phase += 1;
+      state.week = 1;
+      state.kbWeight = Number(state.kbWeight || 16) + 4;
     }
 
     function getWorkoutOrder(session) {
       const startIndex = (session - 1) % EXERCISES.length;
-      return EXERCISES.map((_, i) => EXERCISES[(startIndex + i) % EXERCISES.length]);
+      return EXERCISES.map((_, index) => EXERCISES[(startIndex + index) % EXERCISES.length]);
     }
 
     function getCurrentWorkout() {
       return getWorkoutOrder(state.session);
     }
 
-    function ensureCounterBucket() {
-      const key = getSessionKey();
-      if (!state.counters[key]) state.counters[key] = {};
-      return state.counters[key];
+    function ensureCounterBucket(sessionKey = getSessionKey()) {
+      if (!state.counters[sessionKey]) state.counters[sessionKey] = {};
+      return state.counters[sessionKey];
     }
 
-    function getCount(exerciseId, bucket = 'sets') {
-      const counters = ensureCounterBucket();
-      const exerciseCounters = counters[exerciseId] || {};
+    function getCount(exerciseId, bucket = "sets") {
+      const exerciseCounters = ensureCounterBucket()[exerciseId] || {};
       return exerciseCounters[bucket] || 0;
     }
 
@@ -890,68 +820,69 @@
       render();
     }
 
+    function formatSetList(list) {
+      if (list.length === 1) return `set ${list[0]}`;
+      if (list.length === 2) return `sets ${list[0]} and ${list[1]}`;
+      return `sets ${list.join(", ")}`;
+    }
+
     function getLastExercisePlan() {
       const sets = [];
 
       if (state.phase === 0) {
         const total = Math.min(5, Math.max(1, state.week));
-        for (let i = 1; i <= 5; i += 1) {
+
+        for (let index = 1; index <= 5; index += 1) {
           sets.push({
-            index: i,
-            weight: 'normal',
-            label: 'Training weight',
-            enabled: i <= total
+            index,
+            label: "Training weight",
+            enabled: index <= total
           });
         }
 
         return {
+          sets,
           total,
           activeCount: total,
           normalTarget: total,
           plusTarget: 0,
-          normalLabel: total === 1 ? 'Set 1 at training weight' : `Sets 1-${total} at training weight`,
-          plusLabel: 'No heavier sets during break-in',
-          sets
+          normalLabel: total === 1 ? "Set 1 at training weight" : `Sets 1-${total} at training weight`,
+          plusLabel: "No heavier sets during break-in"
         };
       }
 
       const plusTarget = Math.min(5, Math.max(1, state.week));
-      const total = 5;
       const plusStart = plusTarget === 5 ? 1 : 2;
       const plusEnd = plusTarget === 5 ? 5 : plusTarget + 1;
       const normalSets = [];
 
-      for (let i = 1; i <= 5; i += 1) {
-        const isPlus = i >= plusStart && i <= plusEnd;
+      for (let index = 1; index <= 5; index += 1) {
+        const isPlus = index >= plusStart && index <= plusEnd;
         sets.push({
-          index: i,
-          weight: isPlus ? 'plus' : 'normal',
-          label: isPlus ? '+1 weight' : 'Training weight',
+          index,
+          label: isPlus ? "+1 weight" : "Training weight",
           enabled: true
         });
-        if (!isPlus) normalSets.push(i);
+        if (!isPlus) normalSets.push(index);
       }
 
-      const normalLabel = normalSets.length
-        ? `Training weight: ${formatSetList(normalSets)}`
-        : 'Training weight: none';
-      const plusLabel = `+1 weight: ${plusStart === plusEnd ? `set ${plusStart}` : `sets ${plusStart}-${plusEnd}`}`;
-
       return {
-        total,
-        activeCount: total,
+        sets,
+        total: 5,
+        activeCount: 5,
         normalTarget: normalSets.length,
         plusTarget,
-        normalLabel,
-        plusLabel,
-        sets
+        normalLabel: normalSets.length ? `Training weight: ${formatSetList(normalSets)}` : "Training weight: none",
+        plusLabel: `+1 weight: ${plusStart === plusEnd ? `set ${plusStart}` : `sets ${plusStart}-${plusEnd}`}`
       };
     }
 
-    function formatSetList(list) {
-      if (list.length === 1) return `set ${list[0]}`;
-      if (list.length === 2) return `sets ${list[0]} and ${list[1]}`;
-      return `sets ${list.join(', ')}`;
+    function isChecked(exerciseId) {
+      return getCount(exerciseId, "sets") > 0;
+    }
+
+    function toggleSet(exerciseId) {
+      setCount(exerciseId, "sets", isChecked(exerciseId) ? 0 : 1);
     }
 
     function isLastSetChecked(exerciseId, setIndex) {
@@ -960,20 +891,23 @@
 
     function toggleLastSet(exerciseId, setIndex, enabled) {
       if (!enabled) return;
-      const bucket = `set${setIndex}`;
-      const next = isLastSetChecked(exerciseId, setIndex) ? 0 : 1;
-      setCount(exerciseId, bucket, next);
+      setCount(exerciseId, `set${setIndex}`, isLastSetChecked(exerciseId, setIndex) ? 0 : 1);
+    }
+
+    function ensureSessionBuckets() {
+      ensureCounterBucket();
     }
 
     function launchConfetti() {
-      const colors = ['#567352', '#c9a227', '#a05544', '#3d6b99', '#8b5e3c', '#e07a5f'];
-      for (let i = 0; i < 120; i += 1) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
+      const colors = ["#567352", "#c9a227", "#a05544", "#3d6b99", "#8b5e3c", "#e07a5f"];
+
+      for (let index = 0; index < 120; index += 1) {
+        const piece = document.createElement("div");
+        piece.className = "confetti-piece";
         piece.style.left = `${Math.random() * 100}vw`;
         piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.setProperty('--tx', `${(Math.random() - 0.5) * 240}px`);
-        piece.style.setProperty('--rot', `${(Math.random() - 0.5) * 1080}deg`);
+        piece.style.setProperty("--tx", `${(Math.random() - 0.5) * 240}px`);
+        piece.style.setProperty("--rot", `${(Math.random() - 0.5) * 1080}deg`);
         piece.style.animationDuration = `${2.2 + Math.random() * 1.8}s`;
         document.body.appendChild(piece);
         setTimeout(() => piece.remove(), 4300);
@@ -981,7 +915,7 @@
     }
 
     function advanceSuccess() {
-      const oldSessionKey = getSessionKey();
+      const previousSessionKey = getSessionKey();
       markSessionSuccessful();
 
       if (isWeekComplete()) {
@@ -990,9 +924,8 @@
         moveToNextSessionOnly();
       }
 
-      if (!state.counters[getSessionKey()]) state.counters[getSessionKey()] = {};
-      if (!state.counters[oldSessionKey]) state.counters[oldSessionKey] = {};
-
+      ensureCounterBucket(previousSessionKey);
+      ensureCounterBucket(getSessionKey());
       advanceLesson();
       saveState();
       render();
@@ -1000,7 +933,7 @@
 
     function repeatSession() {
       moveToNextSessionOnly();
-      if (!state.counters[getSessionKey()]) state.counters[getSessionKey()] = {};
+      ensureSessionBuckets();
       advanceLesson();
       saveState();
       render();
@@ -1013,36 +946,11 @@
     }
 
     function hardReset() {
-      if (!confirm('Are you sure you want to reset everything?')) return;
+      if (!confirm("Are you sure you want to reset everything?")) return;
       state = defaultState();
+      ensureLessonState();
       saveState();
       render();
-    }
-
-    function counterRow({ title, sub, value, minusHandler, plusHandler }) {
-      return `
-        <div class="counter-row">
-          <div>
-            <div class="counter-title">${title}</div>
-            <div class="counter-sub">${sub}</div>
-          </div>
-          <div class="controls">
-            <button class="stepper secondary" type="button" onclick="${minusHandler}">−</button>
-            <div class="count">${value}</div>
-            <button class="stepper" type="button" onclick="${plusHandler}">+</button>
-          </div>
-        </div>
-      `;
-    }
-
-
-    function isChecked(exerciseId) {
-      return getCount(exerciseId, 'sets') > 0;
-    }
-
-    function toggleSet(exerciseId) {
-      const next = isChecked(exerciseId) ? 0 : 1;
-      setCount(exerciseId, 'sets', next);
     }
 
     function renderWorkout() {
@@ -1072,11 +980,12 @@
                 <input
                   class="compact-check"
                   type="checkbox"
-                  ${isChecked(exercise.id) ? 'checked' : ''}
-                  onchange="toggleSet('${exercise.id}')"
+                  data-action="toggle-set"
+                  data-exercise-id="${exercise.id}"
+                  ${isChecked(exercise.id) ? "checked" : ""}
                 />
               </label>
-            `).join('')}
+            `).join("")}
           </div>
         </article>
       `;
@@ -1093,24 +1002,24 @@
               <div>Rep target: ${lastExercise.reps}</div>
             </div>
           </div>
-          <div class="last-wrap">
-            <div class="set-list">
-              ${plan.sets.map((set) => `
-                <label class="set-row ${set.enabled ? '' : 'disabled'}">
-                  <div>
-                    <div class="set-name">${set.index}. ${set.label}</div>
-                    <div class="set-sub">${lastExercise.reps}</div>
-                  </div>
-                  <input
-                    class="set-check"
-                    type="checkbox"
-                    ${isLastSetChecked(lastExercise.id, set.index) ? 'checked' : ''}
-                    ${set.enabled ? '' : 'disabled'}
-                    onchange="toggleLastSet('${lastExercise.id}', ${set.index}, ${set.enabled})"
-                  />
-                </label>
-              `).join('')}
-            </div>
+          <div class="set-list" aria-label="Last exercise set plan">
+            ${plan.sets.map((set) => `
+              <label class="set-row ${set.enabled ? "" : "disabled"}">
+                <div>
+                  <div class="set-name">${set.index}. ${set.label}</div>
+                  <div class="set-sub">${lastExercise.reps}</div>
+                </div>
+                <input
+                  class="set-check"
+                  type="checkbox"
+                  data-action="toggle-last-set"
+                  data-exercise-id="${lastExercise.id}"
+                  data-set-index="${set.index}"
+                  ${isLastSetChecked(lastExercise.id, set.index) ? "checked" : ""}
+                  ${set.enabled ? "" : "disabled"}
+                />
+              </label>
+            `).join("")}
           </div>
         </article>
       `;
@@ -1119,21 +1028,40 @@
     }
 
     function render() {
-      document.getElementById('trainingCode').textContent = getTrainingCode();
-      document.getElementById('kbInput').value = state.kbWeight;
-      document.getElementById('lessonText').textContent = getCurrentLesson();
-      document.getElementById('workoutList').innerHTML = renderWorkout();
+      trainingCodeEl.textContent = getTrainingCode();
+      kbInputEl.value = state.kbWeight;
+      lessonTextEl.textContent = getCurrentLesson();
+      workoutListEl.innerHTML = renderWorkout();
     }
 
-    document.getElementById('completedBtn').addEventListener('click', () => {
+    function handleWorkoutToggle(event) {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
+
+      if (target.dataset.action === "toggle-set") {
+        toggleSet(target.dataset.exerciseId);
+        return;
+      }
+
+      if (target.dataset.action === "toggle-last-set") {
+        toggleLastSet(target.dataset.exerciseId, Number(target.dataset.setIndex), !target.disabled);
+      }
+    }
+
+    let state = loadState();
+    ensureLessonState();
+    ensureSessionBuckets();
+
+    completedBtnEl.addEventListener("click", () => {
       launchConfetti();
       advanceSuccess();
     });
-    document.getElementById('repeatBtn').addEventListener('click', repeatSession);
-    document.getElementById('resetCountersBtn').addEventListener('click', resetCurrentCounters);
-    document.getElementById('hardResetBtn').addEventListener('click', hardReset);
-    document.getElementById('kbInput').addEventListener('input', (e) => {
-      const value = Number(e.target.value);
+    repeatBtnEl.addEventListener("click", repeatSession);
+    resetCountersBtnEl.addEventListener("click", resetCurrentCounters);
+    hardResetBtnEl.addEventListener("click", hardReset);
+    workoutListEl.addEventListener("change", handleWorkoutToggle);
+    kbInputEl.addEventListener("input", (event) => {
+      const value = Number(event.target.value);
       state.kbWeight = Number.isFinite(value) && value >= 0 ? value : 0;
       saveState();
     });
