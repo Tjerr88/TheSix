@@ -7,20 +7,25 @@
   <title>The Six</title>
   <style>
     :root {
-      --bg: #f5f2ea;
-      --bg-top: #faf8f3;
-      --card: rgba(255, 253, 248, 0.88);
-      --text: #1d1a15;
-      --muted: #6d6459;
-      --line: rgba(109, 100, 89, 0.16);
-      --line-strong: rgba(109, 100, 89, 0.24);
-      --accent: #4f6f54;
-      --accent-2: #8c6a43;
-      --accent-soft: #f1ece2;
-      --danger: #a05544;
-      --radius: 24px;
-      --shadow: 0 18px 45px rgba(31, 27, 22, 0.08);
-      --shadow-soft: 0 8px 24px rgba(31, 27, 22, 0.05);
+      --bg: #efe7dc;
+      --bg-deep: #e6ddd1;
+      --surface: rgba(255, 251, 246, 0.94);
+      --surface-strong: #fffdf9;
+      --surface-soft: #f5eee4;
+      --ink: #1d1915;
+      --muted: #6d665d;
+      --line: rgba(61, 47, 34, 0.14);
+      --line-strong: rgba(61, 47, 34, 0.24);
+      --forest: #23483d;
+      --forest-soft: rgba(35, 72, 61, 0.08);
+      --bronze: #8f6340;
+      --danger: #8d4e43;
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --shadow-lg: 0 24px 60px rgba(29, 25, 21, 0.08);
+      --shadow-md: 0 10px 24px rgba(29, 25, 21, 0.05);
+      --shadow-sm: 0 4px 12px rgba(29, 25, 21, 0.035);
       color-scheme: light;
     }
 
@@ -33,16 +38,15 @@
       margin: 0;
       padding: 0;
       min-height: 100%;
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      font-family: "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(140, 106, 67, 0.12), transparent 28%),
-        radial-gradient(circle at top right, rgba(79, 111, 84, 0.14), transparent 32%),
-        linear-gradient(180deg, var(--bg-top) 0%, var(--bg) 100%);
+        radial-gradient(circle at top left, rgba(143, 99, 64, 0.12), transparent 24%),
+        linear-gradient(180deg, #f8f3eb 0%, var(--bg) 36%, var(--bg-deep) 100%);
     }
 
     body {
-      padding: 20px 16px 32px;
+      padding: 30px 16px 44px;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -53,141 +57,188 @@
 
     button {
       border: 0;
-      border-radius: 18px;
+      border-radius: var(--radius-md);
       cursor: pointer;
-      transition: transform 0.04s ease, opacity 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      transition: transform 0.04s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.985);
     }
 
     .app {
-      max-width: 780px;
+      max-width: 900px;
       margin: 0 auto;
       display: grid;
       gap: 18px;
-      padding-bottom: 56px;
+      padding-bottom: 60px;
     }
 
     .panel {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .top {
       display: grid;
-      gap: 14px;
+      gap: 18px;
+      padding: 28px;
+      background:
+        linear-gradient(135deg, rgba(255, 253, 249, 0.98), rgba(248, 242, 234, 0.94)),
+        linear-gradient(180deg, rgba(35, 72, 61, 0.06), rgba(143, 99, 64, 0.05));
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow-lg);
       position: relative;
       overflow: hidden;
-      background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 253, 248, 0.92)),
-        linear-gradient(180deg, rgba(79, 111, 84, 0.08), rgba(140, 106, 67, 0.04));
-      border-color: var(--line-strong);
     }
 
-    .top::after {
+    .top::before {
       content: "";
       position: absolute;
-      inset: auto -40px -60px auto;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(79, 111, 84, 0.12), transparent 70%);
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent, rgba(143, 99, 64, 0.08), transparent);
+      opacity: 0.6;
       pointer-events: none;
+    }
+
+    .top > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(35, 72, 61, 0.12);
+      color: var(--forest);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .hero-head {
+      display: grid;
+      gap: 10px;
     }
 
     h1 {
       margin: 0;
-      font-size: 2.6rem;
-      line-height: 0.95;
-      letter-spacing: -0.05em;
-      position: relative;
-      z-index: 1;
+      font-family: "Canela", "Iowan Old Style", Georgia, serif;
+      font-size: 3.35rem;
+      line-height: 0.92;
+      letter-spacing: -0.055em;
+      font-weight: 600;
+    }
+
+    .subline {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.7;
     }
 
     .meta-row {
-      display: flex;
-      align-items: center;
+      display: grid;
+      grid-template-columns: auto auto 1fr;
       gap: 12px;
-      flex-wrap: wrap;
-      font-size: 1.15rem;
-      font-weight: 700;
-      position: relative;
-      z-index: 1;
+      align-items: center;
+    }
+
+    #trainingCode,
+    .kg-wrap {
+      min-height: 52px;
     }
 
     #trainingCode {
       display: inline-flex;
       align-items: center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(79, 111, 84, 0.09);
-      border: 1px solid rgba(79, 111, 84, 0.12);
-      font-size: 0.98rem;
-      letter-spacing: 0.02em;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 16px;
+      background: var(--forest);
+      border: 1px solid rgba(35, 72, 61, 0.25);
+      color: #f8f3eb;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
 
     .divider {
-      color: #cbbfae;
-      font-weight: 500;
+      display: none;
     }
 
     .kg-wrap {
       display: inline-flex;
       align-items: center;
       gap: 10px;
+      width: fit-content;
       font-weight: 700;
-      padding: 8px 10px 8px 12px;
+      padding: 8px 10px 8px 14px;
       border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.74);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
     }
 
     .kg-input {
-      width: 78px;
-      border: 1px solid var(--line);
+      width: 84px;
+      border: 1px solid rgba(61, 47, 34, 0.12);
       background: #fff;
-      color: var(--text);
-      border-radius: 14px;
+      color: var(--ink);
+      border-radius: 12px;
       padding: 11px 12px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 800;
       text-align: center;
       outline: none;
-      box-shadow: inset 0 1px 1px rgba(31, 27, 22, 0.03);
+      box-shadow: inset 0 1px 2px rgba(29, 25, 21, 0.03);
     }
 
     .kg-input:focus {
-      border-color: rgba(79, 111, 84, 0.5);
-      box-shadow: 0 0 0 4px rgba(79, 111, 84, 0.12);
-    }
-
-    .subline {
-      color: var(--muted);
-      font-size: 0.98rem;
-      line-height: 1.45;
+      border-color: rgba(35, 72, 61, 0.45);
+      box-shadow: 0 0 0 4px rgba(35, 72, 61, 0.09);
     }
 
     .lesson-card {
       display: grid;
       gap: 10px;
-      padding: 18px 20px;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 252, 246, 0.95));
-      box-shadow: var(--shadow);
+      padding: 22px 24px;
+      border: 1px solid rgba(143, 99, 64, 0.12);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255, 252, 247, 0.98), rgba(248, 242, 234, 0.96));
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
     }
 
-    .lesson-title {
-      font-size: 0.88rem;
-      letter-spacing: 0.08em;
+    .lesson-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 6px;
+      background: linear-gradient(180deg, var(--bronze), var(--forest));
+      opacity: 0.8;
+    }
+
+    .lesson-title,
+    .warmup-kicker,
+    .exercise-kicker {
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--muted);
       font-weight: 800;
@@ -195,184 +246,194 @@
 
     .lesson-text {
       margin: 0;
-      font-size: 1.02rem;
-      line-height: 1.6;
-      color: var(--text);
+      padding-left: 2px;
+      font-family: "Iowan Old Style", Georgia, serif;
+      font-size: 1.22rem;
+      line-height: 1.7;
+      color: var(--ink);
     }
 
     details.warmup-accordion {
       border: 1px solid var(--line);
-      border-radius: 24px;
-      background: var(--card);
-      padding: 0;
+      border-radius: var(--radius-xl);
+      background: var(--surface);
       overflow: hidden;
-      box-shadow: var(--shadow);
-      margin-bottom: 4px;
+      box-shadow: var(--shadow-sm);
     }
 
     .warmup-summary {
       list-style: none;
       cursor: pointer;
-      padding: 18px 20px;
+      padding: 20px 24px;
       display: grid;
       gap: 6px;
       position: relative;
+      background: linear-gradient(180deg, rgba(255, 253, 250, 0.96), rgba(248, 243, 236, 0.9));
     }
 
     .warmup-summary::after {
       content: "+";
       position: absolute;
-      right: 20px;
+      right: 22px;
       top: 22px;
-      width: 28px;
-      height: 28px;
+      width: 34px;
+      height: 34px;
       border-radius: 999px;
       display: grid;
       place-items: center;
-      background: rgba(79, 111, 84, 0.08);
-      color: var(--accent);
-      font-weight: 800;
+      background: rgba(35, 72, 61, 0.08);
+      color: var(--forest);
+      font-weight: 700;
       font-size: 1.1rem;
     }
 
     details[open] .warmup-summary::after {
-      content: "−";
+      content: "\2212";
     }
 
     .warmup-summary::-webkit-details-marker {
       display: none;
     }
 
-    .warmup-kicker {
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
     .warmup-title {
-      font-size: 1.28rem;
-      font-weight: 800;
-      line-height: 1.2;
+      font-family: "Iowan Old Style", Georgia, serif;
+      font-size: 1.42rem;
+      font-weight: 600;
+      line-height: 1.15;
       letter-spacing: -0.02em;
     }
 
     .warmup-sub {
       color: var(--muted);
-      line-height: 1.45;
-      font-size: 0.95rem;
+      line-height: 1.55;
+      font-size: 0.96rem;
+      max-width: 460px;
     }
 
     .warmup-body {
       border-top: 1px solid var(--line);
-      padding: 18px 20px 20px;
+      padding: 20px 24px 24px;
       display: grid;
-      gap: 14px;
-      background: rgba(245, 242, 234, 0.82);
+      gap: 16px;
+      background: var(--surface-soft);
     }
 
     .plan-box,
     .compact-list,
     .set-list {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(245, 242, 234, 0.78);
+      padding: 16px;
+      border: 1px solid rgba(61, 47, 34, 0.1);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 253, 249, 0.78);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
     }
 
     .plan-box {
-      color: var(--text);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .plan-title {
+      margin-bottom: 8px;
+      font-size: 0.92rem;
       font-weight: 800;
-      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--forest);
     }
 
     .warmup-grid {
       display: grid;
       gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     }
 
     .warmup-item {
-      padding: 10px 12px;
-      border: 1px solid var(--line);
+      padding: 12px 14px;
+      border: 1px solid rgba(61, 47, 34, 0.08);
       border-radius: 14px;
-      background: var(--accent-soft);
+      background: rgba(255, 255, 255, 0.7);
       line-height: 1.35;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+      font-weight: 600;
+    }
+
+    #workoutList.panel {
+      padding: 12px;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
     }
 
     .exercise {
       display: grid;
-      gap: 14px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 252, 246, 0.95));
-      box-shadow: var(--shadow-soft);
+      gap: 16px;
+      padding: 24px;
+      border: 1px solid rgba(61, 47, 34, 0.1);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(247, 241, 233, 0.95));
+      box-shadow: var(--shadow-md);
+      margin-bottom: 14px;
+    }
+
+    .exercise:last-child {
+      margin-bottom: 0;
     }
 
     .exercise-top {
       display: flex;
       justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
       align-items: flex-start;
-    }
-
-    .exercise-kicker {
-      color: var(--muted);
-      font-size: 0.82rem;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 700;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(61, 47, 34, 0.08);
     }
 
     .exercise-name {
       margin: 0;
-      font-size: 1.9rem;
+      font-family: "Iowan Old Style", Georgia, serif;
+      font-size: 2.15rem;
       line-height: 1;
-      letter-spacing: -0.045em;
+      letter-spacing: -0.04em;
+      font-weight: 600;
     }
 
     .exercise-meta {
       text-align: right;
       color: var(--muted);
-      font-size: 0.93rem;
-      line-height: 1.45;
-      min-width: 118px;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      min-width: 150px;
     }
 
     .pill {
       display: inline-block;
-      margin-top: 2px;
-      margin-bottom: 8px;
-      padding: 7px 12px;
+      margin-bottom: 10px;
+      padding: 7px 11px;
       border-radius: 999px;
-      border: 1px solid rgba(79, 111, 84, 0.12);
-      background: rgba(79, 111, 84, 0.08);
-      color: var(--accent);
-      font-size: 0.88rem;
+      border: 1px solid rgba(35, 72, 61, 0.12);
+      background: rgba(35, 72, 61, 0.08);
+      color: var(--forest);
+      font-size: 0.76rem;
       font-weight: 800;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     .compact-list,
     .set-list {
       display: grid;
-      gap: 10px;
+      gap: 0;
     }
 
     .compact-row,
     .set-row {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 12px;
+      gap: 16px;
       align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(61, 47, 34, 0.08);
     }
 
     .compact-row:first-child,
@@ -389,85 +450,92 @@
     .compact-name,
     .set-name {
       font-size: 1rem;
-      font-weight: 800;
-      line-height: 1.2;
+      font-weight: 700;
+      line-height: 1.25;
       margin-bottom: 4px;
     }
 
     .compact-sub,
     .set-sub {
       color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.35;
+      font-size: 0.94rem;
+      line-height: 1.45;
     }
 
     .compact-check,
     .set-check {
-      width: 26px;
-      height: 26px;
-      accent-color: var(--accent);
+      width: 24px;
+      height: 24px;
+      accent-color: var(--forest);
       flex: 0 0 auto;
     }
 
     .set-row.disabled {
-      opacity: 0.45;
+      opacity: 0.42;
     }
 
     .actions {
       display: grid;
       gap: 12px;
+      padding: 20px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(245, 238, 228, 0.95));
+      border: 1px solid rgba(61, 47, 34, 0.12);
+      box-shadow: var(--shadow-md);
     }
 
     .action {
       width: 100%;
-      padding: 18px;
-      font-size: 1.02rem;
+      padding: 17px 18px;
+      font-size: 0.97rem;
       font-weight: 800;
-      color: #fff;
-      background: linear-gradient(180deg, #5a7d60, var(--accent));
-      box-shadow: 0 14px 24px rgba(79, 111, 84, 0.18);
-      letter-spacing: -0.01em;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fbf6ef;
+      background: linear-gradient(180deg, #2b5246, var(--forest));
+      box-shadow: 0 10px 24px rgba(35, 72, 61, 0.16);
     }
 
     .action:hover {
-      box-shadow: 0 16px 28px rgba(79, 111, 84, 0.22);
+      box-shadow: 0 12px 26px rgba(35, 72, 61, 0.2);
     }
 
     .action.secondary {
-      background: linear-gradient(180deg, #f2ede3, #e5ddd1);
-      color: var(--text);
+      background: linear-gradient(180deg, #f4ede4, #ece2d4);
+      color: var(--ink);
       box-shadow: none;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(61, 47, 34, 0.12);
     }
 
     .action.ghost {
-      background: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.5);
       color: var(--muted);
-      border: 1px solid var(--line);
+      border: 1px solid rgba(61, 47, 34, 0.1);
       box-shadow: none;
     }
 
     .action.danger {
-      background: linear-gradient(180deg, #b06453, var(--danger));
-      box-shadow: 0 14px 24px rgba(160, 85, 68, 0.18);
+      background: linear-gradient(180deg, #a15e52, var(--danger));
+      box-shadow: 0 10px 24px rgba(141, 78, 67, 0.16);
     }
 
     .footer-note {
       color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      padding: 2px 4px 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      padding: 4px 2px 0;
+      max-width: 700px;
     }
 
     .confetti-piece {
       position: fixed;
       top: -12px;
-      width: 10px;
-      height: 16px;
+      width: 8px;
+      height: 14px;
       border-radius: 2px;
       pointer-events: none;
       z-index: 9999;
-      opacity: 0.95;
+      opacity: 0.9;
       animation: confetti-fall linear forwards;
     }
 
@@ -480,37 +548,44 @@
 
     @media (max-width: 640px) {
       body {
-        padding: 12px;
+        padding: 14px 12px 30px;
       }
 
       .app {
-        gap: 16px;
+        gap: 14px;
       }
 
-      .panel {
-        padding: 16px;
-        border-radius: 22px;
+      .panel,
+      .top,
+      .lesson-card,
+      .actions,
+      .exercise,
+      .warmup-summary,
+      .warmup-body {
+        padding-left: 16px;
+        padding-right: 16px;
       }
 
       h1 {
-        font-size: 2.2rem;
+        font-size: 2.55rem;
       }
 
       .meta-row {
-        font-size: 1.08rem;
+        grid-template-columns: 1fr;
       }
 
-      .kg-wrap {
+      .kg-wrap,
+      #trainingCode {
         width: 100%;
-        justify-content: flex-start;
-      }
-
-      .exercise-name {
-        font-size: 1.62rem;
+        justify-content: center;
       }
 
       .exercise-top {
         display: grid;
+      }
+
+      .exercise-name {
+        font-size: 1.8rem;
       }
 
       .exercise-meta {
@@ -518,8 +593,8 @@
         min-width: 0;
       }
 
-      .action {
-        padding: 17px 16px;
+      .warmup-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -538,11 +613,14 @@
 <body>
   <main class="app">
     <section class="panel top">
-      <h1>The Six</h1>
-      <div class="subline">A clean progression tracker for your six foundational kettlebell lifts.</div>
+      <div class="hero-kicker">Training Protocol</div>
+      <div class="hero-head">
+        <h1>The Six</h1>
+        <div class="subline">A refined progression sheet for your six foundational kettlebell lifts, designed to feel like a coached training brief rather than a generic tracker.</div>
+      </div>
       <div class="meta-row">
         <span id="trainingCode" aria-live="polite">0.1.4</span>
-        <span class="divider">•</span>
+        <span class="divider">&bull;</span>
         <label class="kg-wrap" for="kbInput">KB:
           <input id="kbInput" class="kg-input" type="number" inputmode="decimal" min="0" step="1" value="16" />
           <span>kg</span>
@@ -551,15 +629,15 @@
     </section>
 
     <section class="lesson-card panel" id="lessonCard">
-      <div class="lesson-title">Lesson of the day</div>
+      <div class="lesson-title">Coach's note</div>
       <p class="lesson-text" id="lessonText"></p>
     </section>
 
     <details class="warmup-accordion">
       <summary class="warmup-summary">
-        <div class="warmup-kicker">Optional</div>
+        <div class="warmup-kicker">Preparation</div>
         <div class="warmup-title">Mobility warm-up</div>
-        <div class="warmup-sub">10–15 minutes. Closed by default.</div>
+        <div class="warmup-sub">10&ndash;15 minutes. Use this block when you want to arrive at the session with better positions, not more fatigue.</div>
       </summary>
       <div class="warmup-body">
         <div class="plan-box">
@@ -567,7 +645,7 @@
           <div>Do these drills before training or in the morning.</div>
           <div>Move smoothly, about 1 rep every 2 seconds.</div>
           <div>Stop when ROM no longer improves or fatigue starts to build.</div>
-          <div>Guideline: 5–10 easy reps per drill, or several short rounds.</div>
+          <div>Guideline: 5&ndash;10 easy reps per drill, or several short rounds.</div>
         </div>
         <div class="warmup-grid">
           <div class="warmup-item">Three-Way Neck</div>
@@ -589,8 +667,8 @@
     <section class="panel" id="workoutList"></section>
 
     <section class="panel actions">
-      <button id="completedBtn" class="action" type="button">✅ Session successful</button>
-      <button id="repeatBtn" class="action secondary" type="button">⚠️ Session completed</button>
+      <button id="completedBtn" class="action" type="button">Mark session successful</button>
+      <button id="repeatBtn" class="action secondary" type="button">Rotate without pass</button>
       <button id="resetCountersBtn" class="action ghost" type="button">Reset counters for this session</button>
       <button id="hardResetBtn" class="action danger" type="button">Full reset</button>
       <div class="footer-note">Session successful = mark this workout as passed and rotate forward. Session completed = rotate forward without a pass. The week only advances after all 6 workouts are successful.</div>
@@ -623,9 +701,9 @@
       "Words create pictures. Pictures influence feelings. Feelings drive actions. Actions shape destiny.",
       "Mental training is not a quick fix. Small efforts cannot offset daily negative habits.",
       "Growth happens in plateaus and leaps, not in a straight line. Trust the process during stagnation.",
-      "Everything impacts everything. Mastery is total integration—every detail matters.",
+      "Everything impacts everything. Mastery is total integration\u2014every detail matters.",
       "Invisible growth precedes visible success. Without deep roots, height cannot be sustained.",
-      "There are signs that you are on the right path—discipline, growth, and character development.",
+      "There are signs that you are on the right path\u2014discipline, growth, and character development.",
       "Be fully present. Presence is a decision.",
       "You achieve goals; you live a mission. A mission gives direction when goals fade.",
       "Release the outcome; commit to the effort. Control the controllables.",
@@ -901,16 +979,16 @@
     function launchConfetti() {
       const colors = ["#567352", "#c9a227", "#a05544", "#3d6b99", "#8b5e3c", "#e07a5f"];
 
-      for (let index = 0; index < 120; index += 1) {
+      for (let index = 0; index < 80; index += 1) {
         const piece = document.createElement("div");
         piece.className = "confetti-piece";
         piece.style.left = `${Math.random() * 100}vw`;
         piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.setProperty("--tx", `${(Math.random() - 0.5) * 240}px`);
-        piece.style.setProperty("--rot", `${(Math.random() - 0.5) * 1080}deg`);
-        piece.style.animationDuration = `${2.2 + Math.random() * 1.8}s`;
+        piece.style.setProperty("--tx", `${(Math.random() - 0.5) * 180}px`);
+        piece.style.setProperty("--rot", `${(Math.random() - 0.5) * 840}deg`);
+        piece.style.animationDuration = `${2.1 + Math.random() * 1.4}s`;
         document.body.appendChild(piece);
-        setTimeout(() => piece.remove(), 4300);
+        setTimeout(() => piece.remove(), 3800);
       }
     }
 
@@ -963,7 +1041,7 @@
         <article class="exercise">
           <div class="exercise-top">
             <div>
-              <div class="exercise-kicker">1–5 / 6</div>
+              <div class="exercise-kicker">1&ndash;5 / 6</div>
               <h2 class="exercise-name">Base blocks</h2>
             </div>
             <div class="exercise-meta">
@@ -994,7 +1072,7 @@
         <article class="exercise">
           <div class="exercise-top">
             <div>
-              <div class="exercise-kicker">6 / 6 • last exercise</div>
+              <div class="exercise-kicker">6 / 6 &bull; last exercise</div>
               <h2 class="exercise-name">${lastExercise.name}</h2>
             </div>
             <div class="exercise-meta">
