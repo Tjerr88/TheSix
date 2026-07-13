@@ -222,12 +222,6 @@
       box-shadow: 0 0 0 4px rgba(39, 93, 78, 0.12);
     }
 
-    .progress-panel {
-      padding: 18px;
-      display: grid;
-      gap: 14px;
-    }
-
     .progress-head {
       display: flex;
       justify-content: space-between;
@@ -951,7 +945,6 @@
       background: rgba(255, 252, 244, 0.9);
     }
 
-    .progress-panel,
     .lesson,
     .workout-card,
     .side .panel,
@@ -1227,17 +1220,6 @@
         </label>
       </section>
 
-      <section class="progress-panel panel" aria-label="Progress">
-        <div class="progress-head">
-          <div>
-            <p class="eyebrow">Session Progress</p>
-            <h2 id="progressTitle">0 / 0 sets complete</h2>
-          </div>
-          <div class="progress-copy" id="progressCopy">Check the required work to unlock success.</div>
-        </div>
-        <div class="bar" aria-hidden="true"><div class="bar-fill" id="sessionBar"></div></div>
-      </section>
-
       <section class="lesson panel">
         <div class="eyebrow">Coach's Note</div>
         <h2 class="lesson-heading" id="lessonHeading"></h2>
@@ -1398,9 +1380,6 @@
       weekLabel: document.getElementById("weekLabel"),
       sessionLabel: document.getElementById("sessionLabel"),
       kbInput: document.getElementById("kbInput"),
-      progressTitle: document.getElementById("progressTitle"),
-      progressCopy: document.getElementById("progressCopy"),
-      sessionBar: document.getElementById("sessionBar"),
       lessonHeading: document.getElementById("lessonHeading"),
       lessonText: document.getElementById("lessonText"),
       workoutList: document.getElementById("workoutList"),
@@ -1844,18 +1823,14 @@
 
     function renderProgress() {
       const completion = getSessionCompletion();
-      const percent = completion.total ? Math.round((completion.done / completion.total) * 100) : 0;
       const weekPassed = getWeekPassedCount();
 
-      els.progressTitle.textContent = `${completion.done} / ${completion.total} sets complete`;
-      els.progressCopy.textContent = completion.complete
-        ? "This session is ready to pass."
-        : `${completion.total - completion.done} required sets remaining.`;
-      els.sessionBar.style.width = `${percent}%`;
       els.completedBtn.disabled = !completion.complete;
       els.completedBtn.title = completion.complete ? "Mark this checked session as successful" : "Check all required sets first";
       els.undoBtn.disabled = !state.undo;
-      els.actionNote.textContent = `${weekPassed} / 6 successful workouts this week.`;
+      els.actionNote.textContent = completion.complete
+        ? `Ready to pass. ${weekPassed} / 6 successful workouts this week.`
+        : `${completion.done} / ${completion.total} sets checked. ${weekPassed} / 6 successful workouts this week.`;
     }
 
     function render() {
