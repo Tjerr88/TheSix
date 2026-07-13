@@ -3,29 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="The Six is a clean progression tracker for six foundational kettlebell lifts." />
+  <meta name="description" content="The Six is a refined progression tracker for six foundational kettlebell lifts." />
+  <meta name="theme-color" content="#173a31" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="logo.png" />
   <title>The Six</title>
   <style>
     :root {
-      --bg: #efe7dc;
-      --bg-deep: #e6ddd1;
-      --surface: rgba(255, 251, 246, 0.94);
-      --surface-strong: #fffdf9;
-      --surface-soft: #f5eee4;
-      --ink: #1d1915;
-      --muted: #6d665d;
-      --line: rgba(61, 47, 34, 0.14);
-      --line-strong: rgba(61, 47, 34, 0.24);
-      --forest: #23483d;
-      --forest-soft: rgba(35, 72, 61, 0.08);
-      --bronze: #8f6340;
-      --danger: #8d4e43;
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --shadow-lg: 0 24px 60px rgba(29, 25, 21, 0.08);
-      --shadow-md: 0 10px 24px rgba(29, 25, 21, 0.05);
-      --shadow-sm: 0 4px 12px rgba(29, 25, 21, 0.035);
+      --ink: #171410;
+      --muted: #6b604f;
+      --paper: rgba(255, 248, 232, 0.9);
+      --paper-strong: #fff8e9;
+      --paper-soft: rgba(247, 235, 207, 0.78);
+      --forest: #173a31;
+      --forest-2: #275d4e;
+      --gold: #b88a42;
+      --gold-soft: rgba(184, 138, 66, 0.18);
+      --blue: #254d68;
+      --danger: #8b3f35;
+      --line: rgba(54, 42, 26, 0.16);
+      --line-strong: rgba(54, 42, 26, 0.26);
+      --shadow: 0 18px 50px rgba(18, 16, 12, 0.14);
+      --radius: 8px;
       color-scheme: light;
     }
 
@@ -35,18 +34,19 @@
 
     html,
     body {
-      margin: 0;
-      padding: 0;
       min-height: 100%;
+      margin: 0;
       color: var(--ink);
-      font-family: "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(143, 99, 64, 0.12), transparent 24%),
-        linear-gradient(180deg, #f8f3eb 0%, var(--bg) 36%, var(--bg-deep) 100%);
+      font-family: Aptos, "Segoe UI", Arial, sans-serif;
+      background: #efe2c4;
     }
 
     body {
-      padding: 30px 16px 44px;
+      min-height: 100vh;
+      padding: 18px;
+      background:
+        linear-gradient(90deg, rgba(12, 30, 25, 0.78), rgba(239, 226, 196, 0.2) 22%, rgba(239, 226, 196, 0.1) 78%, rgba(12, 30, 25, 0.72)),
+        url("background.png") center / cover fixed;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -55,476 +55,641 @@
       font: inherit;
     }
 
-    button {
-      border: 0;
-      border-radius: var(--radius-md);
+    button,
+    .file-button {
+      min-height: 44px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
       cursor: pointer;
-      transition: transform 0.04s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+      transition: transform 0.08s ease, box-shadow 0.18s ease, background 0.18s ease, opacity 0.18s ease;
     }
 
-    button:active {
-      transform: scale(0.985);
+    button:active,
+    .file-button:active {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.48;
+      transform: none;
+      box-shadow: none;
     }
 
     .app {
-      max-width: 900px;
+      width: min(1180px, 100%);
       margin: 0 auto;
       display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
       gap: 18px;
-      padding-bottom: 60px;
+    }
+
+    .main,
+    .side {
+      display: grid;
+      gap: 14px;
+      align-content: start;
     }
 
     .panel {
-      background: var(--surface);
       border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-md);
-      padding: 24px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
-    .top {
+    .hero {
+      min-height: 330px;
+      padding: 26px;
       display: grid;
-      gap: 18px;
-      padding: 28px;
-      background:
-        linear-gradient(135deg, rgba(255, 253, 249, 0.98), rgba(248, 242, 234, 0.94)),
-        linear-gradient(180deg, rgba(35, 72, 61, 0.06), rgba(143, 99, 64, 0.05));
-      border: 1px solid var(--line-strong);
-      box-shadow: var(--shadow-lg);
-      position: relative;
+      grid-template-columns: minmax(0, 1fr) 180px;
+      gap: 24px;
+      align-items: end;
       overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(135deg, rgba(255, 248, 232, 0.92), rgba(245, 224, 181, 0.74)),
+        url("background.png") center / cover;
     }
 
-    .top::before {
+    .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background:
-        linear-gradient(90deg, transparent, rgba(143, 99, 64, 0.08), transparent);
-      opacity: 0.6;
+      border: 1px solid rgba(255, 255, 255, 0.32);
       pointer-events: none;
     }
 
-    .top > * {
+    .hero-content,
+    .hero-mark {
       position: relative;
       z-index: 1;
     }
 
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(35, 72, 61, 0.12);
+    .hero-kicker,
+    .eyebrow {
+      margin: 0 0 10px;
       color: var(--forest);
-      font-size: 0.76rem;
-      font-weight: 800;
-      letter-spacing: 0.14em;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.13em;
       text-transform: uppercase;
-    }
-
-    .hero-head {
-      display: grid;
-      gap: 10px;
     }
 
     h1 {
       margin: 0;
-      font-family: "Canela", "Iowan Old Style", Georgia, serif;
-      font-size: 3.35rem;
-      line-height: 0.92;
-      letter-spacing: -0.055em;
+      max-width: 680px;
+      font-family: "Iowan Old Style", Georgia, serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 0.86;
       font-weight: 600;
     }
 
     .subline {
-      max-width: 560px;
-      color: var(--muted);
+      max-width: 630px;
+      margin: 18px 0 0;
+      color: #443a2d;
       font-size: 1.04rem;
-      line-height: 1.7;
+      line-height: 1.65;
     }
 
-    .meta-row {
+    .hero-mark {
+      align-self: start;
+      justify-self: end;
+      width: 170px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: var(--radius);
+      border: 1px solid rgba(39, 93, 78, 0.24);
+      box-shadow: 0 16px 40px rgba(23, 58, 49, 0.18);
+    }
+
+    .dashboard {
       display: grid;
-      grid-template-columns: auto auto 1fr;
-      gap: 12px;
-      align-items: center;
-    }
-
-    #trainingCode,
-    .kg-wrap {
-      min-height: 52px;
-    }
-
-    #trainingCode {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 16px;
-      border-radius: 16px;
-      background: var(--forest);
-      border: 1px solid rgba(35, 72, 61, 0.25);
-      color: #f8f3eb;
-      font-size: 0.92rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    }
-
-    .divider {
-      display: none;
-    }
-
-    .kg-wrap {
-      display: inline-flex;
-      align-items: center;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
-      width: fit-content;
-      font-weight: 700;
-      padding: 8px 10px 8px 14px;
+      padding: 12px;
+    }
+
+    .metric {
+      min-height: 92px;
+      padding: 14px;
       border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.72);
+      border-radius: var(--radius);
+      background: rgba(255, 252, 242, 0.72);
+      display: grid;
+      align-content: space-between;
+    }
+
+    .metric-label {
       color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      font-family: "Iowan Old Style", Georgia, serif;
+      font-size: 2.1rem;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .kg-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .kg-input {
-      width: 84px;
-      border: 1px solid rgba(61, 47, 34, 0.12);
-      background: #fff;
+      width: 92px;
+      height: 42px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: #fff9ec;
       color: var(--ink);
-      border-radius: 12px;
-      padding: 11px 12px;
-      font-size: 1rem;
+      font-size: 1.25rem;
       font-weight: 800;
       text-align: center;
       outline: none;
-      box-shadow: inset 0 1px 2px rgba(29, 25, 21, 0.03);
     }
 
     .kg-input:focus {
-      border-color: rgba(35, 72, 61, 0.45);
-      box-shadow: 0 0 0 4px rgba(35, 72, 61, 0.09);
+      border-color: var(--forest-2);
+      box-shadow: 0 0 0 4px rgba(39, 93, 78, 0.12);
     }
 
-    .lesson-card {
+    .progress-panel {
+      padding: 18px;
       display: grid;
-      gap: 10px;
-      padding: 22px 24px;
-      border: 1px solid rgba(143, 99, 64, 0.12);
-      border-radius: var(--radius-xl);
-      background:
-        linear-gradient(180deg, rgba(255, 252, 247, 0.98), rgba(248, 242, 234, 0.96));
-      box-shadow: var(--shadow-md);
-      position: relative;
-      overflow: hidden;
+      gap: 14px;
     }
 
-    .lesson-card::before {
-      content: "";
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 6px;
-      background: linear-gradient(180deg, var(--bronze), var(--forest));
-      opacity: 0.8;
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
     }
 
-    .lesson-title,
-    .warmup-kicker,
-    .exercise-kicker {
-      font-size: 0.76rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+    h2,
+    h3 {
+      margin: 0;
+      font-family: "Iowan Old Style", Georgia, serif;
+      font-weight: 650;
+      line-height: 1.05;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.45rem;
+    }
+
+    .progress-copy,
+    .small-copy {
       color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.94rem;
+    }
+
+    .bar {
+      height: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(23, 58, 49, 0.18);
+      border-radius: 999px;
+      background: rgba(23, 58, 49, 0.1);
+    }
+
+    .bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--forest), var(--gold));
+      transition: width 0.22s ease;
+    }
+
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .session-chip {
+      min-height: 72px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 250, 238, 0.7);
+      display: grid;
+      gap: 5px;
+    }
+
+    .session-chip.current {
+      border-color: rgba(23, 58, 49, 0.55);
+      background: rgba(23, 58, 49, 0.12);
+    }
+
+    .session-chip.done {
+      border-color: rgba(184, 138, 66, 0.62);
+      background: rgba(184, 138, 66, 0.18);
+    }
+
+    .chip-index {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .chip-name {
+      font-size: 0.92rem;
       font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .lesson {
+      padding: 18px;
+      display: grid;
+      gap: 8px;
+      border-left: 6px solid var(--gold);
     }
 
     .lesson-text {
       margin: 0;
-      padding-left: 2px;
       font-family: "Iowan Old Style", Georgia, serif;
       font-size: 1.22rem;
-      line-height: 1.7;
-      color: var(--ink);
-    }
-
-    details.warmup-accordion {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      background: var(--surface);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .warmup-summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 20px 24px;
-      display: grid;
-      gap: 6px;
-      position: relative;
-      background: linear-gradient(180deg, rgba(255, 253, 250, 0.96), rgba(248, 243, 236, 0.9));
-    }
-
-    .warmup-summary::after {
-      content: "+";
-      position: absolute;
-      right: 22px;
-      top: 22px;
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: rgba(35, 72, 61, 0.08);
-      color: var(--forest);
-      font-weight: 700;
-      font-size: 1.1rem;
-    }
-
-    details[open] .warmup-summary::after {
-      content: "\2212";
-    }
-
-    .warmup-summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .warmup-title {
-      font-family: "Iowan Old Style", Georgia, serif;
-      font-size: 1.42rem;
-      font-weight: 600;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-    }
-
-    .warmup-sub {
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 0.96rem;
-      max-width: 460px;
-    }
-
-    .warmup-body {
-      border-top: 1px solid var(--line);
-      padding: 20px 24px 24px;
-      display: grid;
-      gap: 16px;
-      background: var(--surface-soft);
-    }
-
-    .plan-box,
-    .compact-list,
-    .set-list {
-      padding: 16px;
-      border: 1px solid rgba(61, 47, 34, 0.1);
-      border-radius: var(--radius-lg);
-      background: rgba(255, 253, 249, 0.78);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    }
-
-    .plan-box {
       line-height: 1.55;
     }
 
-    .plan-title {
-      margin-bottom: 8px;
-      font-size: 0.92rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--forest);
-    }
-
-    .warmup-grid {
+    .workout {
       display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
     }
 
-    .warmup-item {
-      padding: 12px 14px;
-      border: 1px solid rgba(61, 47, 34, 0.08);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.7);
-      line-height: 1.35;
-      font-weight: 600;
-    }
-
-    #workoutList.panel {
-      padding: 12px;
-      background: transparent;
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
-    }
-
-    .exercise {
+    .workout-card {
+      padding: 18px;
       display: grid;
-      gap: 16px;
-      padding: 24px;
-      border: 1px solid rgba(61, 47, 34, 0.1);
-      border-radius: 24px;
-      background:
-        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(247, 241, 233, 0.95));
-      box-shadow: var(--shadow-md);
-      margin-bottom: 14px;
+      gap: 14px;
     }
 
-    .exercise:last-child {
-      margin-bottom: 0;
-    }
-
-    .exercise-top {
+    .card-head {
       display: flex;
       justify-content: space-between;
-      gap: 18px;
+      gap: 16px;
       align-items: flex-start;
-      padding-bottom: 14px;
-      border-bottom: 1px solid rgba(61, 47, 34, 0.08);
-    }
-
-    .exercise-name {
-      margin: 0;
-      font-family: "Iowan Old Style", Georgia, serif;
-      font-size: 2.15rem;
-      line-height: 1;
-      letter-spacing: -0.04em;
-      font-weight: 600;
-    }
-
-    .exercise-meta {
-      text-align: right;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.55;
-      min-width: 150px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
     }
 
     .pill {
-      display: inline-block;
-      margin-bottom: 10px;
-      padding: 7px 11px;
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border: 1px solid rgba(23, 58, 49, 0.16);
       border-radius: 999px;
-      border: 1px solid rgba(35, 72, 61, 0.12);
-      background: rgba(35, 72, 61, 0.08);
+      background: rgba(23, 58, 49, 0.08);
       color: var(--forest);
-      font-size: 0.76rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .compact-list,
-    .set-list {
+    .check-list {
       display: grid;
-      gap: 0;
+      gap: 8px;
     }
 
-    .compact-row,
-    .set-row {
+    .check-row {
+      min-height: 64px;
+      padding: 10px 12px;
+      border: 1px solid rgba(54, 42, 26, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 252, 242, 0.72);
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 16px;
+      gap: 14px;
       align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(61, 47, 34, 0.08);
     }
 
-    .compact-row:first-child,
-    .set-row:first-child {
-      padding-top: 0;
+    .check-row.disabled {
+      opacity: 0.48;
     }
 
-    .compact-row:last-child,
-    .set-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .compact-name,
-    .set-name {
-      font-size: 1rem;
-      font-weight: 700;
-      line-height: 1.25;
+    .check-name {
       margin-bottom: 4px;
+      font-weight: 850;
+      line-height: 1.2;
     }
 
-    .compact-sub,
-    .set-sub {
+    .check-sub {
       color: var(--muted);
-      font-size: 0.94rem;
-      line-height: 1.45;
+      font-size: 0.9rem;
+      line-height: 1.35;
     }
 
-    .compact-check,
-    .set-check {
-      width: 24px;
-      height: 24px;
+    .check-row input {
+      width: 28px;
+      height: 28px;
       accent-color: var(--forest);
-      flex: 0 0 auto;
     }
 
-    .set-row.disabled {
-      opacity: 0.42;
+    .set-tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .rest-button,
+    .rest-choice {
+      min-height: 36px;
+      padding: 8px 10px;
+      border-color: rgba(23, 58, 49, 0.18);
+      color: var(--forest);
+      background: rgba(23, 58, 49, 0.08);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .rest-button.running {
+      color: #fff9ec;
+      background: var(--forest);
+    }
+
+    .rest-options {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-top: 2px;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .setting-row {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 252, 242, 0.64);
+    }
+
+    .setting-label {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .segmented button,
+    .toggle-button {
+      min-height: 38px;
+      padding: 8px 10px;
+      border-color: var(--line);
+      color: var(--ink);
+      background: rgba(255, 248, 232, 0.78);
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .segmented button.active,
+    .toggle-button.active {
+      color: #fff9ec;
+      background: var(--forest);
+      border-color: var(--forest);
+    }
+
+    .timer-panel {
+      display: none;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid rgba(23, 58, 49, 0.2);
+      border-radius: var(--radius);
+      background: rgba(23, 58, 49, 0.08);
+    }
+
+    .timer-panel.show {
+      display: grid;
+    }
+
+    .timer-time {
+      font-family: "Iowan Old Style", Georgia, serif;
+      font-size: 2.4rem;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .side .panel {
+      padding: 16px;
     }
 
     .actions {
       display: grid;
-      gap: 12px;
-      padding: 20px;
-      background:
-        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(245, 238, 228, 0.95));
-      border: 1px solid rgba(61, 47, 34, 0.12);
-      box-shadow: var(--shadow-md);
+      gap: 10px;
     }
 
-    .action {
+    .primary,
+    .secondary,
+    .ghost,
+    .danger,
+    .file-button {
       width: 100%;
-      padding: 17px 18px;
-      font-size: 0.97rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.07em;
       text-transform: uppercase;
-      color: #fbf6ef;
-      background: linear-gradient(180deg, #2b5246, var(--forest));
-      box-shadow: 0 10px 24px rgba(35, 72, 61, 0.16);
     }
 
-    .action:hover {
-      box-shadow: 0 12px 26px rgba(35, 72, 61, 0.2);
+    .primary {
+      color: #fff9ec;
+      background: linear-gradient(180deg, var(--forest-2), var(--forest));
+      box-shadow: 0 10px 24px rgba(23, 58, 49, 0.2);
     }
 
-    .action.secondary {
-      background: linear-gradient(180deg, #f4ede4, #ece2d4);
+    .secondary,
+    .file-button {
       color: var(--ink);
-      box-shadow: none;
-      border: 1px solid rgba(61, 47, 34, 0.12);
+      background: rgba(255, 248, 232, 0.78);
+      border-color: var(--line-strong);
     }
 
-    .action.ghost {
-      background: rgba(255, 255, 255, 0.5);
+    .ghost {
+      color: var(--forest);
+      background: rgba(23, 58, 49, 0.08);
+      border-color: rgba(23, 58, 49, 0.14);
+    }
+
+    .danger {
+      color: #fff9ec;
+      background: linear-gradient(180deg, #a4564a, var(--danger));
+    }
+
+    .file-button {
+      display: grid;
+      place-items: center;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .warmup {
+      overflow: hidden;
+    }
+
+    .warmup summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px;
+    }
+
+    .warmup summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .warmup-body {
+      padding: 0 16px 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .warmup-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .warmup-list li {
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 252, 242, 0.7);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 20;
+      max-width: min(520px, calc(100% - 32px));
+      padding: 12px 14px;
+      border: 1px solid rgba(23, 58, 49, 0.24);
+      border-radius: var(--radius);
+      color: #fff9ec;
+      background: rgba(23, 58, 49, 0.95);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 12px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .install-prompt {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 19;
+      width: min(320px, calc(100% - 36px));
+      padding: 10px;
+      border: 1px solid rgba(23, 58, 49, 0.24);
+      border-radius: var(--radius);
+      background: rgba(255, 248, 232, 0.96);
+      box-shadow: var(--shadow);
+      display: none;
+      gap: 10px;
+      align-items: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .install-prompt.show {
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
+
+    .install-copy {
+      min-width: 0;
+    }
+
+    .install-title {
+      margin-bottom: 2px;
+      color: var(--forest);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .install-sub {
       color: var(--muted);
-      border: 1px solid rgba(61, 47, 34, 0.1);
-      box-shadow: none;
+      font-size: 0.84rem;
+      line-height: 1.35;
     }
 
-    .action.danger {
-      background: linear-gradient(180deg, #a15e52, var(--danger));
-      box-shadow: 0 10px 24px rgba(141, 78, 67, 0.16);
+    .install-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
     }
 
-    .footer-note {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.7;
-      padding: 4px 2px 0;
-      max-width: 700px;
+    .install-button,
+    .install-dismiss {
+      min-height: 38px;
+      padding: 8px 10px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .install-button {
+      color: #fff9ec;
+      background: var(--forest);
+    }
+
+    .install-dismiss {
+      color: var(--forest);
+      background: rgba(23, 58, 49, 0.08);
+      border-color: rgba(23, 58, 49, 0.14);
     }
 
     .confetti-piece {
@@ -546,55 +711,52 @@
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 980px) {
       body {
-        padding: 14px 12px 30px;
+        padding: 12px;
       }
 
       .app {
-        gap: 14px;
-      }
-
-      .panel,
-      .top,
-      .lesson-card,
-      .actions,
-      .exercise,
-      .warmup-summary,
-      .warmup-body {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      h1 {
-        font-size: 2.55rem;
-      }
-
-      .meta-row {
         grid-template-columns: 1fr;
       }
 
-      .kg-wrap,
-      #trainingCode {
-        width: 100%;
-        justify-content: center;
+      .side {
+        grid-row: auto;
       }
 
-      .exercise-top {
+      .dashboard {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        min-height: 360px;
+        grid-template-columns: 1fr;
+        align-items: end;
+      }
+
+      .hero-mark {
+        width: 96px;
+        justify-self: start;
+      }
+
+      .dashboard,
+      .week-grid,
+      .tool-grid,
+      .warmup-list {
+        grid-template-columns: 1fr;
+      }
+
+      .card-head,
+      .progress-head {
         display: grid;
       }
 
-      .exercise-name {
-        font-size: 1.8rem;
-      }
-
-      .exercise-meta {
-        text-align: left;
-        min-width: 0;
-      }
-
-      .warmup-grid {
-        grid-template-columns: 1fr;
+      .install-prompt {
+        right: 12px;
+        bottom: 12px;
+        width: calc(100% - 24px);
       }
     }
 
@@ -608,72 +770,523 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* Calm mode: quieter surfaces, clearer rhythm, less visual competition. */
+    body {
+      padding: 20px;
+      background:
+        linear-gradient(180deg, rgba(247, 238, 217, 0.94), rgba(232, 218, 188, 0.96)),
+        url("background.png") center / cover fixed;
+    }
+
+    .app {
+      width: min(1040px, 100%);
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 16px;
+    }
+
+    .tab-switch {
+      grid-column: 1 / -1;
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      justify-self: center;
+      width: min(340px, 100%);
+      padding: 4px;
+      background: rgba(255, 250, 238, 0.72);
+      box-shadow: none;
+    }
+
+    .tab-button {
+      min-height: 38px;
+      border-color: transparent;
+      color: var(--muted);
+      background: transparent;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .tab-button.active {
+      color: #fff9ec;
+      background: var(--forest);
+    }
+
+    .settings-view {
+      grid-column: 1 / -1;
+      display: none;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-content: start;
+    }
+
+    .app[data-view="settings"] [data-tab-panel="train"] {
+      display: none;
+    }
+
+    .app[data-view="settings"] .settings-view {
+      display: grid;
+    }
+
+    .app[data-view="train"] ~ .install-prompt {
+      display: none !important;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .main,
+    .side {
+      gap: 12px;
+    }
+
+    .panel {
+      border-color: rgba(54, 42, 26, 0.11);
+      background: rgba(255, 250, 238, 0.86);
+      box-shadow: 0 8px 26px rgba(28, 24, 17, 0.075);
+    }
+
+    .hero {
+      min-height: 220px;
+      padding: 24px;
+      grid-template-columns: minmax(0, 1fr) 92px;
+      align-items: center;
+      background:
+        linear-gradient(135deg, rgba(255, 250, 238, 0.94), rgba(247, 235, 207, 0.82)),
+        url("background.png") center / cover;
+    }
+
+    .hero::before {
+      opacity: 0.45;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 5.25rem);
+      letter-spacing: 0;
+    }
+
+    .subline {
+      max-width: 560px;
+      margin-top: 12px;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .hero-mark {
+      width: 92px;
+      border-radius: 10px;
+      box-shadow: none;
+      opacity: 0.92;
+    }
+
+    .hero-kicker,
+    .eyebrow,
+    .metric-label,
+    .setting-label,
+    .chip-index {
+      letter-spacing: 0.08em;
+    }
+
+    .dashboard {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .metric {
+      min-height: 76px;
+      padding: 12px;
+      background: rgba(255, 252, 244, 0.68);
+    }
+
+    .metric-value {
+      font-size: 1.72rem;
+    }
+
+    .kg-input {
+      width: 78px;
+      height: 38px;
+      font-size: 1.05rem;
+      background: rgba(255, 252, 244, 0.9);
+    }
+
+    .progress-panel,
+    .lesson,
+    .workout-card,
+    .side .panel,
+    .settings-view .panel {
+      padding: 16px;
+    }
+
+    .workout-card {
+      padding: 12px;
+      gap: 10px;
+    }
+
+    .progress-head {
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 1.72rem;
+    }
+
+    h3 {
+      font-size: 1.24rem;
+    }
+
+    .bar {
+      height: 8px;
+      background: rgba(23, 58, 49, 0.08);
+    }
+
+    .week-grid {
+      gap: 6px;
+    }
+
+    .session-chip {
+      min-height: 58px;
+      padding: 9px;
+      background: rgba(255, 252, 244, 0.58);
+    }
+
+    .chip-name {
+      font-size: 0.84rem;
+    }
+
+    .lesson {
+      border-left-width: 4px;
+    }
+
+    .lesson-text {
+      font-size: 1.08rem;
+      line-height: 1.48;
+    }
+
+    .card-head {
+      padding-bottom: 8px;
+    }
+
+    .card-head h2 {
+      font-size: 1.45rem;
+    }
+
+    .check-list {
+      gap: 6px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    }
+
+    .check-row {
+      min-height: 48px;
+      padding: 7px 9px;
+      background: rgba(255, 252, 244, 0.62);
+    }
+
+    .check-name {
+      margin-bottom: 2px;
+      font-size: 0.9rem;
+    }
+
+    .check-sub {
+      font-size: 0.8rem;
+    }
+
+    .check-row input {
+      width: 22px;
+      height: 22px;
+    }
+
+    .rest-button,
+    .rest-choice {
+      min-height: 32px;
+      padding: 7px 9px;
+      font-size: 0.68rem;
+    }
+
+    .actions {
+      gap: 8px;
+    }
+
+    .primary,
+    .secondary,
+    .ghost,
+    .danger,
+    .file-button,
+    .toggle-button,
+    .segmented button {
+      min-height: 40px;
+      padding: 10px 12px;
+      letter-spacing: 0.045em;
+      font-size: 0.76rem;
+      box-shadow: none;
+    }
+
+    .secondary,
+    .ghost,
+    .file-button,
+    .toggle-button,
+    .segmented button {
+      background: rgba(255, 252, 244, 0.6);
+    }
+
+    .danger {
+      background: #8b3f35;
+    }
+
+    .settings-grid,
+    .warmup-body {
+      gap: 8px;
+    }
+
+    .setting-row {
+      padding: 8px;
+      background: rgba(255, 252, 244, 0.56);
+    }
+
+    .timer-panel {
+      padding: 10px;
+      background: rgba(23, 58, 49, 0.06);
+    }
+
+    .timer-time {
+      font-size: 2rem;
+    }
+
+    .small-copy,
+    .progress-copy {
+      font-size: 0.88rem;
+    }
+
+    .warmup summary {
+      padding: 14px 16px;
+    }
+
+    .utility-panel {
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .utility-panel summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .utility-panel summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .utility-panel .settings-grid,
+    .utility-panel .tool-grid,
+    .utility-panel .small-copy {
+      margin-top: 10px;
+    }
+
+    .warmup-list {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+
+    .warmup-list li {
+      padding: 7px 9px;
+      font-size: 0.82rem;
+      background: rgba(255, 252, 244, 0.56);
+    }
+
+    @media (max-width: 980px) {
+      body {
+        padding: 12px;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .settings-view {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero {
+        min-height: 230px;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+      }
+
+      .hero-mark {
+        width: 74px;
+        justify-self: end;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .week-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .check-list {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <main class="app">
-    <section class="panel top">
-      <div class="hero-kicker">Training Protocol</div>
-      <div class="hero-head">
-        <h1>The Six</h1>
-        <div class="subline">A refined progression sheet for your six foundational kettlebell lifts, designed to feel like a coached training brief rather than a generic tracker.</div>
-      </div>
-      <div class="meta-row">
-        <span id="trainingCode" aria-live="polite">0.1.4</span>
-        <span class="divider">&bull;</span>
-        <label class="kg-wrap" for="kbInput">KB:
-          <input id="kbInput" class="kg-input" type="number" inputmode="decimal" min="0" step="1" value="16" />
-          <span>kg</span>
+  <main class="app" id="appRoot" data-view="train">
+    <nav class="tab-switch panel" aria-label="App sections">
+      <button class="tab-button active" id="trainTabBtn" type="button" aria-controls="trainPanel">Train</button>
+      <button class="tab-button" id="settingsTabBtn" type="button" aria-controls="settingsPanel">Settings</button>
+    </nav>
+
+    <section class="main" id="trainPanel" data-tab-panel="train" aria-label="Training">
+      <header class="hero panel">
+        <div class="hero-content">
+          <p class="hero-kicker">Training Protocol</p>
+          <h1>The Six</h1>
+          <p class="subline">A focused progression tracker for six foundational kettlebell lifts, built for quiet repetition, clear status, and disciplined rotation.</p>
+        </div>
+        <img class="hero-mark" src="logo.png" alt="The Six logo" />
+      </header>
+
+      <section class="dashboard panel" aria-label="Current state">
+        <div class="metric">
+          <div class="metric-label">Code</div>
+          <div class="metric-value" id="trainingCode">0.1.1</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Week</div>
+          <div class="metric-value" id="weekLabel">1 / 5</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Session</div>
+          <div class="metric-value" id="sessionLabel">1 / 6</div>
+        </div>
+        <label class="metric" for="kbInput">
+          <span class="metric-label">Kettlebell</span>
+          <span class="kg-row">
+            <input id="kbInput" class="kg-input" type="number" inputmode="decimal" min="0" step="1" value="16" />
+            <strong>kg</strong>
+          </span>
         </label>
-      </div>
+      </section>
+
+      <section class="progress-panel panel" aria-label="Progress">
+        <div class="progress-head">
+          <div>
+            <p class="eyebrow">Session Progress</p>
+            <h2 id="progressTitle">0 / 0 sets complete</h2>
+          </div>
+          <div class="progress-copy" id="progressCopy">Check the required work to unlock success.</div>
+        </div>
+        <div class="bar" aria-hidden="true"><div class="bar-fill" id="sessionBar"></div></div>
+        <div class="week-grid" id="weekGrid"></div>
+      </section>
+
+      <section class="lesson panel">
+        <div class="eyebrow">Coach's Note</div>
+        <p class="lesson-text" id="lessonText"></p>
+      </section>
+
+      <section class="workout" id="workoutList" aria-label="Workout checklist"></section>
     </section>
 
-    <section class="lesson-card panel" id="lessonCard">
-      <div class="lesson-title">Coach's note</div>
-      <p class="lesson-text" id="lessonText"></p>
-    </section>
-
-    <details class="warmup-accordion">
-      <summary class="warmup-summary">
-        <div class="warmup-kicker">Preparation</div>
-        <div class="warmup-title">Mobility warm-up</div>
-        <div class="warmup-sub">10&ndash;15 minutes. Use this block when you want to arrive at the session with better positions, not more fatigue.</div>
-      </summary>
-      <div class="warmup-body">
-        <div class="plan-box">
-          <div class="plan-title">General rules</div>
-          <div>Do these drills before training or in the morning.</div>
-          <div>Move smoothly, about 1 rep every 2 seconds.</div>
-          <div>Stop when ROM no longer improves or fatigue starts to build.</div>
-          <div>Guideline: 5&ndash;10 easy reps per drill, or several short rounds.</div>
+    <aside class="side" id="trainControls" data-tab-panel="train" aria-label="Controls">
+      <section class="panel actions">
+        <p class="eyebrow">Session Control</p>
+        <div class="timer-panel" id="timerPanel">
+          <div class="setting-label" id="timerLabel">Rest Timer</div>
+          <div class="timer-time" id="timerTime">2:00</div>
+          <button id="cancelTimerBtn" class="ghost" type="button">Cancel Timer</button>
         </div>
-        <div class="warmup-grid">
-          <div class="warmup-item">Three-Way Neck</div>
-          <div class="warmup-item">Fingers and Wrists</div>
-          <div class="warmup-item">Elbow Circles</div>
-          <div class="warmup-item">Kettlebell Halo</div>
-          <div class="warmup-item">Egyptian</div>
-          <div class="warmup-item">Hip Circles</div>
-          <div class="warmup-item">Knee Circles</div>
-          <div class="warmup-item">Toes, Feet, and Ankles</div>
-          <div class="warmup-item">Crocodile Breathing</div>
-          <div class="warmup-item">Prying Cobra / Down Dog</div>
-          <div class="warmup-item">Frog</div>
-          <div class="warmup-item">Tug-of-War Squats</div>
+        <button id="completedBtn" class="primary" type="button">Mark Session Successful</button>
+        <button id="repeatBtn" class="secondary" type="button">Rotate Without Pass</button>
+        <button id="undoBtn" class="ghost" type="button">Undo Last Action</button>
+        <button id="resetCountersBtn" class="ghost" type="button">Reset Current Session</button>
+        <div class="small-copy" id="actionNote">Complete all required sets to mark this session as successful.</div>
+      </section>
+    </aside>
+
+    <section class="settings-view" id="settingsPanel" data-tab-panel="settings" aria-label="Settings" hidden>
+      <section class="panel actions">
+        <p class="eyebrow">Settings</p>
+        <h2>Timer & App</h2>
+        <div class="settings-grid">
+          <div class="setting-row">
+            <div class="setting-label">Default Rest</div>
+            <div class="segmented" id="restPresetGroup">
+              <button type="button" data-rest-preset="90">1:30</button>
+              <button type="button" data-rest-preset="120">2:00</button>
+              <button type="button" data-rest-preset="180">3:00</button>
+            </div>
+          </div>
+          <div class="tool-grid">
+            <button id="soundToggleBtn" class="toggle-button" type="button">Sound On</button>
+            <button id="vibrationToggleBtn" class="toggle-button" type="button">Vibration On</button>
+          </div>
+          <button id="autoCheckToggleBtn" class="toggle-button" type="button">Auto-check On Rest Start</button>
+          <button id="wakeLockToggleBtn" class="toggle-button" type="button">Wake Lock When Possible</button>
         </div>
-      </div>
-    </details>
+      </section>
 
-    <section class="panel" id="workoutList"></section>
+      <section class="panel actions">
+        <p class="eyebrow">Backup</p>
+        <h2>Export & Import</h2>
+        <div class="tool-grid">
+          <button id="exportBtn" class="secondary" type="button">Export</button>
+          <label class="file-button" for="importFile">Import</label>
+        </div>
+        <input id="importFile" class="file-input" type="file" accept="application/json,.json" />
+        <div class="small-copy">Progress is stored on this device. Export creates a portable backup.</div>
+      </section>
 
-    <section class="panel actions">
-      <button id="completedBtn" class="action" type="button">Mark session successful</button>
-      <button id="repeatBtn" class="action secondary" type="button">Rotate without pass</button>
-      <button id="resetCountersBtn" class="action ghost" type="button">Reset counters for this session</button>
-      <button id="hardResetBtn" class="action danger" type="button">Full reset</button>
-      <div class="footer-note">Session successful = mark this workout as passed and rotate forward. Session completed = rotate forward without a pass. The week only advances after all 6 workouts are successful.</div>
+      <section class="panel actions">
+        <p class="eyebrow">Maintenance</p>
+        <h2>Reset Options</h2>
+        <button id="resetWeekBtn" class="ghost" type="button">Reset Current Week</button>
+        <button id="hardResetBtn" class="danger" type="button">Full Reset</button>
+      </section>
+
+      <details class="panel warmup" open>
+        <summary>
+          <p class="eyebrow">Preparation</p>
+          <h3>Mobility Warm-up</h3>
+        </summary>
+        <div class="warmup-body">
+          <div class="small-copy">10-15 minutes. Move smoothly and stop when range no longer improves.</div>
+          <ul class="warmup-list">
+            <li>Three-Way Neck</li>
+            <li>Fingers and Wrists</li>
+            <li>Elbow Circles</li>
+            <li>Kettlebell Halo</li>
+            <li>Egyptian</li>
+            <li>Hip Circles</li>
+            <li>Knee Circles</li>
+            <li>Toes, Feet, Ankles</li>
+            <li>Crocodile Breathing</li>
+            <li>Prying Cobra</li>
+            <li>Frog</li>
+            <li>Tug-of-War Squats</li>
+          </ul>
+        </div>
+      </details>
     </section>
   </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="install-prompt" id="installPrompt" role="region" aria-label="Install app">
+    <div class="install-copy">
+      <div class="install-title">Install The Six</div>
+      <div class="install-sub" id="installCopy">Add it to your device for faster training access.</div>
+    </div>
+    <div class="install-actions">
+      <button class="install-button" id="installBtn" type="button">Install</button>
+      <button class="install-dismiss" id="installDismissBtn" type="button" aria-label="Dismiss install prompt">Later</button>
+    </div>
+  </div>
 
   <script>
     const EXERCISES = [
@@ -688,7 +1301,7 @@
     const LESSONS = [
       "Focus on the process, not the reward. Greatness begins with faithfully executing simple daily tasks.",
       "You are always building your own house. Who you become matters more than what you achieve.",
-      "Dream big. Start small. Be ridiculously faithful. Everyone wants greatness until it's time to do what greatness requires.",
+      "Dream big. Start small. Be ridiculously faithful. Everyone wants greatness until it is time to do what greatness requires.",
       "With one eye on the goal, you only have one eye for the journey. Focus on the next step, not the summit.",
       "Nothing is a test; everything is an opportunity to learn and grow.",
       "Your value comes from who you are, not from what you do.",
@@ -701,9 +1314,9 @@
       "Words create pictures. Pictures influence feelings. Feelings drive actions. Actions shape destiny.",
       "Mental training is not a quick fix. Small efforts cannot offset daily negative habits.",
       "Growth happens in plateaus and leaps, not in a straight line. Trust the process during stagnation.",
-      "Everything impacts everything. Mastery is total integration\u2014every detail matters.",
+      "Everything impacts everything. Mastery is total integration; every detail matters.",
       "Invisible growth precedes visible success. Without deep roots, height cannot be sustained.",
-      "There are signs that you are on the right path\u2014discipline, growth, and character development.",
+      "There are signs that you are on the right path: discipline, growth, and character development.",
       "Be fully present. Presence is a decision.",
       "You achieve goals; you live a mission. A mission gives direction when goals fade.",
       "Release the outcome; commit to the effort. Control the controllables.",
@@ -716,16 +1329,60 @@
       "Identity is shaped by choices. You can redefine who you are."
     ];
 
-    const STORAGE_KEY = "six-pillars-state-v3";
+    const STORAGE_KEY = "six-pillars-state-v4";
+    const OLD_STORAGE_KEY = "six-pillars-state-v3";
+    const INSTALL_DISMISSED_KEY = "six-pillars-install-dismissed-at";
+    const INSTALL_DISMISS_DAYS = 7;
 
-    const trainingCodeEl = document.getElementById("trainingCode");
-    const kbInputEl = document.getElementById("kbInput");
-    const lessonTextEl = document.getElementById("lessonText");
-    const workoutListEl = document.getElementById("workoutList");
-    const completedBtnEl = document.getElementById("completedBtn");
-    const repeatBtnEl = document.getElementById("repeatBtn");
-    const resetCountersBtnEl = document.getElementById("resetCountersBtn");
-    const hardResetBtnEl = document.getElementById("hardResetBtn");
+    const els = {
+      appRoot: document.getElementById("appRoot"),
+      trainTabBtn: document.getElementById("trainTabBtn"),
+      settingsTabBtn: document.getElementById("settingsTabBtn"),
+      trainPanel: document.getElementById("trainPanel"),
+      trainControls: document.getElementById("trainControls"),
+      settingsPanel: document.getElementById("settingsPanel"),
+      trainingCode: document.getElementById("trainingCode"),
+      weekLabel: document.getElementById("weekLabel"),
+      sessionLabel: document.getElementById("sessionLabel"),
+      kbInput: document.getElementById("kbInput"),
+      progressTitle: document.getElementById("progressTitle"),
+      progressCopy: document.getElementById("progressCopy"),
+      sessionBar: document.getElementById("sessionBar"),
+      weekGrid: document.getElementById("weekGrid"),
+      lessonText: document.getElementById("lessonText"),
+      workoutList: document.getElementById("workoutList"),
+      completedBtn: document.getElementById("completedBtn"),
+      repeatBtn: document.getElementById("repeatBtn"),
+      undoBtn: document.getElementById("undoBtn"),
+      resetCountersBtn: document.getElementById("resetCountersBtn"),
+      resetWeekBtn: document.getElementById("resetWeekBtn"),
+      hardResetBtn: document.getElementById("hardResetBtn"),
+      exportBtn: document.getElementById("exportBtn"),
+      importFile: document.getElementById("importFile"),
+      actionNote: document.getElementById("actionNote"),
+      toast: document.getElementById("toast"),
+      installPrompt: document.getElementById("installPrompt"),
+      installCopy: document.getElementById("installCopy"),
+      installBtn: document.getElementById("installBtn"),
+      installDismissBtn: document.getElementById("installDismissBtn"),
+      timerPanel: document.getElementById("timerPanel"),
+      timerLabel: document.getElementById("timerLabel"),
+      timerTime: document.getElementById("timerTime"),
+      cancelTimerBtn: document.getElementById("cancelTimerBtn"),
+      restPresetGroup: document.getElementById("restPresetGroup"),
+      soundToggleBtn: document.getElementById("soundToggleBtn"),
+      vibrationToggleBtn: document.getElementById("vibrationToggleBtn"),
+      autoCheckToggleBtn: document.getElementById("autoCheckToggleBtn"),
+      wakeLockToggleBtn: document.getElementById("wakeLockToggleBtn")
+    };
+
+    let toastTimer = 0;
+    let deferredInstallPrompt = null;
+    let restTickTimer = 0;
+    let longPressTimer = 0;
+    let longPressTriggered = false;
+    let wakeLock = null;
+    let state = loadState();
 
     function defaultState() {
       return {
@@ -736,44 +1393,96 @@
         counters: {},
         successes: {},
         lessonBag: [],
-        lessonIndex: 0
+        lessonIndex: 0,
+        undo: null,
+        settings: {
+          defaultRestSeconds: 120,
+          sound: true,
+          vibration: true,
+          autoCheckOnRest: true,
+          wakeLock: true
+        },
+        restTimer: null,
+        restOptionFor: null,
+        updatedAt: new Date().toISOString()
       };
+    }
+
+    function clone(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function clampInteger(value, minimum, maximum, fallback) {
+      if (!Number.isInteger(value)) return fallback;
+      return Math.min(maximum, Math.max(minimum, value));
+    }
+
+    function normalizeState(parsed) {
+      const clean = {
+        phase: Number.isInteger(parsed.phase) && parsed.phase >= 0 ? parsed.phase : 0,
+        week: clampInteger(parsed.week, 1, 5, 1),
+        session: clampInteger(parsed.session, 1, EXERCISES.length, 1),
+        kbWeight: Number.isFinite(parsed.kbWeight) && parsed.kbWeight >= 0 ? parsed.kbWeight : 16,
+        counters: parsed.counters && typeof parsed.counters === "object" && !Array.isArray(parsed.counters) ? parsed.counters : {},
+        successes: parsed.successes && typeof parsed.successes === "object" && !Array.isArray(parsed.successes) ? parsed.successes : {},
+        lessonBag: Array.isArray(parsed.lessonBag) ? parsed.lessonBag.filter((index) => Number.isInteger(index) && index >= 0 && index < LESSONS.length) : [],
+        lessonIndex: Number.isInteger(parsed.lessonIndex) ? parsed.lessonIndex : 0,
+        undo: parsed.undo && typeof parsed.undo === "object" ? parsed.undo : null,
+        settings: {
+          defaultRestSeconds: [90, 120, 180].includes(parsed.settings?.defaultRestSeconds) ? parsed.settings.defaultRestSeconds : 120,
+          sound: typeof parsed.settings?.sound === "boolean" ? parsed.settings.sound : true,
+          vibration: typeof parsed.settings?.vibration === "boolean" ? parsed.settings.vibration : true,
+          autoCheckOnRest: typeof parsed.settings?.autoCheckOnRest === "boolean" ? parsed.settings.autoCheckOnRest : true,
+          wakeLock: typeof parsed.settings?.wakeLock === "boolean" ? parsed.settings.wakeLock : true
+        },
+        restTimer: parsed.restTimer && typeof parsed.restTimer === "object" && Number.isFinite(parsed.restTimer.endsAt) ? parsed.restTimer : null,
+        restOptionFor: typeof parsed.restOptionFor === "string" ? parsed.restOptionFor : null,
+        updatedAt: typeof parsed.updatedAt === "string" ? parsed.updatedAt : new Date().toISOString()
+      };
+
+      if (clean.lessonBag.length !== LESSONS.length) {
+        clean.lessonBag = shuffleArray(LESSONS.map((_, index) => index));
+        clean.lessonIndex = 0;
+      }
+
+      if (clean.lessonIndex < 0 || clean.lessonIndex >= clean.lessonBag.length) {
+        clean.lessonIndex = 0;
+      }
+
+      return clean;
     }
 
     function loadState() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(OLD_STORAGE_KEY);
         if (!raw) return defaultState();
-
-        const parsed = JSON.parse(raw);
-
-        return {
-          phase: Number.isInteger(parsed.phase) ? parsed.phase : 0,
-          week: Number.isInteger(parsed.week) ? parsed.week : 1,
-          session: Number.isInteger(parsed.session) ? parsed.session : 1,
-          kbWeight: Number.isFinite(parsed.kbWeight) ? parsed.kbWeight : 16,
-          counters: parsed.counters && typeof parsed.counters === "object" ? parsed.counters : {},
-          successes: parsed.successes && typeof parsed.successes === "object" ? parsed.successes : {},
-          lessonBag: Array.isArray(parsed.lessonBag) ? parsed.lessonBag.filter(Number.isInteger) : [],
-          lessonIndex: Number.isInteger(parsed.lessonIndex) ? parsed.lessonIndex : 0
-        };
+        return normalizeState(JSON.parse(raw));
       } catch {
         return defaultState();
       }
     }
 
     function saveState() {
+      state.updatedAt = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function rememberUndo(label) {
+      const snapshot = clone(state);
+      snapshot.undo = null;
+      state.undo = {
+        label,
+        snapshot,
+        createdAt: new Date().toISOString()
+      };
     }
 
     function shuffleArray(array) {
       const copy = [...array];
-
       for (let index = copy.length - 1; index > 0; index -= 1) {
         const swapIndex = Math.floor(Math.random() * (index + 1));
         [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
       }
-
       return copy;
     }
 
@@ -795,7 +1504,6 @@
 
     function advanceLesson() {
       ensureLessonState();
-
       if (state.lessonIndex < state.lessonBag.length - 1) {
         state.lessonIndex += 1;
         return;
@@ -803,11 +1511,9 @@
 
       const nextBag = shuffleArray(LESSONS.map((_, index) => index));
       const lastLesson = state.lessonBag[state.lessonBag.length - 1];
-
       if (LESSONS.length > 1 && nextBag[0] === lastLesson) {
         [nextBag[0], nextBag[1]] = [nextBag[1], nextBag[0]];
       }
-
       state.lessonBag = nextBag;
       state.lessonIndex = 0;
     }
@@ -816,12 +1522,12 @@
       return `${state.phase}.${state.week}.${state.session}`;
     }
 
-    function getSessionKey() {
-      return getTrainingCode();
-    }
-
     function getWeekKey(phase = state.phase, week = state.week) {
       return `${phase}.${week}`;
+    }
+
+    function getSessionKey(phase = state.phase, week = state.week, session = state.session) {
+      return `${phase}.${week}.${session}`;
     }
 
     function ensureSuccessBucket(phase = state.phase, week = state.week) {
@@ -830,18 +1536,22 @@
       return state.successes[key];
     }
 
+    function ensureCounterBucket(sessionKey = getSessionKey()) {
+      if (!state.counters[sessionKey]) state.counters[sessionKey] = {};
+      return state.counters[sessionKey];
+    }
+
+    function isSessionPassed(session = state.session, phase = state.phase, week = state.week) {
+      return !!(state.successes[getWeekKey(phase, week)] || {})[session];
+    }
+
     function markSessionSuccessful(session = state.session, phase = state.phase, week = state.week) {
       ensureSuccessBucket(phase, week)[session] = true;
     }
 
     function isWeekComplete(phase = state.phase, week = state.week) {
       const bucket = ensureSuccessBucket(phase, week);
-
-      for (let session = 1; session <= EXERCISES.length; session += 1) {
-        if (!bucket[session]) return false;
-      }
-
-      return true;
+      return EXERCISES.every((_, index) => !!bucket[index + 1]);
     }
 
     function moveToNextSessionOnly() {
@@ -850,7 +1560,6 @@
 
     function advanceWeekOrPhase() {
       state.session = 1;
-
       if (state.phase === 0) {
         if (state.week < 5) {
           state.week += 1;
@@ -871,18 +1580,13 @@
       state.kbWeight = Number(state.kbWeight || 16) + 4;
     }
 
-    function getWorkoutOrder(session) {
+    function getWorkoutOrder(session = state.session) {
       const startIndex = (session - 1) % EXERCISES.length;
       return EXERCISES.map((_, index) => EXERCISES[(startIndex + index) % EXERCISES.length]);
     }
 
     function getCurrentWorkout() {
       return getWorkoutOrder(state.session);
-    }
-
-    function ensureCounterBucket(sessionKey = getSessionKey()) {
-      if (!state.counters[sessionKey]) state.counters[sessionKey] = {};
-      return state.counters[sessionKey];
     }
 
     function getCount(exerciseId, bucket = "sets") {
@@ -898,6 +1602,12 @@
       render();
     }
 
+    function setCountSilently(exerciseId, bucket, value) {
+      const counters = ensureCounterBucket();
+      if (!counters[exerciseId]) counters[exerciseId] = {};
+      counters[exerciseId][bucket] = Math.max(0, value);
+    }
+
     function formatSetList(list) {
       if (list.length === 1) return `set ${list[0]}`;
       if (list.length === 2) return `sets ${list[0]} and ${list[1]}`;
@@ -906,24 +1616,13 @@
 
     function getLastExercisePlan() {
       const sets = [];
-
       if (state.phase === 0) {
         const total = Math.min(5, Math.max(1, state.week));
-
         for (let index = 1; index <= 5; index += 1) {
-          sets.push({
-            index,
-            label: "Training weight",
-            enabled: index <= total
-          });
+          sets.push({ index, label: "Training weight", enabled: index <= total });
         }
-
         return {
           sets,
-          total,
-          activeCount: total,
-          normalTarget: total,
-          plusTarget: 0,
           normalLabel: total === 1 ? "Set 1 at training weight" : `Sets 1-${total} at training weight`,
           plusLabel: "No heavier sets during break-in"
         };
@@ -936,20 +1635,12 @@
 
       for (let index = 1; index <= 5; index += 1) {
         const isPlus = index >= plusStart && index <= plusEnd;
-        sets.push({
-          index,
-          label: isPlus ? "+1 weight" : "Training weight",
-          enabled: true
-        });
+        sets.push({ index, label: isPlus ? "+1 weight" : "Training weight", enabled: true });
         if (!isPlus) normalSets.push(index);
       }
 
       return {
         sets,
-        total: 5,
-        activeCount: 5,
-        normalTarget: normalSets.length,
-        plusTarget,
         normalLabel: normalSets.length ? `Training weight: ${formatSetList(normalSets)}` : "Training weight: none",
         plusLabel: `+1 weight: ${plusStart === plusEnd ? `set ${plusStart}` : `sets ${plusStart}-${plusEnd}`}`
       };
@@ -972,27 +1663,417 @@
       setCount(exerciseId, `set${setIndex}`, isLastSetChecked(exerciseId, setIndex) ? 0 : 1);
     }
 
-    function ensureSessionBuckets() {
+    function getRestKey(exerciseId, setIndex) {
+      return `${getSessionKey()}:${exerciseId}:${setIndex}`;
+    }
+
+    function isRestRunningFor(exerciseId, setIndex) {
+      return state.restTimer?.key === getRestKey(exerciseId, setIndex) && getRemainingRestSeconds() > 0;
+    }
+
+    function formatTime(totalSeconds) {
+      const safe = Math.max(0, Math.ceil(totalSeconds));
+      const minutes = Math.floor(safe / 60);
+      const seconds = safe % 60;
+      return `${minutes}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function getSessionCompletion() {
+      const workout = getCurrentWorkout();
+      const firstFive = workout.slice(0, 5);
+      const lastExercise = workout[workout.length - 1];
+      const requiredLastSets = getLastExercisePlan().sets.filter((set) => set.enabled);
+      const doneBase = firstFive.filter((exercise) => isChecked(exercise.id)).length;
+      const doneLast = requiredLastSets.filter((set) => isLastSetChecked(lastExercise.id, set.index)).length;
+      const total = firstFive.length + requiredLastSets.length;
+      const done = doneBase + doneLast;
+      return { done, total, complete: done === total };
+    }
+
+    function getWeekPassedCount() {
+      const bucket = state.successes[getWeekKey()] || {};
+      return EXERCISES.filter((_, index) => !!bucket[index + 1]).length;
+    }
+
+    function renderWeekGrid() {
+      const bucket = state.successes[getWeekKey()] || {};
+      els.weekGrid.innerHTML = EXERCISES.map((_, index) => {
+        const session = index + 1;
+        const opener = getWorkoutOrder(session)[0];
+        const classes = [
+          "session-chip",
+          session === state.session ? "current" : "",
+          bucket[session] ? "done" : ""
+        ].filter(Boolean).join(" ");
+        return `
+          <div class="${classes}">
+            <div class="chip-index">Session ${session}</div>
+            <div class="chip-name">${opener.name}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderWorkout() {
+      const workout = getCurrentWorkout();
+      const lastExercise = workout[workout.length - 1];
+      const firstFive = workout.slice(0, 5);
+      const plan = getLastExercisePlan();
+
+      const base = `
+        <article class="workout-card panel">
+          <div class="card-head">
+            <div>
+              <p class="eyebrow">1-5 / 6</p>
+              <h2>Base Blocks</h2>
+            </div>
+            <span class="pill">One set each</span>
+          </div>
+          <div class="check-list">
+            ${firstFive.map((exercise, index) => `
+              <label class="check-row">
+                <span>
+                  <span class="check-name">${index + 1}. ${exercise.name}</span>
+                  <span class="check-sub">${exercise.reps}</span>
+                </span>
+                <input type="checkbox" data-action="toggle-set" data-exercise-id="${exercise.id}" ${isChecked(exercise.id) ? "checked" : ""} />
+              </label>
+            `).join("")}
+          </div>
+        </article>
+      `;
+
+      const last = `
+        <article class="workout-card panel">
+          <div class="card-head">
+            <div>
+              <p class="eyebrow">6 / 6 Last Exercise</p>
+              <h2>${lastExercise.name}</h2>
+            </div>
+            <span class="pill">${lastExercise.type} - ${lastExercise.reps}</span>
+          </div>
+          <div class="small-copy">${plan.normalLabel}. ${plan.plusLabel}.</div>
+          <div class="check-list">
+            ${plan.sets.map((set) => `
+              <div class="check-row ${set.enabled ? "" : "disabled"}">
+                <span>
+                  <span class="check-name">${set.index}. ${set.label}</span>
+                  <span class="check-sub">${lastExercise.reps}</span>
+                </span>
+                <span class="set-tools">
+                  ${set.enabled ? `
+                    <button
+                      class="rest-button ${isRestRunningFor(lastExercise.id, set.index) ? "running" : ""}"
+                      type="button"
+                      data-action="start-rest"
+                      data-exercise-id="${lastExercise.id}"
+                      data-set-index="${set.index}"
+                    >${isRestRunningFor(lastExercise.id, set.index) ? formatTime(getRemainingRestSeconds()) : "Start Rest"}</button>
+                  ` : ""}
+                  <input type="checkbox" data-action="toggle-last-set" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}" ${isLastSetChecked(lastExercise.id, set.index) ? "checked" : ""} ${set.enabled ? "" : "disabled"} />
+                </span>
+                ${state.restOptionFor === getRestKey(lastExercise.id, set.index) ? `
+                  <span class="rest-options">
+                    <button class="rest-choice" type="button" data-action="start-rest-choice" data-rest-seconds="90" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}">1:30</button>
+                    <button class="rest-choice" type="button" data-action="start-rest-choice" data-rest-seconds="120" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}">2:00</button>
+                    <button class="rest-choice" type="button" data-action="start-rest-choice" data-rest-seconds="180" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}">3:00</button>
+                  </span>
+                ` : ""}
+              </div>
+            `).join("")}
+          </div>
+        </article>
+      `;
+
+      els.workoutList.innerHTML = base + last;
+    }
+
+    function renderProgress() {
+      const completion = getSessionCompletion();
+      const percent = completion.total ? Math.round((completion.done / completion.total) * 100) : 0;
+      const weekPassed = getWeekPassedCount();
+
+      els.progressTitle.textContent = `${completion.done} / ${completion.total} sets complete`;
+      els.progressCopy.textContent = completion.complete
+        ? "This session is ready to pass."
+        : `${completion.total - completion.done} required sets remaining.`;
+      els.sessionBar.style.width = `${percent}%`;
+      els.completedBtn.disabled = !completion.complete;
+      els.completedBtn.title = completion.complete ? "Mark this checked session as successful" : "Check all required sets first";
+      els.undoBtn.disabled = !state.undo;
+      els.actionNote.textContent = `${weekPassed} / 6 successful workouts this week.`;
+    }
+
+    function render() {
+      ensureLessonState();
       ensureCounterBucket();
+      els.trainingCode.textContent = getTrainingCode();
+      els.weekLabel.textContent = `${state.week} / 5`;
+      els.sessionLabel.textContent = `${state.session} / 6`;
+      els.kbInput.value = state.kbWeight;
+      els.lessonText.textContent = getCurrentLesson();
+      renderWeekGrid();
+      renderWorkout();
+      renderProgress();
+      renderTimerPanel();
+      renderSettings();
     }
 
     function launchConfetti() {
-      const colors = ["#567352", "#c9a227", "#a05544", "#3d6b99", "#8b5e3c", "#e07a5f"];
-
-      for (let index = 0; index < 80; index += 1) {
+      const colors = ["#173a31", "#b88a42", "#8b3f35", "#254d68", "#fff8e9"];
+      for (let index = 0; index < 70; index += 1) {
         const piece = document.createElement("div");
         piece.className = "confetti-piece";
         piece.style.left = `${Math.random() * 100}vw`;
         piece.style.background = colors[Math.floor(Math.random() * colors.length)];
         piece.style.setProperty("--tx", `${(Math.random() - 0.5) * 180}px`);
         piece.style.setProperty("--rot", `${(Math.random() - 0.5) * 840}deg`);
-        piece.style.animationDuration = `${2.1 + Math.random() * 1.4}s`;
+        piece.style.animationDuration = `${2 + Math.random() * 1.3}s`;
         document.body.appendChild(piece);
-        setTimeout(() => piece.remove(), 3800);
+        setTimeout(() => piece.remove(), 3600);
       }
     }
 
+    function toast(message) {
+      clearTimeout(toastTimer);
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2600);
+    }
+
+    function switchView(view) {
+      const nextView = view === "settings" ? "settings" : "train";
+      els.appRoot.dataset.view = nextView;
+      els.trainTabBtn.classList.toggle("active", nextView === "train");
+      els.settingsTabBtn.classList.toggle("active", nextView === "settings");
+      els.trainTabBtn.setAttribute("aria-selected", String(nextView === "train"));
+      els.settingsTabBtn.setAttribute("aria-selected", String(nextView === "settings"));
+      els.trainPanel.hidden = nextView !== "train";
+      els.trainControls.hidden = nextView !== "train";
+      els.settingsPanel.hidden = nextView !== "settings";
+    }
+
+    function getRemainingRestSeconds() {
+      if (!state.restTimer?.endsAt) return 0;
+      return Math.max(0, Math.ceil((state.restTimer.endsAt - Date.now()) / 1000));
+    }
+
+    async function requestWakeLock() {
+      if (!state.settings.wakeLock || !("wakeLock" in navigator) || !state.restTimer) return;
+      try {
+        wakeLock = await navigator.wakeLock.request("screen");
+        wakeLock.addEventListener("release", () => {
+          wakeLock = null;
+        });
+      } catch {
+        wakeLock = null;
+      }
+    }
+
+    async function releaseWakeLock() {
+      if (!wakeLock) return;
+      try {
+        await wakeLock.release();
+      } catch {
+        wakeLock = null;
+      }
+    }
+
+    function beep() {
+      if (!state.settings.sound) return;
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const audio = new AudioContext();
+        const oscillator = audio.createOscillator();
+        const gain = audio.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.value = 880;
+        gain.gain.setValueAtTime(0.001, audio.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.18, audio.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.45);
+        oscillator.connect(gain);
+        gain.connect(audio.destination);
+        oscillator.start();
+        oscillator.stop(audio.currentTime + 0.5);
+      } catch {}
+    }
+
+    function alertRestDone() {
+      beep();
+      if (state.settings.vibration && "vibrate" in navigator) {
+        navigator.vibrate([180, 80, 180]);
+      }
+      toast("Rest complete. Next set is ready.");
+    }
+
+    function completeExpiredRestTimer({ notify = true } = {}) {
+      if (!state.restTimer || getRemainingRestSeconds() > 0) return false;
+      state.restTimer = null;
+      saveState();
+      releaseWakeLock();
+      render();
+      if (notify) alertRestDone();
+      return true;
+    }
+
+    function scheduleRestTick() {
+      clearInterval(restTickTimer);
+      if (!state.restTimer) return;
+
+      restTickTimer = setInterval(() => {
+        if (!state.restTimer) {
+          clearInterval(restTickTimer);
+          return;
+        }
+
+        if (getRemainingRestSeconds() <= 0) {
+          clearInterval(restTickTimer);
+          completeExpiredRestTimer();
+          return;
+        }
+
+        renderProgress();
+        renderTimerPanel();
+        updateRestButtons();
+      }, 1000);
+    }
+
+    function startRest(exerciseId, setIndex, seconds = state.settings.defaultRestSeconds) {
+      if (state.settings.autoCheckOnRest) {
+        setCountSilently(exerciseId, `set${setIndex}`, 1);
+      }
+
+      state.restOptionFor = null;
+      state.restTimer = {
+        key: getRestKey(exerciseId, setIndex),
+        exerciseId,
+        setIndex,
+        seconds,
+        startedAt: Date.now(),
+        endsAt: Date.now() + seconds * 1000,
+        label: `Set ${setIndex} rest`
+      };
+
+      saveState();
+      render();
+      scheduleRestTick();
+      requestWakeLock();
+      toast(`Rest started: ${formatTime(seconds)}.`);
+    }
+
+    function cancelRestTimer() {
+      if (!state.restTimer) return;
+      state.restTimer = null;
+      saveState();
+      clearInterval(restTickTimer);
+      releaseWakeLock();
+      render();
+      toast("Rest timer cancelled.");
+    }
+
+    function clearRestTimerSilently() {
+      state.restTimer = null;
+      state.restOptionFor = null;
+      clearInterval(restTickTimer);
+      releaseWakeLock();
+    }
+
+    function updateRestButtons() {
+      const remaining = getRemainingRestSeconds();
+      document.querySelectorAll("[data-action='start-rest']").forEach((button) => {
+        const exerciseId = button.dataset.exerciseId;
+        const setIndex = Number(button.dataset.setIndex);
+        const running = isRestRunningFor(exerciseId, setIndex);
+        button.textContent = running ? formatTime(remaining) : "Start Rest";
+        button.classList.toggle("running", running);
+      });
+    }
+
+    function renderTimerPanel() {
+      const remaining = getRemainingRestSeconds();
+      els.timerPanel.classList.toggle("show", !!state.restTimer && remaining > 0);
+      if (!state.restTimer || remaining <= 0) return;
+      els.timerLabel.textContent = state.restTimer.label || "Rest Timer";
+      els.timerTime.textContent = formatTime(remaining);
+    }
+
+    function renderSettings() {
+      els.restPresetGroup.querySelectorAll("[data-rest-preset]").forEach((button) => {
+        button.classList.toggle("active", Number(button.dataset.restPreset) === state.settings.defaultRestSeconds);
+      });
+      els.soundToggleBtn.classList.toggle("active", state.settings.sound);
+      els.soundToggleBtn.textContent = state.settings.sound ? "Sound On" : "Sound Off";
+      els.vibrationToggleBtn.classList.toggle("active", state.settings.vibration);
+      els.vibrationToggleBtn.textContent = state.settings.vibration ? "Vibration On" : "Vibration Off";
+      els.autoCheckToggleBtn.classList.toggle("active", state.settings.autoCheckOnRest);
+      els.autoCheckToggleBtn.textContent = state.settings.autoCheckOnRest ? "Auto-check On Rest Start" : "Manual Check On Rest";
+      els.wakeLockToggleBtn.classList.toggle("active", state.settings.wakeLock);
+      els.wakeLockToggleBtn.textContent = state.settings.wakeLock ? "Wake Lock When Possible" : "Wake Lock Off";
+    }
+
+    function isStandaloneMode() {
+      return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+    }
+
+    function installDismissedRecently() {
+      const dismissedAt = Number(localStorage.getItem(INSTALL_DISMISSED_KEY));
+      if (!Number.isFinite(dismissedAt) || dismissedAt <= 0) return false;
+      return Date.now() - dismissedAt < INSTALL_DISMISS_DAYS * 24 * 60 * 60 * 1000;
+    }
+
+    function hideInstallPrompt() {
+      els.installPrompt.classList.remove("show");
+    }
+
+    function updateInstallPrompt() {
+      if (isStandaloneMode()) {
+        hideInstallPrompt();
+        return;
+      }
+
+      if (deferredInstallPrompt && !installDismissedRecently()) {
+        els.installCopy.textContent = "Add it to your device for faster training access.";
+        els.installBtn.disabled = false;
+        els.installPrompt.classList.add("show");
+        return;
+      }
+
+      hideInstallPrompt();
+    }
+
+    async function installApp() {
+      if (!deferredInstallPrompt) {
+        toast("Chrome has not offered the install prompt yet. Use the browser menu to install.");
+        return;
+      }
+
+      deferredInstallPrompt.prompt();
+      const choice = await deferredInstallPrompt.userChoice.catch(() => null);
+      deferredInstallPrompt = null;
+
+      if (choice?.outcome === "accepted") {
+        hideInstallPrompt();
+        toast("The Six is installing.");
+      } else {
+        localStorage.setItem(INSTALL_DISMISSED_KEY, String(Date.now()));
+        hideInstallPrompt();
+        toast("Install skipped for now.");
+      }
+    }
+
+    function dismissInstallPrompt() {
+      localStorage.setItem(INSTALL_DISMISSED_KEY, String(Date.now()));
+      hideInstallPrompt();
+    }
+
     function advanceSuccess() {
+      if (!getSessionCompletion().complete) {
+        toast("Check all required sets first.");
+        return false;
+      }
+
+      rememberUndo("session success");
       const previousSessionKey = getSessionKey();
       markSessionSuccessful();
 
@@ -1002,114 +2083,107 @@
         moveToNextSessionOnly();
       }
 
+      clearRestTimerSilently();
       ensureCounterBucket(previousSessionKey);
       ensureCounterBucket(getSessionKey());
       advanceLesson();
       saveState();
       render();
+      toast("Session marked successful.");
+      return true;
     }
 
     function repeatSession() {
+      rememberUndo("rotation");
       moveToNextSessionOnly();
-      ensureSessionBuckets();
+      clearRestTimerSilently();
+      ensureCounterBucket();
       advanceLesson();
       saveState();
       render();
+      toast("Rotated without pass.");
+    }
+
+    function undoLastAction() {
+      if (!state.undo) return;
+      const label = state.undo.label || "last action";
+      state = normalizeState(state.undo.snapshot);
+      state.undo = null;
+      saveState();
+      render();
+      toast(`Undid ${label}.`);
     }
 
     function resetCurrentCounters() {
+      rememberUndo("session reset");
       state.counters[getSessionKey()] = {};
+      clearRestTimerSilently();
       saveState();
       render();
+      toast("Current session reset.");
+    }
+
+    function resetCurrentWeek() {
+      if (!confirm("Reset all passes and checks for the current week?")) return;
+      rememberUndo("week reset");
+      const weekKey = getWeekKey();
+      delete state.successes[weekKey];
+      Object.keys(state.counters).forEach((key) => {
+        if (key.startsWith(`${weekKey}.`)) delete state.counters[key];
+      });
+      clearRestTimerSilently();
+      saveState();
+      render();
+      toast("Current week reset.");
     }
 
     function hardReset() {
-      if (!confirm("Are you sure you want to reset everything?")) return;
+      if (!confirm("Reset everything?")) return;
+      rememberUndo("full reset");
+      const undo = state.undo;
       state = defaultState();
+      state.undo = undo;
+      clearRestTimerSilently();
       ensureLessonState();
       saveState();
       render();
+      toast("Everything reset.");
     }
 
-    function renderWorkout() {
-      const workout = getCurrentWorkout();
-      const lastExercise = workout[workout.length - 1];
-      const firstFive = workout.slice(0, 5);
-      const plan = getLastExercisePlan();
-
-      const checklist = `
-        <article class="exercise">
-          <div class="exercise-top">
-            <div>
-              <div class="exercise-kicker">1&ndash;5 / 6</div>
-              <h2 class="exercise-name">Base blocks</h2>
-            </div>
-            <div class="exercise-meta">
-              <div>Each exercise = 1 set</div>
-            </div>
-          </div>
-          <div class="compact-list">
-            ${firstFive.map((exercise, index) => `
-              <label class="compact-row">
-                <div>
-                  <div class="compact-name">${index + 1}. ${exercise.name}</div>
-                  <div class="compact-sub">${exercise.reps}</div>
-                </div>
-                <input
-                  class="compact-check"
-                  type="checkbox"
-                  data-action="toggle-set"
-                  data-exercise-id="${exercise.id}"
-                  ${isChecked(exercise.id) ? "checked" : ""}
-                />
-              </label>
-            `).join("")}
-          </div>
-        </article>
-      `;
-
-      const lastExerciseCard = `
-        <article class="exercise">
-          <div class="exercise-top">
-            <div>
-              <div class="exercise-kicker">6 / 6 &bull; last exercise</div>
-              <h2 class="exercise-name">${lastExercise.name}</h2>
-            </div>
-            <div class="exercise-meta">
-              <div class="pill">${lastExercise.type}</div>
-              <div>Rep target: ${lastExercise.reps}</div>
-            </div>
-          </div>
-          <div class="set-list" aria-label="Last exercise set plan">
-            ${plan.sets.map((set) => `
-              <label class="set-row ${set.enabled ? "" : "disabled"}">
-                <div>
-                  <div class="set-name">${set.index}. ${set.label}</div>
-                  <div class="set-sub">${lastExercise.reps}</div>
-                </div>
-                <input
-                  class="set-check"
-                  type="checkbox"
-                  data-action="toggle-last-set"
-                  data-exercise-id="${lastExercise.id}"
-                  data-set-index="${set.index}"
-                  ${isLastSetChecked(lastExercise.id, set.index) ? "checked" : ""}
-                  ${set.enabled ? "" : "disabled"}
-                />
-              </label>
-            `).join("")}
-          </div>
-        </article>
-      `;
-
-      return checklist + lastExerciseCard;
+    function exportState() {
+      const payload = JSON.stringify({ app: "The Six", version: 4, state }, null, 2);
+      const blob = new Blob([payload], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `the-six-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+      toast("Backup exported.");
     }
 
-    function render() {
-      trainingCodeEl.textContent = getTrainingCode();
-      kbInputEl.value = state.kbWeight;
-      lessonTextEl.textContent = getCurrentLesson();
-      workoutListEl.innerHTML = renderWorkout();
+    function importState(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result));
+          const undo = {
+            label: "import",
+            snapshot: clone(state),
+            createdAt: new Date().toISOString()
+          };
+          state = normalizeState(parsed.state || parsed);
+          state.undo = undo;
+          saveState();
+          render();
+          toast("Backup imported.");
+        } catch {
+          toast("That backup could not be imported.");
+        } finally {
+          els.importFile.value = "";
+        }
+      };
+      reader.readAsText(file);
     }
 
     function handleWorkoutToggle(event) {
@@ -1126,26 +2200,137 @@
       }
     }
 
-    let state = loadState();
-    ensureLessonState();
-    ensureSessionBuckets();
+    function openRestOptions(exerciseId, setIndex) {
+      state.restOptionFor = getRestKey(exerciseId, setIndex);
+      saveState();
+      render();
+      toast("Choose rest time for this set.");
+    }
 
-    completedBtnEl.addEventListener("click", () => {
-      launchConfetti();
-      advanceSuccess();
+    function handleRestPointerDown(event) {
+      const button = event.target.closest("[data-action='start-rest']");
+      if (!button) return;
+      longPressTriggered = false;
+      clearTimeout(longPressTimer);
+      longPressTimer = setTimeout(() => {
+        longPressTriggered = true;
+        openRestOptions(button.dataset.exerciseId, Number(button.dataset.setIndex));
+      }, 550);
+    }
+
+    function clearRestLongPress() {
+      clearTimeout(longPressTimer);
+    }
+
+    function handleWorkoutClick(event) {
+      const target = event.target;
+      const restButton = target.closest("[data-action='start-rest']");
+      if (restButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        clearRestLongPress();
+        if (longPressTriggered) return;
+        startRest(restButton.dataset.exerciseId, Number(restButton.dataset.setIndex));
+        return;
+      }
+
+      const restChoice = target.closest("[data-action='start-rest-choice']");
+      if (restChoice) {
+        event.preventDefault();
+        event.stopPropagation();
+        startRest(restChoice.dataset.exerciseId, Number(restChoice.dataset.setIndex), Number(restChoice.dataset.restSeconds));
+      }
+    }
+
+    function setDefaultRest(seconds) {
+      state.settings.defaultRestSeconds = seconds;
+      saveState();
+      render();
+      toast(`Default rest set to ${formatTime(seconds)}.`);
+    }
+
+    function toggleSetting(key) {
+      state.settings[key] = !state.settings[key];
+      saveState();
+      render();
+      if (key === "wakeLock" && state.settings.wakeLock && state.restTimer) requestWakeLock();
+      if (key === "wakeLock" && !state.settings.wakeLock) releaseWakeLock();
+    }
+
+    els.trainTabBtn.addEventListener("click", () => switchView("train"));
+    els.settingsTabBtn.addEventListener("click", () => switchView("settings"));
+    els.completedBtn.addEventListener("click", () => {
+      if (advanceSuccess()) launchConfetti();
     });
-    repeatBtnEl.addEventListener("click", repeatSession);
-    resetCountersBtnEl.addEventListener("click", resetCurrentCounters);
-    hardResetBtnEl.addEventListener("click", hardReset);
-    workoutListEl.addEventListener("change", handleWorkoutToggle);
-    kbInputEl.addEventListener("input", (event) => {
+    els.repeatBtn.addEventListener("click", repeatSession);
+    els.undoBtn.addEventListener("click", undoLastAction);
+    els.resetCountersBtn.addEventListener("click", resetCurrentCounters);
+    els.resetWeekBtn.addEventListener("click", resetCurrentWeek);
+    els.hardResetBtn.addEventListener("click", hardReset);
+    els.exportBtn.addEventListener("click", exportState);
+    els.importFile.addEventListener("change", (event) => importState(event.target.files[0]));
+    els.workoutList.addEventListener("change", handleWorkoutToggle);
+    els.workoutList.addEventListener("click", handleWorkoutClick);
+    els.workoutList.addEventListener("pointerdown", handleRestPointerDown);
+    els.workoutList.addEventListener("pointerup", clearRestLongPress);
+    els.workoutList.addEventListener("pointercancel", clearRestLongPress);
+    els.workoutList.addEventListener("pointerleave", clearRestLongPress);
+    els.cancelTimerBtn.addEventListener("click", cancelRestTimer);
+    els.restPresetGroup.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-rest-preset]");
+      if (button) setDefaultRest(Number(button.dataset.restPreset));
+    });
+    els.soundToggleBtn.addEventListener("click", () => toggleSetting("sound"));
+    els.vibrationToggleBtn.addEventListener("click", () => toggleSetting("vibration"));
+    els.autoCheckToggleBtn.addEventListener("click", () => toggleSetting("autoCheckOnRest"));
+    els.wakeLockToggleBtn.addEventListener("click", () => toggleSetting("wakeLock"));
+    els.installBtn.addEventListener("click", installApp);
+    els.installDismissBtn.addEventListener("click", dismissInstallPrompt);
+    els.kbInput.addEventListener("input", (event) => {
       const value = Number(event.target.value);
       state.kbWeight = Number.isFinite(value) && value >= 0 ? value : 0;
       saveState();
     });
 
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      updateInstallPrompt();
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      hideInstallPrompt();
+      localStorage.removeItem(INSTALL_DISMISSED_KEY);
+      toast("The Six has been installed.");
+    });
+
+    window.matchMedia("(display-mode: standalone)").addEventListener?.("change", updateInstallPrompt);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        completeExpiredRestTimer({ notify: true });
+        if (state.restTimer) requestWakeLock();
+        render();
+        updateInstallPrompt();
+      }
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+
+    ensureLessonState();
+    ensureCounterBucket();
+    completeExpiredRestTimer({ notify: false });
     saveState();
     render();
+    switchView("train");
+    scheduleRestTick();
+    requestWakeLock();
+    updateInstallPrompt();
   </script>
 </body>
 </html>

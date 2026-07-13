@@ -1,0 +1,19 @@
+{
+  "name": "The Six",
+  "short_name": "The Six",
+  "description": "A refined progression tracker for six foundational kettlebell lifts.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#efe2c4",
+  "theme_color": "#173a31",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
