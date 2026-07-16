@@ -778,7 +778,7 @@
     body {
       padding: 20px;
       background:
-        linear-gradient(180deg, rgba(247, 238, 217, 0.94), rgba(232, 218, 188, 0.96)),
+        linear-gradient(180deg, rgba(8, 28, 23, 0.46), rgba(8, 24, 20, 0.68)),
         url("background.png") center / cover fixed;
     }
 
@@ -857,8 +857,8 @@
       grid-template-columns: minmax(0, 1fr) 92px;
       align-items: center;
       background:
-        linear-gradient(135deg, rgba(255, 250, 238, 0.94), rgba(247, 235, 207, 0.82)),
-        url("background.png") center / cover;
+        linear-gradient(135deg, rgba(255, 250, 238, 0.92), rgba(247, 235, 207, 0.72)),
+        url("background.png") 62% center / cover;
     }
 
     .hero::before {
@@ -1147,6 +1147,12 @@
     }
 
     @media (max-width: 680px) {
+      body {
+        background:
+          linear-gradient(180deg, rgba(8, 28, 23, 0.38), rgba(8, 24, 20, 0.62)),
+          url("background-mobile.png") center top / cover fixed;
+      }
+
       .hero {
         min-height: 230px;
         grid-template-columns: 1fr auto;
@@ -1334,34 +1340,34 @@
     ];
 
     const LESSONS = [
-      { title: "Chop Wood, Carry Water", text: "Focus on the process, not the reward. Greatness begins with faithfully executing simple daily tasks." },
-      { title: "Building Your Own House", text: "You are always building your own house. Who you become matters more than what you achieve." },
-      { title: "Faithful in the Small Things", text: "Dream big. Start small. Be ridiculously faithful. Everyone wants greatness until it is time to do what greatness requires." },
-      { title: "One Eye for the Journey", text: "With one eye on the goal, you only have one eye for the journey. Focus on the next step, not the summit." },
-      { title: "Nothing is a Test", text: "Nothing is a test; everything is an opportunity to learn and grow." },
-      { title: "Where Do You Find Your Identity?", text: "Your value comes from who you are, not from what you do." },
-      { title: "Guzzling Salt Water", text: "Achievement without meaning never satisfies. Success alone cannot fill an internal void." },
-      { title: "Evil's Best Weapon", text: "Discouragement is the most powerful weapon. Guard your mind by choosing what you consume and how you think." },
-      { title: "What Went Well?", text: "Train your brain to see what went well. Confidence grows where attention goes." },
-      { title: "Insta-everything", text: "You do not shine under bright lights; bright lights reveal your work in the dark. There are no shortcuts to mastery." },
-      { title: "Wandering Eyes", text: "Comparison steals joy. The grass is greener where you water it." },
-      { title: "Rough Side of the Mountain", text: "The rough side shapes your character. Hardship prepares you for sustained success." },
-      { title: "Harnessing Power", text: "Words create pictures. Pictures influence feelings. Feelings drive actions. Actions shape destiny." },
-      { title: "Diet Coke", text: "Mental training is not a quick fix. Small efforts cannot offset daily negative habits." },
-      { title: "The Path to Mastery", text: "Growth happens in plateaus and leaps, not in a straight line. Trust the process during stagnation." },
-      { title: "I Aim With Everything", text: "Everything impacts everything. Mastery is total integration; every detail matters." },
-      { title: "Bamboo", text: "Invisible growth precedes visible success. Without deep roots, height cannot be sustained." },
-      { title: "Road Signs on the Path to Mastery", text: "There are signs that you are on the right path: discipline, growth, and character development." },
-      { title: "Be Where Your Feet Are", text: "Be fully present. Presence is a decision." },
-      { title: "Goal vs. Mission", text: "You achieve goals; you live a mission. A mission gives direction when goals fade." },
-      { title: "Surrender", text: "Release the outcome; commit to the effort. Control the controllables." },
-      { title: "Famous Failures", text: "Failure is part of greatness. Persistence separates the great from the average." },
-      { title: "The Illusion of Partially Controllable Goals", text: "Some goals seem controllable but are not. Focus on behaviors, not outcomes." },
-      { title: "The Fight", text: "The real battle is internal. Discipline is stronger than motivation." },
-      { title: "Principles Instead of Feelings", text: "Live by principles, not emotions. Feelings change; principles endure." },
-      { title: "Warrior Dial", text: "You have an internal intensity dial. Learn to consciously turn it up and down." },
-      { title: "'They'", text: "'They' does not exist. Stop living according to imagined expectations." },
-      { title: "A New Name", text: "Identity is shaped by choices. You can redefine who you are." }
+      { title: "Chop Wood, Carry Water", text: "Greatness is built through ordinary work repeated faithfully. Stop waiting for the exciting part and learn to value the daily process." },
+      { title: "Building Your Own House", text: "Every action shapes the person and life you are building. Even when the work seems to be for someone else, you are always building your own house." },
+      { title: "Faithful in the Small Things", text: "Dream big, start small, and remain faithful when the work feels boring or insignificant. Greatness belongs to those willing to do what it quietly requires." },
+      { title: "One Eye for the Journey", text: "Obsessing over the destination makes you miss the step in front of you. Focus on one solid step at a time and let progress emerge from the journey." },
+      { title: "Nothing Is a Test", text: "Life is not a series of tests designed to prove your worth. Treat every experience as an opportunity to learn, grow, and become better." },
+      { title: "Where Do You Find Your Identity?", text: "Your value must come from something deeper than performance, status, or achievement. What you do can disappear; who you are remains." },
+      { title: "Guzzling Salt Water", text: "Achievement cannot satisfy an inner need for worth; chasing more often creates an even greater thirst. Measure success by the character you live out, not only by what you accomplish." },
+      { title: "Evil’s Best Weapon", text: "Discouragement can destroy dreams before failure ever does. Guard your heart through what you watch, read, hear, imagine, say to yourself, and who you surround yourself with." },
+      { title: "What Went Well?", text: "Your mind remembers the story you repeatedly tell about your experiences. Deliberately notice what went well, identify only a few areas for growth, and record what you learned." },
+      { title: "Insta-everything", text: "The bright lights do not create greatness; they reveal the work performed when nobody was watching. Talent cannot replace skill, character, and sustained practice." },
+      { title: "Wandering Eyes", text: "Comparison steals joy and distracts you from the life you have been given. The grass is not greener elsewhere; it grows where you consistently water it." },
+      { title: "Rough Side of the Mountain", text: "Hardship can form the skills, resilience, and character needed to sustain success. The rough path may prepare you to travel farther than an easy beginning ever could." },
+      { title: "Harnessing Power", text: "Words create mental pictures, pictures influence feelings, feelings shape actions, and repeated actions shape your future. Talk to yourself constructively instead of merely listening to your inner critic." },
+      { title: "Diet Coke", text: "A few minutes of positive thinking cannot undo a full day of negative mental habits. Mental toughness is trained continuously through deliberate choices, not quick tricks." },
+      { title: "The Path to Mastery", text: "Progress rarely rises in a straight line; it moves through long plateaus followed by sudden leaps. A period without visible improvement may still be part of mastery." },
+      { title: "I Aim With Everything", text: "Mastery appears when every small element works together: posture, breathing, tension, attention, imagery, and technique. Everything affects everything, so every detail is part of the aim." },
+      { title: "Bamboo", text: "Long periods of invisible growth create the foundation for later breakthroughs. Keep watering the roots when nothing seems to be happening, because rapid growth cannot be sustained without them." },
+      { title: "Road Signs on the Path to Mastery", text: "Thoughts such as “this is hard,” “I do not feel like it,” and “this makes no difference” may actually show that you are on the path. Respond by choosing useful action, speaking to yourself wisely, and living by principles rather than feelings." },
+      { title: "Be Where Your Feet Are", text: "You cannot perform in the present unless you practice living in the present. Give full attention to where your feet are, and remember that “I choose to” creates a different mindset than “I have to.”" },
+      { title: "Goal vs. Mission", text: "A goal can be blocked by circumstances or other people, but a mission can be lived wherever you are with what you already have. Goals give you targets; a mission keeps your life pointed at what truly matters." },
+      { title: "Surrender", text: "Clinging to the outcome creates tension, anxiety, and forced performance. Surrender what you cannot control, adopt gratitude, and trust the work you have already done." },
+      { title: "Famous Failures", text: "Failure does not disqualify you from greatness; it can become a launching point for growth. Your setbacks can become either your excuse or part of a meaningful story—choose courage, curiosity, and persistence." },
+      { title: "The Illusion of Partially Controllable Goals", text: "Goals such as winning, beating someone, or reaching a particular result are never fully under your control. Do not destroy your character, relationships, health, or enjoyment of the journey while chasing an alluring outcome." },
+      { title: "The Fight", text: "A crisis contains danger, but it may also contain an opportunity to develop qualities that easier circumstances never could. Accept responsibility, stop dwelling only on what you lost, and make a practical list of what you can still do." },
+      { title: "Principles Instead of Feelings", text: "Feelings change with circumstances and often pull you away from the person you want to become. Choose a small set of tested principles and follow them especially when you do not feel like it." },
+      { title: "Warrior Dial", text: "More intensity is not always better. Learn to consciously raise or lower your energy so that your level of arousal matches what the moment requires." },
+      { title: "“They”", text: "Do not let imagined social expectations force you into a smaller, safer life. Be courageous enough to follow your path, but do not force your lessons onto others—offer wisdom only when invited and lead through example." },
+      { title: "A New Name", text: "Transformation is not only about what you achieve, but about becoming a stronger and more authentic version of yourself. Choose an identity that represents who you intend to be, then reinforce it through consistent action." }
     ];
 
     const STORAGE_KEY = "six-pillars-state-v4";

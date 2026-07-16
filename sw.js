@@ -1,10 +1,11 @@
-const CACHE_NAME = "the-six-pwa-v10";
+const CACHE_NAME = "the-six-pwa-v11";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./logo.png",
-  "./background.png"
+  "./background.png",
+  "./background-mobile.png"
 ];
 
 self.addEventListener("install", (event) => {
