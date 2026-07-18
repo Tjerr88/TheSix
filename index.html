@@ -1246,7 +1246,7 @@
         <button id="completedBtn" class="primary" type="button">Mark Session Successful</button>
         <button id="repeatBtn" class="secondary" type="button">Rotate Without Pass</button>
         <button id="undoBtn" class="ghost" type="button">Undo Last Action</button>
-        <button id="resetCountersBtn" class="ghost" type="button">Reset Current Session</button>
+        <button id="resetCountersBtn" class="ghost" type="button">Skip progress today</button>
         <div class="small-copy" id="actionNote">Complete all required sets to mark this session as successful.</div>
       </section>
     </aside>
@@ -1430,6 +1430,7 @@
         kbWeight: 16,
         counters: {},
         successes: {},
+        skipProgressDay: null,
         lessonBag: [],
         lessonIndex: 0,
         undo: null,
@@ -1463,6 +1464,14 @@
         kbWeight: Number.isFinite(parsed.kbWeight) && parsed.kbWeight >= 0 ? parsed.kbWeight : 16,
         counters: parsed.counters && typeof parsed.counters === "object" && !Array.isArray(parsed.counters) ? parsed.counters : {},
         successes: parsed.successes && typeof parsed.successes === "object" && !Array.isArray(parsed.successes) ? parsed.successes : {},
+        skipProgressDay: parsed.skipProgressDay && typeof parsed.skipProgressDay === "object" && typeof parsed.skipProgressDay.date === "string"
+          ? {
+              date: parsed.skipProgressDay.date,
+              sessionKey: typeof parsed.skipProgressDay.sessionKey === "string" ? parsed.skipProgressDay.sessionKey : "",
+              counters: parsed.skipProgressDay.counters && typeof parsed.skipProgressDay.counters === "object" ? parsed.skipProgressDay.counters : {},
+              completed: parsed.skipProgressDay.completed === true
+            }
+          : null,
         lessonBag: Array.isArray(parsed.lessonBag) ? parsed.lessonBag.filter((index) => Number.isInteger(index) && index >= 0 && index < LESSONS.length) : [],
         lessonIndex: Number.isInteger(parsed.lessonIndex) ? parsed.lessonIndex : 0,
         undo: parsed.undo && typeof parsed.undo === "object" ? parsed.undo : null,
@@ -1568,6 +1577,18 @@
       return `${phase}.${week}.${session}`;
     }
 
+    function getLocalDateKey(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function isSkippingProgressToday() {
+      return state.skipProgressDay?.date === getLocalDateKey()
+        && state.skipProgressDay.sessionKey === getSessionKey();
+    }
+
     function ensureSuccessBucket(phase = state.phase, week = state.week) {
       const key = getWeekKey(phase, week);
       if (!state.successes[key]) state.successes[key] = {};
@@ -1575,6 +1596,10 @@
     }
 
     function ensureCounterBucket(sessionKey = getSessionKey()) {
+      if (sessionKey === getSessionKey() && isSkippingProgressToday()) {
+        if (!state.skipProgressDay.counters) state.skipProgressDay.counters = {};
+        return state.skipProgressDay.counters;
+      }
       if (!state.counters[sessionKey]) state.counters[sessionKey] = {};
       return state.counters[sessionKey];
     }
@@ -1654,6 +1679,16 @@
 
     function getLastExercisePlan() {
       const sets = [];
+      if (isSkippingProgressToday()) {
+        for (let index = 1; index <= 5; index += 1) {
+          sets.push({ index, label: "Easy movement", enabled: index === 1 });
+        }
+        return {
+          sets,
+          normalLabel: "One easy set only",
+          plusLabel: "No progression today"
+        };
+      }
       if (state.phase === 0) {
         const total = Math.min(5, Math.max(1, state.week));
         for (let index = 1; index <= 5; index += 1) {
@@ -1830,11 +1865,22 @@
     function renderProgress() {
       const completion = getSessionCompletion();
       const weekPassed = getWeekPassedCount();
+      const skippingToday = isSkippingProgressToday();
 
-      els.completedBtn.disabled = !completion.complete;
-      els.completedBtn.title = completion.complete ? "Mark this checked session as successful" : "Check all required sets first";
+      els.completedBtn.disabled = !completion.complete || (skippingToday && state.skipProgressDay.completed);
+      els.completedBtn.textContent = skippingToday ? "Mark Movement Done" : "Mark Session Successful";
+      els.completedBtn.title = completion.complete
+        ? (skippingToday ? "Finish today's easy movement without advancing progress" : "Mark this checked session as successful")
+        : "Check all required sets first";
+      els.repeatBtn.disabled = skippingToday;
+      els.resetCountersBtn.disabled = skippingToday;
+      els.resetCountersBtn.textContent = skippingToday ? "Progress skipped today" : "Skip progress today";
       els.undoBtn.disabled = !state.undo;
-      els.actionNote.textContent = completion.complete
+      els.actionNote.textContent = skippingToday
+        ? (state.skipProgressDay.completed
+            ? "Done for today. Your original session is waiting for you tomorrow."
+            : `${completion.done} / ${completion.total} easy sets checked. Today's session stays in place for tomorrow.`)
+        : completion.complete
         ? `Ready to pass. ${weekPassed} / 6 successful workouts this week.`
         : `${completion.done} / ${completion.total} sets checked. ${weekPassed} / 6 successful workouts this week.`;
     }
@@ -2109,6 +2155,16 @@
         return false;
       }
 
+      if (isSkippingProgressToday()) {
+        rememberUndo("easy movement completion");
+        state.skipProgressDay.completed = true;
+        clearRestTimerSilently();
+        saveState();
+        render();
+        toast("Movement done. Your original session returns tomorrow.");
+        return "movement-only";
+      }
+
       rememberUndo("session success");
       const previousSessionKey = getSessionKey();
       markSessionSuccessful();
@@ -2150,13 +2206,19 @@
       toast(`Undid ${label}.`);
     }
 
-    function resetCurrentCounters() {
-      rememberUndo("session reset");
-      state.counters[getSessionKey()] = {};
+    function skipProgressToday() {
+      if (isSkippingProgressToday()) return;
+      rememberUndo("skip progress today");
+      state.skipProgressDay = {
+        date: getLocalDateKey(),
+        sessionKey: getSessionKey(),
+        counters: {},
+        completed: false
+      };
       clearRestTimerSilently();
       saveState();
       render();
-      toast("Current session reset.");
+      toast("Progress paused today. Do one easy set per lift; this session returns tomorrow.");
     }
 
     function resetCurrentWeek() {
@@ -2296,11 +2358,11 @@
     els.trainTabBtn.addEventListener("click", () => switchView("train"));
     els.settingsTabBtn.addEventListener("click", () => switchView("settings"));
     els.completedBtn.addEventListener("click", () => {
-      if (advanceSuccess()) launchConfetti();
+      if (advanceSuccess() === true) launchConfetti();
     });
     els.repeatBtn.addEventListener("click", repeatSession);
     els.undoBtn.addEventListener("click", undoLastAction);
-    els.resetCountersBtn.addEventListener("click", resetCurrentCounters);
+    els.resetCountersBtn.addEventListener("click", skipProgressToday);
     els.resetWeekBtn.addEventListener("click", resetCurrentWeek);
     els.hardResetBtn.addEventListener("click", hardReset);
     els.exportBtn.addEventListener("click", exportState);
