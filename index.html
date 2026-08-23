@@ -2019,11 +2019,9 @@
         <h2>Timer & App</h2>
         <div class="settings-grid">
           <div class="setting-row">
-            <div class="setting-label">Default Rest</div>
+            <div class="setting-label">Grinds &amp; Cleans Rest</div>
             <div class="segmented" id="restPresetGroup">
-              <button type="button" data-rest-preset="90">1:30</button>
               <button type="button" data-rest-preset="120">2:00</button>
-              <button type="button" data-rest-preset="180">3:00</button>
             </div>
           </div>
           <div class="tool-grid">
@@ -2100,6 +2098,10 @@
       { id: "squat", name: "Double Front Squat", reps: "5 total", type: "Grind" },
       { id: "snatch", name: "Snatch", reps: "10 per side", type: "Ballistic" }
     ];
+    const EMOM_EXERCISE_IDS = new Set(["swing", "snatch"]);
+    const EMOM_ROUNDS = 10;
+    const EMOM_ROUND_SECONDS = 60;
+    const FIXED_REST_SECONDS = 120;
 
     const LESSONS = [
       { title: "Chop Wood, Carry Water", text: "Greatness is built through ordinary work repeated faithfully. Stop waiting for the exciting part and learn to value the daily process." },
@@ -2503,7 +2505,27 @@
     }
 
     function isRestRunningFor(exerciseId, setIndex) {
-      return state.restTimer?.key === getRestKey(exerciseId, setIndex) && getRemainingRestSeconds() > 0;
+      return state.restTimer?.mode !== "emom" && state.restTimer?.key === getRestKey(exerciseId, setIndex) && getRemainingRestSeconds() > 0;
+    }
+
+    function isEmomExercise(exerciseId) {
+      return EMOM_EXERCISE_IDS.has(exerciseId);
+    }
+
+    function isEmomRunningFor(exerciseId) {
+      return state.restTimer?.mode === "emom" && state.restTimer?.exerciseId === exerciseId && getRemainingRestSeconds() > 0;
+    }
+
+    function getEmomRoundInfo() {
+      if (state.restTimer?.mode !== "emom") return null;
+      const elapsedSeconds = Math.max(0, Math.floor((Date.now() - state.restTimer.startedAt) / 1000));
+      const round = Math.min(EMOM_ROUNDS, Math.floor(elapsedSeconds / EMOM_ROUND_SECONDS) + 1);
+      const secondsIntoRound = elapsedSeconds % EMOM_ROUND_SECONDS;
+      return {
+        round,
+        side: round % 2 === 1 ? "Left" : "Right",
+        intervalRemaining: EMOM_ROUND_SECONDS - secondsIntoRound
+      };
     }
 
     function formatTime(totalSeconds) {
@@ -2517,7 +2539,10 @@
       const workout = getCurrentWorkout();
       const firstFive = workout.slice(0, 5);
       const lastExercise = workout[workout.length - 1];
-      const requiredLastSets = getLastExercisePlan().sets.filter((set) => set.enabled);
+      const lastPlan = getLastExercisePlan();
+      const requiredLastSets = isEmomExercise(lastExercise.id)
+        ? lastPlan.sets
+        : lastPlan.sets.filter((set) => set.enabled);
       const doneBase = firstFive.filter((exercise) => isChecked(exercise.id)).length;
       const doneLast = requiredLastSets.filter((set) => isLastSetChecked(lastExercise.id, set.index)).length;
       const total = firstFive.length + requiredLastSets.length;
@@ -2555,6 +2580,7 @@
       const lastExercise = workout[workout.length - 1];
       const firstFive = workout.slice(0, 5);
       const plan = getLastExercisePlan();
+      const usesEmom = isEmomExercise(lastExercise.id);
 
       const base = `
         <article class="workout-card panel">
@@ -2589,6 +2615,17 @@
             <span class="pill">${lastExercise.type} - ${lastExercise.reps}</span>
           </div>
           <div class="small-copy">${plan.normalLabel}. ${plan.plusLabel}.</div>
+          ${usesEmom ? `
+            <div class="set-tools" style="margin: 14px 0 8px; justify-content: flex-start; flex-wrap: wrap;">
+              <button
+                class="rest-button ${isEmomRunningFor(lastExercise.id) ? "running" : ""}"
+                type="button"
+                data-action="start-emom"
+                data-exercise-id="${lastExercise.id}"
+              >${isEmomRunningFor(lastExercise.id) ? `EMOM running - ${formatTime(getRemainingRestSeconds())} total` : "Start 10:00 EMOM"}</button>
+              <span class="check-sub">Automatic: 5 rounds left + 5 rounds right, alternating every minute.</span>
+            </div>
+          ` : `<div class="small-copy" style="margin-top: 8px;">Start the fixed 2:00 rest manually after each set.</div>`}
           <div class="check-list">
             ${plan.sets.map((set) => `
               <div class="check-row ${set.enabled ? "" : "disabled"}">
@@ -2597,24 +2634,19 @@
                   <span class="check-sub">${lastExercise.reps}</span>
                 </span>
                 <span class="set-tools">
-                  ${set.enabled ? `
+                  ${set.enabled && !usesEmom ? `
                     <button
                       class="rest-button ${isRestRunningFor(lastExercise.id, set.index) ? "running" : ""}"
                       type="button"
                       data-action="start-rest"
                       data-exercise-id="${lastExercise.id}"
                       data-set-index="${set.index}"
-                    >${isRestRunningFor(lastExercise.id, set.index) ? formatTime(getRemainingRestSeconds()) : "Start Rest"}</button>
+                    >${isRestRunningFor(lastExercise.id, set.index) ? formatTime(getRemainingRestSeconds()) : "Start 2:00 Rest"}</button>
+                  ` : set.enabled ? `
+                    <span class="check-sub">Minutes ${set.index * 2 - 1}-${set.index * 2}</span>
                   ` : ""}
                   <input type="checkbox" data-action="toggle-last-set" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}" ${isLastSetChecked(lastExercise.id, set.index) ? "checked" : ""} ${set.enabled ? "" : "disabled"} />
                 </span>
-                ${state.restOptionFor === getRestKey(lastExercise.id, set.index) ? `
-                  <span class="rest-options">
-                    <button class="rest-choice" type="button" data-action="start-rest-choice" data-rest-seconds="90" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}">1:30</button>
-                    <button class="rest-choice" type="button" data-action="start-rest-choice" data-rest-seconds="120" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}">2:00</button>
-                    <button class="rest-choice" type="button" data-action="start-rest-choice" data-rest-seconds="180" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}">3:00</button>
-                  </span>
-                ` : ""}
               </div>
             `).join("")}
           </div>
@@ -2751,13 +2783,50 @@
       toast("Rest complete. Next set is ready.");
     }
 
+    function alertEmomRound(round, side) {
+      beep();
+      if (state.settings.vibration && "vibrate" in navigator) navigator.vibrate(180);
+      toast(`EMOM round ${round}/${EMOM_ROUNDS}: ${side}.`);
+    }
+
+    function syncEmomProgress({ forceComplete = false, notifyRound = true } = {}) {
+      if (state.restTimer?.mode !== "emom") return false;
+      const elapsedSeconds = forceComplete
+        ? EMOM_ROUNDS * EMOM_ROUND_SECONDS
+        : Math.max(0, Math.floor((Date.now() - state.restTimer.startedAt) / 1000));
+      const completedSets = Math.min(5, Math.floor(elapsedSeconds / (EMOM_ROUND_SECONDS * 2)));
+      let changed = false;
+      for (let setIndex = 1; setIndex <= completedSets; setIndex += 1) {
+        if (!isLastSetChecked(state.restTimer.exerciseId, setIndex)) {
+          setCountSilently(state.restTimer.exerciseId, `set${setIndex}`, 1);
+          changed = true;
+        }
+      }
+
+      const info = getEmomRoundInfo();
+      if (info && info.round !== state.restTimer.lastAnnouncedRound) {
+        state.restTimer.lastAnnouncedRound = info.round;
+        changed = true;
+        if (notifyRound) alertEmomRound(info.round, info.side);
+      }
+      return changed;
+    }
+
     function completeExpiredRestTimer({ notify = true } = {}) {
       if (!state.restTimer || getRemainingRestSeconds() > 0) return false;
+      const completedMode = state.restTimer.mode;
+      if (completedMode === "emom") syncEmomProgress({ forceComplete: true, notifyRound: false });
       state.restTimer = null;
       saveState();
       releaseWakeLock();
       render();
-      if (notify) alertRestDone();
+      if (notify && completedMode === "emom") {
+        beep();
+        if (state.settings.vibration && "vibrate" in navigator) navigator.vibrate([180, 80, 180]);
+        toast("10:00 EMOM complete. All 5 sets are done.");
+      } else if (notify) {
+        alertRestDone();
+      }
       return true;
     }
 
@@ -2771,6 +2840,12 @@
           return;
         }
 
+        const emomChanged = syncEmomProgress();
+        if (emomChanged) {
+          saveState();
+          renderWorkout();
+        }
+
         if (getRemainingRestSeconds() <= 0) {
           clearInterval(restTickTimer);
           completeExpiredRestTimer();
@@ -2780,10 +2855,11 @@
         renderProgress();
         renderTimerPanel();
         updateRestButtons();
+        updateEmomButtons();
       }, 1000);
     }
 
-    function startRest(exerciseId, setIndex, seconds = state.settings.defaultRestSeconds) {
+    function startRest(exerciseId, setIndex, seconds = FIXED_REST_SECONDS) {
       if (state.settings.autoCheckOnRest) {
         setCountSilently(exerciseId, `set${setIndex}`, 1);
       }
@@ -2804,6 +2880,26 @@
       scheduleRestTick();
       requestWakeLock();
       toast(`Rest started: ${formatTime(seconds)}.`);
+    }
+
+    function startEmom(exerciseId) {
+      const startedAt = Date.now();
+      state.restOptionFor = null;
+      state.restTimer = {
+        mode: "emom",
+        key: `${getSessionKey()}:${exerciseId}:emom`,
+        exerciseId,
+        seconds: EMOM_ROUNDS * EMOM_ROUND_SECONDS,
+        startedAt,
+        endsAt: startedAt + EMOM_ROUNDS * EMOM_ROUND_SECONDS * 1000,
+        lastAnnouncedRound: 1,
+        label: "EMOM"
+      };
+      saveState();
+      render();
+      scheduleRestTick();
+      requestWakeLock();
+      alertEmomRound(1, "Left");
     }
 
     function cancelRestTimer() {
@@ -2829,7 +2925,15 @@
         const exerciseId = button.dataset.exerciseId;
         const setIndex = Number(button.dataset.setIndex);
         const running = isRestRunningFor(exerciseId, setIndex);
-        button.textContent = running ? formatTime(remaining) : "Start Rest";
+        button.textContent = running ? formatTime(remaining) : "Start 2:00 Rest";
+        button.classList.toggle("running", running);
+      });
+    }
+
+    function updateEmomButtons() {
+      document.querySelectorAll("[data-action='start-emom']").forEach((button) => {
+        const running = isEmomRunningFor(button.dataset.exerciseId);
+        button.textContent = running ? `EMOM running - ${formatTime(getRemainingRestSeconds())} total` : "Start 10:00 EMOM";
         button.classList.toggle("running", running);
       });
     }
@@ -2838,8 +2942,12 @@
       const remaining = getRemainingRestSeconds();
       els.timerPanel.classList.toggle("show", !!state.restTimer && remaining > 0);
       if (!state.restTimer || remaining <= 0) return;
-      els.timerLabel.textContent = state.restTimer.label || "Rest Timer";
-      els.timerTime.textContent = formatTime(remaining);
+      const emom = getEmomRoundInfo();
+      els.timerLabel.textContent = emom
+        ? `EMOM - Round ${emom.round}/${EMOM_ROUNDS} - ${emom.side} - ${formatTime(remaining)} total`
+        : state.restTimer.label || "Rest Timer";
+      els.timerTime.textContent = emom ? formatTime(emom.intervalRemaining) : formatTime(remaining);
+      els.cancelTimerBtn.textContent = emom ? "Stop EMOM" : "Cancel Timer";
     }
 
     function renderSettings() {
@@ -3084,21 +3192,22 @@
 
     function handleWorkoutClick(event) {
       const target = event.target;
+      const emomButton = target.closest("[data-action='start-emom']");
+      if (emomButton) {
+        event.preventDefault();
+        event.stopPropagation();
+        startEmom(emomButton.dataset.exerciseId);
+        return;
+      }
+
       const restButton = target.closest("[data-action='start-rest']");
       if (restButton) {
         event.preventDefault();
         event.stopPropagation();
         clearRestLongPress();
         if (longPressTriggered) return;
-        startRest(restButton.dataset.exerciseId, Number(restButton.dataset.setIndex));
+        startRest(restButton.dataset.exerciseId, Number(restButton.dataset.setIndex), FIXED_REST_SECONDS);
         return;
-      }
-
-      const restChoice = target.closest("[data-action='start-rest-choice']");
-      if (restChoice) {
-        event.preventDefault();
-        event.stopPropagation();
-        startRest(restChoice.dataset.exerciseId, Number(restChoice.dataset.setIndex), Number(restChoice.dataset.restSeconds));
       }
     }
 
@@ -3131,10 +3240,6 @@
     els.importFile.addEventListener("change", (event) => importState(event.target.files[0]));
     els.workoutList.addEventListener("change", handleWorkoutToggle);
     els.workoutList.addEventListener("click", handleWorkoutClick);
-    els.workoutList.addEventListener("pointerdown", handleRestPointerDown);
-    els.workoutList.addEventListener("pointerup", clearRestLongPress);
-    els.workoutList.addEventListener("pointercancel", clearRestLongPress);
-    els.workoutList.addEventListener("pointerleave", clearRestLongPress);
     els.cancelTimerBtn.addEventListener("click", cancelRestTimer);
     els.restPresetGroup.addEventListener("click", (event) => {
       const button = event.target.closest("[data-rest-preset]");
