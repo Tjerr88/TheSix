@@ -1,9 +1,12 @@
 function tpActive(){return false;} // Legacy backups remain readable; TP is no longer a training mode.
 function standardFocus(){return getCurrentWorkout()[5];}
 function standardPlan(){return isSkippingProgressToday()?[{index:1,weight:Standard.loads(state.standard,standardFocus().id).base}]:Standard.plan(state.standard,standardFocus().id);}
-function assessment(){return state.standard.assessmentKey===getSessionKey()?state.standard.assessment:'';}
+function assessment(){return standardPlan().every(row=>isLastSetChecked(standardFocus().id,row.index))?'achieved':'repeat';}
 function renderStandardSettings(){
  const s=state.standard;
+ document.querySelector('#tpPanel > h2').textContent=s.setupRequired?'Set up your training':'Training';
+ document.getElementById('programWeights').hidden=s.setupRequired;
+ document.getElementById('liftProgress').hidden=s.setupRequired;
  document.getElementById('standardSetupNotice').hidden=!s.setupRequired;
  document.getElementById('startMode').value=s.stage==='breakin'?'breakin':'baseline';
  document.getElementById('baseWeight').value=s.base;document.getElementById('nextWeight').value=s.next;
@@ -17,21 +20,23 @@ function renderStandardSettings(){
 }
 function standardStepLabel(id){const s=state.standard,l=Standard.loads(s,id);return s.ready[id]?'Ready · '+(l.stage==='build'?l.next:l.base)+' kg':l.stage==='breakin'?s.steps[id]+' / 5 sets':l.stage==='baseline'?'Confirm 5 sets':s.steps[id]+' / 5 at '+l.next+' kg';}
 function standardWorkout(){
- if(state.standard.setupRequired){els.workoutList.innerHTML='<section class="panel workout-card"><h2>Your starting point</h2><p class="small-copy">Choose break-in or five sets, then check your two weights.</p><button class="primary" id="openProgramSetup">Set up training</button></section>';return;}
+ const lesson=els.lessonHeading.closest('.lesson');
+ if(lesson){if(state.standard.setupRequired)lesson.before(els.workoutList);else (document.querySelector('#trainPanel > .warmup')||lesson).after(els.workoutList);}
+ if(state.standard.setupRequired){els.workoutList.innerHTML='<section class="panel workout-card"><h2>Set up before your first session</h2><p class="small-copy">Choose your weights and starting point, then save to begin.</p><button class="primary" id="openProgramSetup">Choose weights &amp; start</button></section>';return;}
  if(day7Active()){els.workoutList.innerHTML=renderDay7Workout();return;}
  const e=standardFocus(),plan=standardPlan(),ballistic=['swing','snatch'].includes(e.id);
  const base='<article class="workout-card panel"><div class="check-list">'+getCurrentWorkout().slice(0,5).map(renderBaseExercise).join('')+'</div></article>';
  const last='<article class="workout-card panel"><h2>'+e.name+'</h2><p class="small-copy">'+e.reps+' · '+(isSkippingProgressToday()?'Easy practice':standardStepLabel(e.id))+'</p>'+
  (ballistic?'<button class="secondary" data-start-interval="'+e.id+'">Start intervals · 1:'+state.standard.ratios[e.id]+'</button><p class="small-copy">'+(e.id==='swing'?18:22)+' sec work · '+((e.id==='swing'?18:22)*state.standard.ratios[e.id])+' sec rest. Alternate sides.</p>':'')+
- plan.map(set=>'<div class="check-row"><label><span class="check-name">Set '+set.index+' · '+set.weight+' kg'+(['clean','squat'].includes(e.id)?' / bell':'')+'</span><span class="check-sub">'+e.reps+'</span><input aria-label="Focus set '+set.index+' complete" type="checkbox" data-action="toggle-last-set" data-exercise-id="'+e.id+'" data-set-index="'+set.index+'" '+(isLastSetChecked(e.id,set.index)?'checked':'')+'></label>'+(!ballistic?'<button type="button" class="rest-button" data-action="start-rest" data-exercise-id="'+e.id+'" data-set-index="'+set.index+'">Rest 2:00</button>':'')+'</div>').join('')+
- (!isSkippingProgressToday()?'<label class="tp-feedback">Focus result<select id="standardResult"><option value="">Choose</option><option value="achieved" '+(assessment()==='achieved'?'selected':'')+'>All reps controlled</option><option value="repeat" '+(assessment()==='repeat'?'selected':'')+'>Repeat this step</option></select></label>':'')+'</article>';
+ plan.map(set=>renderFocusSet(e,set,ballistic)).join('')+
+ '<p class="small-copy">Log controlled reps. Full set fills both sides where shown.</p></article>';
  els.workoutList.innerHTML=CompactUI.workout(base,last);
 }
 function standardCompletion(){
  if(state.standard.setupRequired)return {done:0,total:1,complete:false};
  if(day7Active())return day7Completion();
  const base=getCurrentWorkout().slice(0,5).filter(e=>isChecked(e.id)).length,plan=standardPlan(),done=plan.filter(x=>isLastSetChecked(standardFocus().id,x.index)).length;
- return {done:base+done,total:5+plan.length,complete:base===5&&(isSkippingProgressToday()?done===plan.length:assessment()==='repeat'||assessment()==='achieved'&&done===plan.length)};
+ return {done:base+done,total:5+plan.length,complete:base===5&&(!isSkippingProgressToday()||done===plan.length)};
 }
 function standardProgress(){
  document.getElementById('skipDay7Btn').hidden=!day7Active();
@@ -39,7 +44,7 @@ function standardProgress(){
  if(day7Active()){renderDay7Progress();return;}
  const c=standardCompletion(),easy=isSkippingProgressToday();
  els.completedBtn.disabled=!c.complete||(easy&&state.skipProgressDay.completed);els.completedBtn.textContent=easy?'Finish easy practice':'Save session';
- els.actionNote.textContent=state.standard.setupRequired?'Choose your starting point in Settings.':c.done+' / '+c.total+' sets checked'+(!easy&&assessment()==='repeat'?' · This exercise keeps its current step.':'.');
+ els.actionNote.textContent=state.standard.setupRequired?'Choose your starting point in Settings.':c.done+' / '+c.total+' sets complete'+(!easy?(assessment()==='repeat'?' · Saving will repeat this focus step.':' · Focus target completed.'):'.');
  els.repeatBtn.disabled=state.standard.setupRequired;els.resetCountersBtn.disabled=state.standard.setupRequired||easy;els.resetCountersBtn.textContent='Easy practice today';els.undoBtn.disabled=!state.undo;
 }
 function saveStandardSession(){
@@ -48,7 +53,7 @@ function saveStandardSession(){
  rememberUndo('session');
  if(isSkippingProgressToday()){state.skipProgressDay.completed=true;state.lastTrainingDate=getLocalDateKey();clearRestTimerSilently();saveState();render();return true;}
  SkillPractice.close(state.skillPractice);
- const e=standardFocus();Standard.record(state.standard,e.id,assessment()==='achieved',{date:getLocalDateKey(),session:getSessionKey(),checked:standardPlan().filter(x=>isLastSetChecked(e.id,x.index)).map(x=>x.index)});
+ const e=standardFocus();Standard.record(state.standard,e.id,assessment()==='achieved',{date:getLocalDateKey(),session:getSessionKey(),reps:focusRepSnapshot(),checked:standardPlan().filter(x=>isLastSetChecked(e.id,x.index)).map(x=>x.index)});
  state.kbWeight=state.standard.base;state.lastTrainingDate=getLocalDateKey();markSessionSuccessful();
  if(isWeekComplete()){const cycle=getWeekKey();advanceWeekOrPhase();state.standard.cycle++;if(state.day7.enabled)state.day7.pending=cycle;}else moveToNextSessionOnly();
  clearRestTimerSilently();advanceLesson();saveState();render();toast('Session saved.');setTimeout(maybeOfferEscape,0);return true;
@@ -72,6 +77,7 @@ function renderIntervalTimer(){
  document.getElementById('extraIntervalBtn').hidden=f.phase!=='rest';
 }
 function setupStandardUI(){
+ els.workoutList.addEventListener('click',handleFocusReps);
  document.getElementById('trainingCode').previousElementSibling.textContent='Stage';document.getElementById('weekLabel').previousElementSibling.textContent='Cycle';
  const group=document.createElement('button');group.id='groupAdvanceBtn';group.className='secondary';group.type='button';group.textContent='All six ready · next level';els.completedBtn.after(group);
  group.addEventListener('click',()=>{
@@ -86,11 +92,10 @@ function setupStandardUI(){
   if(!Number.isFinite(base)||base<=0||!Number.isFinite(next)||next<=base||next>500){toast('Choose a positive weight and a higher target.');return;}
   rememberUndo('program setup');const old=state.standard;
   state.standard=Standard.normalize({base,next,stage:mode,steps:Object.fromEntries(Standard.ids.map(id=>[id,mode==='baseline'?5:1])),ratios:old.ratios,history:old.history,revision:old.revision+1,setupRequired:false});
-  SkillPractice.close(state.skillPractice);state.kbWeight=base;state.phase++;state.week=1;state.session=1;state.day7.pending=null;state.skipProgressDay=null;clearRestTimerSilently();saveState();render();switchView('train');
+  SkillPractice.close(state.skillPractice);state.kbWeight=base;state.phase++;state.week=1;state.session=1;state.day7.pending=null;state.skipProgressDay=null;clearRestTimerSilently();saveState();render();switchView('train');toast('Training is ready.');
  });
  document.getElementById('resetProgramBtn').addEventListener('click',()=>{if(!confirm('Choose a new starting point? Saved results stay in your backup.'))return;rememberUndo('new starting point');state.standard.setupRequired=true;clearRestTimerSilently();saveState();render();});
  for(const id of ['swing','snatch'])document.getElementById(id+'Ratio').addEventListener('change',event=>{const ratio=Number(event.target.value);if(![1,2,3].includes(ratio))return;state.standard.ratios[id]=ratio;saveState();render();});
- els.workoutList.addEventListener('change',event=>{if(event.target.id!=='standardResult')return;state.standard.assessment=event.target.value;state.standard.assessmentKey=getSessionKey();saveState();renderProgress();});
  els.workoutList.addEventListener('click',event=>{const b=event.target.closest('[data-start-interval]');if(b)startIntervals(b.dataset.startInterval);if(event.target.closest('#openProgramSetup'))switchView('settings');});
  for(const [id,label]of [['pauseIntervalBtn','Pause'],['extraIntervalBtn','Extra rest · 30 sec']]){const b=document.createElement('button');b.id=id;b.type='button';b.className='secondary';b.textContent=label;b.hidden=true;els.cancelTimerBtn.before(b);}
  document.getElementById('pauseIntervalBtn').addEventListener('click',()=>{const t=state.restTimer;if(t?.mode!=='interval')return;if(t.pausedAt){const delta=Date.now()-t.pausedAt;t.startedAt+=delta;t.endsAt+=delta;delete t.pausedAt;}else t.pausedAt=Date.now();saveState();renderTimerPanel();});

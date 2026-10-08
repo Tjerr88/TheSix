@@ -39,17 +39,35 @@ var Standard = (()=>{
   s.assessment='';s.assessmentKey='';
  }
  const allReady=s=>!s.escape&&ids.every(id=>s.ready[id]);
- function failureCount(s,id){
-  const l=loads(s,id);let n=0;
-  for(let i=s.history.length-1;i>=0;i--){const h=s.history[i];if(h.id!==id)continue;
-   if(h.revision!==s.revision||h.passed!==false||h.stage!==l.stage||h.base!==l.base||h.next!==l.next||h.step!==s.steps[id])break;n++;
-  }return n;
+ const repTarget=id=>({getup:1,swing:10,press:5,clean:10,squat:5,snatch:10})[id];
+ const repSides=id=>['clean','squat'].includes(id)?['both']:['left','right'];
+ function repVector(h,id,rows){
+  if(!Array.isArray(h.reps)||h.reps.length!==rows.length||!Array.isArray(h.plan)||h.plan.length!==rows.length)return null;
+  const values=[];
+  for(let i=0;i<rows.length;i++){
+   const r=h.reps[i];if(h.plan[i]?.index!==rows[i].index||h.plan[i]?.weight!==rows[i].weight||r?.index!==rows[i].index||!Array.isArray(r.values)||r.values.length!==repSides(id).length||r.values.some(v=>!Number.isInteger(v)||v<0||v>repTarget(id)))return null;
+   values.push(...r.values);
+  }return values;
  }
+ function stagnation(s,id){
+  const l=loads(s,id),rows=plan(s,id),attempts=[];
+  for(let i=s.history.length-1;i>=0;i--){const h=s.history[i];if(h.id!==id)continue;
+   if(h.revision!==s.revision||h.passed!==false||h.stage!==l.stage||h.base!==l.base||h.next!==l.next||h.step!==s.steps[id])break;
+   const values=repVector(h,id,rows);if(!values)break;attempts.unshift({values,index:i});
+  }
+  let best=null,count=0,baseline=-1;
+  for(const a of attempts){
+   // Improvement must preserve the best reps of every set and side.
+   if(!best||a.values.every((v,i)=>v>=best[i])&&a.values.some((v,i)=>v>best[i])){best=a.values;count=1;baseline=a.index;}
+   else count++;
+  }return {count,baseline};
+ }
+ const failureCount=(s,id)=>stagnation(s,id).count;
  function escapeOffer(s){
   if(s.setupRequired||s.escape||s.stage==='build'&&s.next+(s.next-s.base)>500)return null;
   const lagging=ids.filter(id=>!s.ready[id]);if(lagging.length!==1)return null;
   const id=lagging[0],count=failureCount(s,id);if(count<5)return null;
-  const key=[s.revision,id,s.stage,s.base,s.next,s.steps[id]].join(':');
+  const key=[s.revision,id,s.stage,s.base,s.next,s.steps[id],stagnation(s,id).baseline].join(':');
   return {id,count,key,from:s.stage==='build'?s.next:s.base,suggested:s.stage==='build'?s.next+(s.next-s.base):s.next};
  }
  function acceptEscape(s,target){
@@ -79,6 +97,6 @@ var Standard = (()=>{
   const extra={};for(const [k,v]of Object.entries(raw.extra||{}))if(Number.isInteger(Number(k))&&Number(k)>=0&&Number(k)<raw.sets.length*2&&Number.isFinite(v)&&v>=0)extra[k]=v;
   return {...raw,extra};
  }
- return {ids,normalize,loads,plan,record,allReady,advance,frame,timer,failureCount,escapeOffer,acceptEscape};
+ return {ids,normalize,loads,plan,record,allReady,advance,frame,timer,repTarget,repSides,stagnation,failureCount,escapeOffer,acceptEscape};
 })();
 if(typeof module!=='undefined')module.exports=Standard;

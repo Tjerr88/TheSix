@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#06130f" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="logo.png" />
-  <title>The Six 3.6</title>
+  <title>The Six 3.7</title>
   <style>
     :root {
       --ink: #171410;
@@ -2041,6 +2041,7 @@
     #timerPanel button{margin-top:8px}.check-row label{flex:1}.check-row label input{margin-left:10px}
   </style>
   <link rel="stylesheet" href="milestones.css">
+  <link rel="stylesheet" href="focus-reps.css">
 </head>
 <body>
   <main class="app" id="appRoot" data-view="train">
@@ -2143,11 +2144,11 @@
 
       <section class="panel actions" id="tpPanel">
         <h2>Training</h2>
-        <p class="small-copy" id="standardSetupNotice">Choose your starting point. Previous results stay saved.</p>
+        <p class="small-copy" id="standardSetupNotice">Choose your starting point, then tap Save &amp; start training. Previous results stay saved.</p>
         <div id="startFields">
           <label class="tp-feedback">Start<select id="startMode"><option value="breakin">Break-in · 1 to 5 sets</option><option value="baseline">Five sets · confirm first</option></select></label>
           <div class="tp-fields"><label>Start · kg / bell<input id="baseWeight" type="number" min="0.5" max="499.5" step="0.5"></label><label>Next · kg / bell<input id="nextWeight" type="number" min="1" max="500" step="0.5"></label></div>
-          <button type="button" id="saveProgramBtn" class="secondary">Start program</button>
+          <button type="button" id="saveProgramBtn" class="primary">Save &amp; start training</button>
         </div>
         <p id="programWeights" class="small-copy"></p>
         <div id="liftProgress"></div>
@@ -2233,6 +2234,7 @@
   <script src="day7.js"></script>
   <script src="standard-engine.js"></script>
   <script src="escape-ui.js"></script>
+  <script src="focus-reps.js"></script>
   <script src="standard-ui.js"></script>
   <script src="skill-practice.js"></script>
   <script src="milestones-engine.js"></script>
@@ -2515,7 +2517,7 @@
     }
 
     function getTrainingCode() {
-      return day7Active()?"Day 7":({breakin:"Break-in",baseline:"Five sets",build:"Build"})[state.standard.stage];
+      return state.standard.setupRequired?"Setup required":day7Active()?"Day 7":({breakin:"Break-in",baseline:"Five sets",build:"Build"})[state.standard.stage];
     }
 
     function getWeekKey(phase = state.phase, week = state.week) {
@@ -2618,7 +2620,7 @@
     }
 
     function isLastSetChecked(exerciseId, setIndex) {
-      return getCount(exerciseId, `set${setIndex}`) > 0;
+      return focusReps(exerciseId, setIndex).every(v => v === Standard.repTarget(exerciseId));
     }
 
     function toggleLastSet(exerciseId, setIndex, enabled) {
@@ -2716,8 +2718,8 @@
       ensureLessonState();
       ensureCounterBucket();
       els.trainingCode.textContent = getTrainingCode();
-      els.weekLabel.textContent = day7Active()?String(Math.max(1,state.standard.cycle-1)):String(state.standard.cycle);
-      els.sessionLabel.textContent = day7Active()?"7 · optional":`${state.session} / 6`;
+      els.weekLabel.textContent = state.standard.setupRequired?"—":day7Active()?String(Math.max(1,state.standard.cycle-1)):String(state.standard.cycle);
+      els.sessionLabel.textContent = state.standard.setupRequired?"Not started":day7Active()?"7 · optional":`${state.session} / 6`;
       els.kbInput.value = state.kbWeight;
       const lesson = getCurrentLesson();
       
