@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
+  <meta name="google" content="notranslate">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="The Six is a refined progression tracker for six foundational kettlebell lifts." />
   <meta name="theme-color" content="#06130f" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="logo.png" />
-  <title>The Six</title>
+  <title>The Six 3.5.2</title>
   <style>
     :root {
       --ink: #171410;
@@ -1932,7 +1933,114 @@
         bottom: 84px;
       }
     }
+    .tab-button { color:#b7c3b7; }
+    .tab-button.active { color:#10271e; }
+    .warmup > summary .eyebrow { display:none; }
+    .warmup > summary h3 { font-size:16px; margin:0; }
+    .settings-view .warmup { padding:14px 16px; }
+    .warmup > summary { min-height:40px; display:flex; align-items:center; justify-content:space-between; }
+    .warmup > summary::after { content:"+"; color:#d7b46a; font-size:20px; }
+    .warmup[open] > summary::after { content:"−"; }
+    /* Compact mobile hierarchy */
+    .hero.panel { min-height:0; padding:16px 18px; display:flex; align-items:center; justify-content:space-between; background:#10271e; }
+    .hero .hero-content { padding:0; }
+    .hero h1 { font-size:36px; line-height:1; margin:0; }
+    .hero .hero-kicker,.hero .subline,.hero .hero-meta { display:none; }
+    .hero .hero-mark { position:static; width:46px; height:46px; opacity:1; margin:0; }
+    .compact-status { display:flex; flex-wrap:wrap; gap:16px; padding:12px 16px; }
+    .compact-status .status-item { min-height:0; padding:0; border:0; flex:1; }
+    .compact-status .metric-label { font-size:10px; }
+    .compact-status strong { font-size:16px; }
+    .main,.workout,.side,.settings-view { gap:10px; }
+    details.compact-panel,details.training-step,details.exercise-fold,details.compact-help,details.compact-coach { display:block; }
+    details.compact-panel,details.training-step { padding:14px 16px; }
+    .compact-panel > summary,.training-step > summary,.exercise-fold > summary { min-height:40px; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px; font-weight:700; }
+    .compact-panel > summary::after,.training-step > summary::after,.exercise-fold > summary::after { content:'+'; color:#d7b46a; font-size:20px; }
+    .compact-panel[open] > summary::after,.training-step[open] > summary::after,.exercise-fold[open] > summary::after { content:'−'; }
+    .compact-panel summary small,.training-step summary small { font-weight:400; font-size:12px; color:#b7c3b7; margin-left:auto; }
+    .compact-panel[open] > summary,.training-step[open] > summary { margin-bottom:12px; }
+    .exercise-fold { border-bottom:1px solid #284137; padding:8px 0; }
+    .exercise-fold > summary { flex-wrap:wrap; gap:4px; position:relative; padding-right:24px; }
+    .exercise-fold > summary span { width:100%; }
+    .exercise-fold > summary small { display:block; font-size:12px; color:#a8b7ab; font-weight:400; }
+    .exercise-fold > summary::after { position:absolute; right:0; top:14px; }
+    .compact-help { margin-top:12px; border-top:1px solid #284137; padding-top:10px; }
+    .compact-help > summary,.compact-coach > summary { cursor:pointer; font-size:13px; color:#d7b46a; padding:6px 0; }
+    .compact-help p { margin:10px 0; }
+    .compact-help button { margin-top:8px; width:100%; }
+    .training-step .workout-card { border:0; background:none; border-radius:0; padding:0; box-shadow:none; }
+    #baseTraining .card-head { display:none; }
+    #baseTraining .check-list { gap:6px; }
+    #baseTraining .check-row { padding:10px 12px; min-height:54px; }
+    #baseTraining .sv-block { padding:10px 12px; margin:4px 0; }
+    #baseTraining .sv-block .eyebrow { font-size:10px; margin:0; }
+    #baseTraining .sv-block h3 { margin:6px 0; font-size:18px; }
+    #baseTraining .sv-block p { margin:4px 0; }
+    #baseTraining .sv-block .check-row { display:inline-flex; width:calc(50% - 5px); box-sizing:border-box; gap:6px; margin-top:8px; padding:8px; }
+    #baseTraining .sv-block .check-name { font-size:11px; }
+    .compact-coach { padding:10px 16px; }
+    .compact-coach .lesson-heading { font-size:20px; margin-top:12px; }
+    .compact-coach .lesson-text { font-size:13px; }
+    .compact-coach::before { display:none; }
+    .settings-title { font-size:28px; margin:4px 0 8px; }
+    #tpPanel .check-row,#svPanel .check-row { padding:10px; margin:6px 0 12px; }
+    .tp-focus .tp-plan { padding:10px 12px; margin:8px 0; }
+    .tp-focus .tp-row { margin:2px 0; }
+    .tp-focus .tp-row input { margin:3px 0; }
+    .tp-focus .tp-feedback { margin-top:10px; }
+    .tp-focus .compact-help { margin-top:10px; }
+    .tp-focus .tp-heading { margin-top:10px; }
+    #trainControls .actions { padding:14px 16px; gap:8px; }
+    #trainControls #completedBtn { min-height:46px; }
+    #actionNote { font-size:12px; }
+    @media (max-width:700px) { .hero.panel { min-height:0; padding:14px 16px; } .hero h1 {font-size:34px;} }
+    .check-row .check-name, .check-row .check-sub { display: block; }
+    .tp-setting { padding:14px 0; border-bottom:1px solid #42604d; }
+    .tp-setting h3 { margin:0 0 8px; }
+    .tp-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+    .tp-fields label,.tp-feedback { display:block; font-size:12px; color:#d7b46a; }
+    .tp-fields input,.tp-row input,.tp-feedback select { box-sizing:border-box; width:100%; min-height:44px; margin:6px 0; background:#10271e; color:#f3ead8; border:1px solid #42604d; border-radius:8px; padding:8px; font-size:16px; }
+    .tp-row { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; align-items:center; gap:8px; margin:8px 0; }
+    .tp-single { grid-template-columns:1fr 1fr 1fr; }
+    .tp-row small { display:block; color:#d7b46a; }
+    .tp-heading { font-size:12px; color:#d7b46a; }
+    .tp-row .rest-button { min-width:0; padding:8px 3px; }
+    .tp-plan { background:#173a31; border:1px solid #d7b46a; border-radius:12px; padding:14px; margin:14px 0; }
+    .tp-weight { font-size:22px; color:#d7b46a; }
+    .tp-focus { display:block; scroll-margin-top:16px; }
+    .tp-focus > p { margin:12px 0; }
+    .tp-focus > h2 { margin:10px 0; }
+    .tp-focus details { margin-top:16px; }
+    .status-kb[hidden] { display:none; }
+    .sv-block { padding: 16px 12px; margin: 8px 0; border: 1px solid #d7b46a; border-radius: 14px; background: #173a31; }
+    .sv-block h3 { margin: 8px 0; }
+    .sv-setting { display:grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid #284137; }
+    .sv-setting label { font-size: 12px; color: #d7b46a; }
+    .sv-setting input,.sv-setting select { display:block; box-sizing:border-box; width:100%; min-height:44px; margin-top:8px; padding:8px; background:#10271e; color:#f3ead8; border:1px solid #42604d; border-radius:8px; font:inherit; font-size:14px; }
+  /* Flat settings: one row per exercise, no nested exercise cards. */
+    .weight-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+    .weight-table th,.weight-table td{padding:8px 3px;text-align:left;border-bottom:1px solid #42604d;vertical-align:middle}
+    .weight-table th:first-child{width:42%}.weight-table input{width:100%;min-width:0;box-sizing:border-box;padding:9px 4px;font-size:16px}
+    .weight-table button{font-size:12px;padding:8px;max-width:100%}
+    #tpChoices .tp-feedback{margin-top:14px}#settingsPanel{grid-template-columns:1fr!important;max-width:680px;margin:auto}
+    #settingsPanel h2{font-size:22px;margin:0 0 12px}#settingsPanel .panel{padding:16px}
+    #settingsPanel .small-copy{margin:8px 0}#day7Options select{width:100%;min-width:0;padding:10px;font:inherit}
+    #day7Options .tp-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+    #appSettings>h3{margin:18px 0 8px;font-size:16px}#appSettings .panel{padding:0;background:none;border:0;box-shadow:none}
+    .weight-table input,#day7Options select{background:#10271e;color:#f3ead8;border:1px solid #42604d;border-radius:7px}
+    #appSettings .settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    #appSettings .settings-grid>.tool-grid{display:contents}#appSettings .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    #appSettings button{padding:12px 7px;font-size:11px;min-width:0}#appSettings .settings-grid button{margin:0}
+    [hidden]{display:none!important}
+      #trainPanel>.lesson{display:block;padding:20px;border:1px solid #b88a42;border-left:4px solid #d7b46a}
+    #trainPanel>.lesson .lesson-heading{font-size:clamp(22px,5.5vw,28px);line-height:1.2;margin:10px 0}
+    #trainPanel>.lesson .lesson-text{font-size:16px;line-height:1.65;margin:0;color:#f3ead8}
+      #tpPanel input,#tpPanel select{width:100%;min-width:0;box-sizing:border-box;padding:10px;background:#10271e;color:#f3ead8;border:1px solid #42604d;border-radius:7px;font:inherit;font-size:16px}
+    #tpPanel .tp-fields{grid-template-columns:repeat(2,minmax(0,1fr));margin:12px 0}#tpPanel .tp-fields label{font-size:12px}
+    #tpPanel .weight-table th:first-child{width:52%}.set-tools label{display:block}
+    #timerPanel button{margin-top:8px}.check-row label{flex:1}.check-row label input{margin-left:10px}
   </style>
+  <link rel="stylesheet" href="milestones.css">
 </head>
 <body>
   <main class="app" id="appRoot" data-view="train">
@@ -1958,7 +2066,7 @@
           <p class="subline">Six foundational lifts. One disciplined practice. Build durable strength through quiet repetition and deliberate rotation.</p>
           <div class="hero-meta" aria-label="Program summary">
             <span>6 movements</span>
-            <span>5-week cycle</span>
+            <span>Train · Progress · Repeat</span>
             <span>Built for practice</span>
           </div>
         </div>
@@ -1988,7 +2096,7 @@
       </section>
 
       <section class="lesson panel">
-        <div class="eyebrow">Coach's Note</div>
+        
         <h2 class="lesson-heading" id="lessonHeading"></h2>
         <p class="lesson-text" id="lessonText"></p>
       </section>
@@ -2033,6 +2141,37 @@
         </div>
       </section>
 
+      <section class="panel actions" id="tpPanel">
+        <h2>Training</h2>
+        <p class="small-copy" id="standardSetupNotice">Choose your starting point. Previous results stay saved.</p>
+        <div id="startFields">
+          <label class="tp-feedback">Start<select id="startMode"><option value="breakin">Break-in · 1 to 5 sets</option><option value="baseline">Five sets · confirm first</option></select></label>
+          <div class="tp-fields"><label>Start · kg / bell<input id="baseWeight" type="number" min="0.5" max="499.5" step="0.5"></label><label>Next · kg / bell<input id="nextWeight" type="number" min="1" max="500" step="0.5"></label></div>
+          <button type="button" id="saveProgramBtn" class="secondary">Start program</button>
+        </div>
+        <p id="programWeights" class="small-copy"></p>
+        <div id="liftProgress"></div>
+        <div class="tp-fields"><label>Swing · work : rest<select id="swingRatio"><option value="3">1:3 · 18s / 54s</option><option value="2">1:2 · 18s / 36s</option><option value="1">1:1 · 18s / 18s</option></select></label><label>Snatch · work : rest<select id="snatchRatio"><option value="3">1:3 · 22s / 66s</option><option value="2">1:2 · 22s / 44s</option><option value="1">1:1 · 22s / 22s</option></select></label></div>
+        <button type="button" id="resetProgramBtn" class="ghost">Change starting point</button>
+      </section>
+      <section class="panel actions" id="day7Panel">
+        <h2>Day 7</h2>
+        <label class="check-row"><span class="check-name">Optional accessory day</span><input type="checkbox" id="day7Toggle" /></label>
+        <p class="small-copy">After six sessions. Skip whenever needed.</p>
+        <div id="day7Options">
+          <div class="tp-fields"><label>Rounds<select id="day7Sets"><option>2</option><option>3</option></select></label><label>Carry · sec/side<select id="day7Carry"><option>20</option><option>30</option><option>40</option></select></label></div>
+          <div id="day7Weights"></div>
+          <label class="check-row"><span class="check-name">Supported pistol squat</span><input type="checkbox" id="day7Supported" /></label>
+        </div>
+      </section>
+      <section class="panel actions" id="reminderPanel" hidden>
+        <p class="eyebrow">Reminder</p>
+        <h2>Your training reminder</h2>
+        <div class="small-copy" id="reminderStatus" aria-live="polite"></div>
+        <button class="secondary" type="button" id="reminderSettingsBtn">Set reminder time</button>
+        <button class="ghost" type="button" id="notificationSettingsBtn">Notification settings</button>
+        <div class="small-copy">Completing your session cancels today’s reminder.</div>
+      </section>
       <section class="panel actions">
         <p class="eyebrow">Backup</p>
         <h2>Export & Import</h2>
@@ -2041,7 +2180,7 @@
           <label class="file-button" for="importFile">Import</label>
         </div>
         <input id="importFile" class="file-input" type="file" accept="application/json,.json" />
-        <div class="small-copy">Progress is stored on this device. Export creates a portable backup.</div>
+        <div class="small-copy">Progress stays on this device. Export creates a backup.</div>
       </section>
 
       <section class="panel actions">
@@ -2089,6 +2228,15 @@
     </div>
   </div>
 
+  <script src="compact-ui.js"></script>
+  <script src="tp-engine.js"></script>
+  <script src="day7.js"></script>
+  <script src="standard-engine.js"></script>
+  <script src="standard-ui.js"></script>
+  <script src="skill-practice.js"></script>
+  <script src="milestones-engine.js"></script>
+  <script src="sfg2-ui.js"></script>
+  <script src="milestones-ui.js"></script>
   <script>
     const EXERCISES = [
       { id: "getup", name: "Get-Up", reps: "1 per side", type: "Grind" },
@@ -2098,6 +2246,27 @@
       { id: "squat", name: "Double Front Squat", reps: "5 total", type: "Grind" },
       { id: "snatch", name: "Snatch", reps: "10 per side", type: "Ballistic" }
     ];
+    const SV_OPTIONS = {
+      getup: [{id:"windmill", name:"Windmill", side:true}, {id:"bent-press", name:"Bent Press", side:true}],
+      swing: [{id:"two-handed-swing", name:"Two-handed Swing", side:false}],
+      press: [{id:"floor-press", name:"Floor Press", side:true}, {id:"push-press", name:"Push Press", side:true}],
+      clean: [{id:"staggered-row", name:"Staggered-stance Row", side:true}, {id:"chin-up", name:"Chin-up", side:false}],
+      squat: [{id:"reverse-lunge", name:"Reverse Lunge", side:true}],
+      snatch: [{id:"high-pull", name:"High Pull", side:true}, {id:"half-snatch", name:"Half Snatch", side:true}]
+    };
+    function normalizeSV(raw) {
+      const clean = {enabled: false, choices:{}, weights:{}, exposures:{}, reviewed:{}};
+      EXERCISES.forEach(e => {
+        clean.exposures[e.id]=Number.isInteger(raw?.exposures?.[e.id]) && raw.exposures[e.id]>=0 ? raw.exposures[e.id] : 0;
+        clean.reviewed[e.id]=Number.isInteger(raw?.reviewed?.[e.id]) && raw.reviewed[e.id]>=0 ? Math.min(raw.reviewed[e.id],clean.exposures[e.id]) : 0;
+        clean.choices[e.id] = SV_OPTIONS[e.id].some(o=>o.id===raw?.choices?.[e.id]) ? raw.choices[e.id] : SV_OPTIONS[e.id][0].id;
+        SV_OPTIONS[e.id].forEach(o => {
+          const w=raw?.weights?.[o.id];
+          clean.weights[o.id] = Number.isFinite(w) && w >= 0 && w <= 500 ? w : 0;
+        });
+      });
+      return clean;
+    }
     const EMOM_EXERCISE_IDS = new Set(["swing", "snatch"]);
     const EMOM_ROUNDS = 10;
     const EMOM_ROUND_SECONDS = 60;
@@ -2188,6 +2357,13 @@
 
     function defaultState() {
       return {
+        tp: TP.normalize(null),
+        standard: Standard.normalize(null),
+        milestones: Milestones.normalize(null),
+        skillPractice: SkillPractice.normalize(null),
+        day7: Day7.normalize(null),
+        sv: normalizeSV(null),
+        lastTrainingDate: "",
         phase: 0,
         week: 1,
         session: 1,
@@ -2222,6 +2398,13 @@
 
     function normalizeState(parsed) {
       const clean = {
+        tp: {...TP.normalize(parsed.tp, Number.isFinite(parsed.kbWeight) ? parsed.kbWeight : 16),enabled:false},
+        standard: Standard.normalize(parsed.standard,parsed),
+        milestones: Milestones.normalize(parsed.milestones),
+        skillPractice: SkillPractice.normalize(parsed.skillPractice),
+        day7: Day7.normalize(parsed.day7, parsed.sv, parsed.kbWeight),
+        sv: normalizeSV(parsed.sv),
+        lastTrainingDate: typeof parsed.lastTrainingDate === "string" ? parsed.lastTrainingDate : "",
         phase: Number.isInteger(parsed.phase) && parsed.phase >= 0 ? parsed.phase : 0,
         week: clampInteger(parsed.week, 1, 5, 1),
         session: clampInteger(parsed.session, 1, EXERCISES.length, 1),
@@ -2246,7 +2429,7 @@
           autoCheckOnRest: typeof parsed.settings?.autoCheckOnRest === "boolean" ? parsed.settings.autoCheckOnRest : true,
           wakeLock: typeof parsed.settings?.wakeLock === "boolean" ? parsed.settings.wakeLock : true
         },
-        restTimer: parsed.restTimer && typeof parsed.restTimer === "object" && Number.isFinite(parsed.restTimer.endsAt) ? parsed.restTimer : null,
+        restTimer: parsed.standard ? Standard.timer(parsed.restTimer) : null,
         restOptionFor: typeof parsed.restOptionFor === "string" ? parsed.restOptionFor : null,
         updatedAt: typeof parsed.updatedAt === "string" ? parsed.updatedAt : new Date().toISOString()
       };
@@ -2276,6 +2459,7 @@
     function saveState() {
       state.updatedAt = new Date().toISOString();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      window.TheSixAndroid?.syncCompletion(state.lastTrainingDate || "");
     }
 
     function rememberUndo(label) {
@@ -2330,7 +2514,7 @@
     }
 
     function getTrainingCode() {
-      return `${state.phase}.${state.week}.${state.session}`;
+      return day7Active()?"Day 7":({breakin:"Break-in",baseline:"Five sets",build:"Build"})[state.standard.stage];
     }
 
     function getWeekKey(phase = state.phase, week = state.week) {
@@ -2338,7 +2522,8 @@
     }
 
     function getSessionKey(phase = state.phase, week = state.week, session = state.session) {
-      return `${phase}.${week}.${session}`;
+      if(day7Active()&&phase===state.phase&&week===state.week&&session===state.session)return state.day7.pending+":day7";
+      return `s${state.standard.revision}:${phase}.${week}.${session}`;
     }
 
     function getLocalDateKey(date = new Date()) {
@@ -2385,27 +2570,7 @@
       state.session = state.session < EXERCISES.length ? state.session + 1 : 1;
     }
 
-    function advanceWeekOrPhase() {
-      state.session = 1;
-      if (state.phase === 0) {
-        if (state.week < 5) {
-          state.week += 1;
-        } else {
-          state.phase = 1;
-          state.week = 1;
-        }
-        return;
-      }
-
-      if (state.week < 5) {
-        state.week += 1;
-        return;
-      }
-
-      state.phase += 1;
-      state.week = 1;
-      state.kbWeight = Number(state.kbWeight || 16) + 4;
-    }
+    function advanceWeekOrPhase(){state.session=1;if(state.week<5)state.week++;else{state.week=1;state.phase++;}}
 
     function getWorkoutOrder(session = state.session) {
       const startIndex = (session - 1) % EXERCISES.length;
@@ -2441,47 +2606,7 @@
       return `sets ${list.join(", ")}`;
     }
 
-    function getLastExercisePlan() {
-      const sets = [];
-      if (isSkippingProgressToday()) {
-        for (let index = 1; index <= 5; index += 1) {
-          sets.push({ index, label: "Easy movement", enabled: index === 1 });
-        }
-        return {
-          sets,
-          normalLabel: "One easy set only",
-          plusLabel: "No progression today"
-        };
-      }
-      if (state.phase === 0) {
-        const total = Math.min(5, Math.max(1, state.week));
-        for (let index = 1; index <= 5; index += 1) {
-          sets.push({ index, label: "Training weight", enabled: index <= total });
-        }
-        return {
-          sets,
-          normalLabel: total === 1 ? "Set 1 at training weight" : `Sets 1-${total} at training weight`,
-          plusLabel: "No heavier sets during break-in"
-        };
-      }
-
-      const plusTarget = Math.min(5, Math.max(1, state.week));
-      const plusStart = plusTarget === 5 ? 1 : 2;
-      const plusEnd = plusTarget === 5 ? 5 : plusTarget + 1;
-      const normalSets = [];
-
-      for (let index = 1; index <= 5; index += 1) {
-        const isPlus = index >= plusStart && index <= plusEnd;
-        sets.push({ index, label: isPlus ? "+1 weight" : "Training weight", enabled: true });
-        if (!isPlus) normalSets.push(index);
-      }
-
-      return {
-        sets,
-        normalLabel: normalSets.length ? `Training weight: ${formatSetList(normalSets)}` : "Training weight: none",
-        plusLabel: `+1 weight: ${plusStart === plusEnd ? `set ${plusStart}` : `sets ${plusStart}-${plusEnd}`}`
-      };
-    }
+    function getLastExercisePlan(){return {sets:standardPlan().map(x=>({...x,label:x.weight+' kg',enabled:true})),normalLabel:'',plusLabel:''};}
 
     function isChecked(exerciseId) {
       return getCount(exerciseId, "sets") > 0;
@@ -2508,9 +2633,7 @@
       return state.restTimer?.mode !== "emom" && state.restTimer?.key === getRestKey(exerciseId, setIndex) && getRemainingRestSeconds() > 0;
     }
 
-    function isEmomExercise(exerciseId) {
-      return EMOM_EXERCISE_IDS.has(exerciseId);
-    }
+    function isEmomExercise(){return false;}
 
     function isEmomRunningFor(exerciseId) {
       return state.restTimer?.mode === "emom" && state.restTimer?.exerciseId === exerciseId && getRemainingRestSeconds() > 0;
@@ -2535,20 +2658,29 @@
       return `${minutes}:${String(seconds).padStart(2, "0")}`;
     }
 
-    function getSessionCompletion() {
-      const workout = getCurrentWorkout();
-      const firstFive = workout.slice(0, 5);
-      const lastExercise = workout[workout.length - 1];
-      const lastPlan = getLastExercisePlan();
-      const requiredLastSets = isEmomExercise(lastExercise.id)
-        ? lastPlan.sets
-        : lastPlan.sets.filter((set) => set.enabled);
-      const doneBase = firstFive.filter((exercise) => isChecked(exercise.id)).length;
-      const doneLast = requiredLastSets.filter((set) => isLastSetChecked(lastExercise.id, set.index)).length;
-      const total = firstFive.length + requiredLastSets.length;
-      const done = doneBase + doneLast;
-      return { done, total, complete: done === total };
+    function getSVExercise() {
+      return null;
     }
+    function svOption(exercise) { return SV_OPTIONS[exercise.id].find(o=>o.id===state.sv.choices[exercise.id]); }
+    function svCounterId(exercise) { return exercise.id + ":sv:" + svOption(exercise).id; }
+    function baseDescription(exercise){return exercise.reps+' · '+state.standard.base+' kg'+(['clean','squat'].includes(exercise.id)?' per bell':'');}
+
+    function renderBaseExercise(exercise,index) {
+      if (getSVExercise()?.id !== exercise.id) return `
+        <label class="check-row"><span><span class="check-name">${index+1}. ${exercise.name}${state.tp.enabled&&exercise.id==='getup'?' · '+TP.stages[state.tp.lifts.getup.stage]:''}</span><span class="check-sub">${baseDescription(exercise)}</span></span>
+        <input type="checkbox" data-action="toggle-set" data-exercise-id="${exercise.id}" ${isChecked(exercise.id)?"checked":""} /></label>`;
+      const option = svOption(exercise), weight = state.sv.weights[option.id];
+      return `<div class="sv-block">
+        <p class="eyebrow">Specialized Variety · replaces ${exercise.name}</p>
+        <h3>${option.name}</h3>
+        <p class="small-copy">2 × 5 ${option.side ? "per side" : "total"} · ${weight ? weight+" kg" : option.id === "chin-up" ? "Bodyweight" : "Choose weight in Settings"}</p>
+        ${[1,2].map(n=>`<label class="check-row"><span class="check-name">Set ${n} · 5 ${option.side?"per side":"total"}</span><input aria-label="SV set ${n}" type="checkbox" data-action="toggle-sv" data-exercise-id="${exercise.id}" data-set-index="${n}" ${getCount(svCounterId(exercise),"set"+n)?"checked":""} /></label>`).join("")}
+      </div>`;
+    }
+    function recordSVExposure() {
+      const e=getSVExercise();if(e)state.sv.exposures[e.id]++;
+    }
+    function getSessionCompletion(){return standardCompletion();}
 
     function getWeekPassedCount() {
       const bucket = state.successes[getWeekKey()] || {};
@@ -2575,124 +2707,29 @@
       }).join("");
     }
 
-    function renderWorkout() {
-      const workout = getCurrentWorkout();
-      const lastExercise = workout[workout.length - 1];
-      const firstFive = workout.slice(0, 5);
-      const plan = getLastExercisePlan();
-      const usesEmom = isEmomExercise(lastExercise.id);
+    function renderWorkout(){standardWorkout();}
 
-      const base = `
-        <article class="workout-card panel">
-          <div class="card-head">
-            <div>
-              <p class="eyebrow">1-5 / 6</p>
-              <h2>Base Blocks</h2>
-            </div>
-            <span class="pill">One set each</span>
-          </div>
-          <div class="check-list">
-            ${firstFive.map((exercise, index) => `
-              <label class="check-row">
-                <span>
-                  <span class="check-name">${index + 1}. ${exercise.name}</span>
-                  <span class="check-sub">${exercise.reps}</span>
-                </span>
-                <input type="checkbox" data-action="toggle-set" data-exercise-id="${exercise.id}" ${isChecked(exercise.id) ? "checked" : ""} />
-              </label>
-            `).join("")}
-          </div>
-        </article>
-      `;
-
-      const last = `
-        <article class="workout-card panel">
-          <div class="card-head">
-            <div>
-              <p class="eyebrow">6 / 6 Last Exercise</p>
-              <h2>${lastExercise.name}</h2>
-            </div>
-            <span class="pill">${lastExercise.type} - ${lastExercise.reps}</span>
-          </div>
-          <div class="small-copy">${plan.normalLabel}. ${plan.plusLabel}.</div>
-          ${usesEmom ? `
-            <div class="set-tools" style="margin: 14px 0 8px; justify-content: flex-start; flex-wrap: wrap;">
-              <button
-                class="rest-button ${isEmomRunningFor(lastExercise.id) ? "running" : ""}"
-                type="button"
-                data-action="start-emom"
-                data-exercise-id="${lastExercise.id}"
-              >${isEmomRunningFor(lastExercise.id) ? `EMOM running - ${formatTime(getRemainingRestSeconds())} total` : "Start 10:00 EMOM"}</button>
-              <span class="check-sub">Automatic: 5 rounds left + 5 rounds right, alternating every minute.</span>
-            </div>
-          ` : `<div class="small-copy" style="margin-top: 8px;">Start the fixed 2:00 rest manually after each set.</div>`}
-          <div class="check-list">
-            ${plan.sets.map((set) => `
-              <div class="check-row ${set.enabled ? "" : "disabled"}">
-                <span>
-                  <span class="check-name">${set.index}. ${set.label}</span>
-                  <span class="check-sub">${lastExercise.reps}</span>
-                </span>
-                <span class="set-tools">
-                  ${set.enabled && !usesEmom ? `
-                    <button
-                      class="rest-button ${isRestRunningFor(lastExercise.id, set.index) ? "running" : ""}"
-                      type="button"
-                      data-action="start-rest"
-                      data-exercise-id="${lastExercise.id}"
-                      data-set-index="${set.index}"
-                    >${isRestRunningFor(lastExercise.id, set.index) ? formatTime(getRemainingRestSeconds()) : "Start 2:00 Rest"}</button>
-                  ` : set.enabled ? `
-                    <span class="check-sub">Minutes ${set.index * 2 - 1}-${set.index * 2}</span>
-                  ` : ""}
-                  <input type="checkbox" data-action="toggle-last-set" data-exercise-id="${lastExercise.id}" data-set-index="${set.index}" ${isLastSetChecked(lastExercise.id, set.index) ? "checked" : ""} ${set.enabled ? "" : "disabled"} />
-                </span>
-              </div>
-            `).join("")}
-          </div>
-        </article>
-      `;
-
-      els.workoutList.innerHTML = base + last;
-    }
-
-    function renderProgress() {
-      const completion = getSessionCompletion();
-      const weekPassed = getWeekPassedCount();
-      const skippingToday = isSkippingProgressToday();
-
-      els.completedBtn.disabled = !completion.complete || (skippingToday && state.skipProgressDay.completed);
-      els.completedBtn.textContent = skippingToday ? "Mark Movement Done" : "Mark Session Successful";
-      els.completedBtn.title = completion.complete
-        ? (skippingToday ? "Finish today's easy movement without advancing progress" : "Mark this checked session as successful")
-        : "Check all required sets first";
-      els.repeatBtn.disabled = skippingToday;
-      els.resetCountersBtn.disabled = skippingToday;
-      els.resetCountersBtn.textContent = skippingToday ? "Progress skipped today" : "Skip progress today";
-      els.undoBtn.disabled = !state.undo;
-      els.actionNote.textContent = skippingToday
-        ? (state.skipProgressDay.completed
-            ? "Done for today. Your original session is waiting for you tomorrow."
-            : `${completion.done} / ${completion.total} easy sets checked. Today's session stays in place for tomorrow.`)
-        : completion.complete
-        ? `Ready to pass. ${weekPassed} / 6 successful workouts this week.`
-        : `${completion.done} / ${completion.total} sets checked. ${weekPassed} / 6 successful workouts this week.`;
-    }
+    function renderProgress(){standardProgress();}
 
     function render() {
       ensureLessonState();
       ensureCounterBucket();
       els.trainingCode.textContent = getTrainingCode();
-      els.weekLabel.textContent = `${state.week} / 5`;
-      els.sessionLabel.textContent = `${state.session} / 6`;
+      els.weekLabel.textContent = day7Active()?String(Math.max(1,state.standard.cycle-1)):String(state.standard.cycle);
+      els.sessionLabel.textContent = day7Active()?"7 · optional":`${state.session} / 6`;
       els.kbInput.value = state.kbWeight;
       const lesson = getCurrentLesson();
+      
       els.lessonHeading.textContent = lesson.title;
       els.lessonText.textContent = lesson.text;
       renderWorkout();
       renderProgress();
       renderTimerPanel();
       renderSettings();
+      renderDay7Settings();
+      renderStandardSettings();
+      renderMilestones();
+      renderSkillSettings();
     }
 
     function launchConfetti() {
@@ -2718,7 +2755,7 @@
     }
 
     function switchView(view) {
-      const nextView = view === "settings" ? "settings" : "train";
+      const nextView = state.milestones.active ? "milestones" : ["settings","milestones"].includes(view) ? view : "train";
       els.appRoot.dataset.view = nextView;
       els.trainTabBtn.classList.toggle("active", nextView === "train");
       els.settingsTabBtn.classList.toggle("active", nextView === "settings");
@@ -2727,15 +2764,20 @@
       els.trainPanel.hidden = nextView !== "train";
       els.trainControls.hidden = nextView !== "train";
       els.settingsPanel.hidden = nextView !== "settings";
+      document.getElementById("milestonesPanel").hidden = nextView !== "milestones";
+      document.getElementById("milestonesTabBtn").classList.toggle("active", nextView === "milestones");
+      document.getElementById("milestonesTabBtn").setAttribute("aria-selected", String(nextView === "milestones"));
+      window.scrollTo({top:0,behavior:"instant"});
     }
 
     function getRemainingRestSeconds() {
+      if(state.restTimer?.mode==="interval")return intervalRemaining();
       if (!state.restTimer?.endsAt) return 0;
       return Math.max(0, Math.ceil((state.restTimer.endsAt - Date.now()) / 1000));
     }
 
     async function requestWakeLock() {
-      if (!state.settings.wakeLock || !("wakeLock" in navigator) || !state.restTimer) return;
+      if (!state.settings.wakeLock || !("wakeLock" in navigator) || (!state.restTimer && !state.milestones.active)) return;
       try {
         wakeLock = await navigator.wakeLock.request("screen");
         wakeLock.addEventListener("release", () => {
@@ -2813,6 +2855,7 @@
     }
 
     function completeExpiredRestTimer({ notify = true } = {}) {
+      if(state.restTimer?.mode==="interval"){if(!Standard.frame(state.restTimer).done)return false;state.restTimer=null;saveState();releaseWakeLock();render();if(notify){beep();toast("Intervals complete. Check the sets you performed.");}return true;}
       if (!state.restTimer || getRemainingRestSeconds() > 0) return false;
       const completedMode = state.restTimer.mode;
       if (completedMode === "emom") syncEmomProgress({ forceComplete: true, notifyRound: false });
@@ -2840,7 +2883,7 @@
           return;
         }
 
-        const emomChanged = syncEmomProgress();
+        const emomChanged = state.restTimer?.mode==="interval"?intervalTick():false;
         if (emomChanged) {
           saveState();
           renderWorkout();
@@ -2860,7 +2903,7 @@
     }
 
     function startRest(exerciseId, setIndex, seconds = FIXED_REST_SECONDS) {
-      if (state.settings.autoCheckOnRest) {
+      if (false) {
         setCountSilently(exerciseId, `set${setIndex}`, 1);
       }
 
@@ -2939,13 +2982,15 @@
     }
 
     function renderTimerPanel() {
+      if(state.restTimer?.mode==="interval"){renderIntervalTimer();return;}
+      document.getElementById("pauseIntervalBtn").hidden=true;document.getElementById("extraIntervalBtn").hidden=true;
       const remaining = getRemainingRestSeconds();
       els.timerPanel.classList.toggle("show", !!state.restTimer && remaining > 0);
       if (!state.restTimer || remaining <= 0) return;
       const emom = getEmomRoundInfo();
       els.timerLabel.textContent = emom
         ? `EMOM - Round ${emom.round}/${EMOM_ROUNDS} - ${emom.side} - ${formatTime(remaining)} total`
-        : state.restTimer.label || "Rest Timer";
+        : `Set ${state.restTimer.setIndex || 1} rest`;
       els.timerTime.textContent = emom ? formatTime(emom.intervalRemaining) : formatTime(remaining);
       els.cancelTimerBtn.textContent = emom ? "Stop EMOM" : "Cancel Timer";
     }
@@ -2965,7 +3010,7 @@
     }
 
     function isStandaloneMode() {
-      return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+      return !!window.TheSixAndroid || window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
     }
 
     function installDismissedRecently() {
@@ -3019,45 +3064,15 @@
       hideInstallPrompt();
     }
 
-    function advanceSuccess() {
-      if (!getSessionCompletion().complete) {
-        toast("Check all required sets first.");
-        return false;
-      }
-
-      if (isSkippingProgressToday()) {
-        rememberUndo("easy movement completion");
-        state.skipProgressDay.completed = true;
-        clearRestTimerSilently();
-        saveState();
-        render();
-        toast("Movement done. Your original session returns tomorrow.");
-        return "movement-only";
-      }
-
-      rememberUndo("session success");
-      const previousSessionKey = getSessionKey();
-      markSessionSuccessful();
-
-      if (isWeekComplete()) {
-        advanceWeekOrPhase();
-      } else {
-        moveToNextSessionOnly();
-      }
-
-      clearRestTimerSilently();
-      ensureCounterBucket(previousSessionKey);
-      ensureCounterBucket(getSessionKey());
-      advanceLesson();
-      saveState();
-      render();
-      toast("Session marked successful.");
-      return true;
-    }
+    function advanceSuccess(){return saveStandardSession();}
 
     function repeatSession() {
+      if(day7Active())return;
       rememberUndo("rotation");
+      if(state.standard.setupRequired)return;
+      SkillPractice.close(state.skillPractice);
       moveToNextSessionOnly();
+      state.standard.assessment="";state.standard.assessmentKey="";
       clearRestTimerSilently();
       ensureCounterBucket();
       advanceLesson();
@@ -3073,10 +3088,11 @@
       state.undo = null;
       saveState();
       render();
-      toast(`Undid ${label}.`);
+      toast("Last action undone.");
     }
 
     function skipProgressToday() {
+      if(day7Active()||state.standard.setupRequired)return;
       if (isSkippingProgressToday()) return;
       rememberUndo("skip progress today");
       state.skipProgressDay = {
@@ -3092,6 +3108,7 @@
     }
 
     function resetCurrentWeek() {
+      if(day7Active()){toast("Finish or skip Day 7 first.");return;}
       if (!confirm("Reset all passes and checks for the current week?")) return;
       rememberUndo("week reset");
       const weekKey = getWeekKey();
@@ -3119,7 +3136,8 @@
     }
 
     function exportState() {
-      const payload = JSON.stringify({ app: "The Six", version: 4, state }, null, 2);
+      const payload = JSON.stringify({ app: "The Six", version: 5, state }, null, 2);
+      if (window.TheSixAndroid) { window.TheSixAndroid.exportBackup(payload); return; }
       const blob = new Blob([payload], { type: "application/json" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -3156,8 +3174,14 @@
 
     function handleWorkoutToggle(event) {
       const target = event.target;
+      if(target.dataset.action==="day7-set"){setCount(target.dataset.exerciseId,"set"+target.dataset.setIndex,target.checked?1:0);return;}
       if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
 
+      if (target.dataset.action === "toggle-sv") {
+        const exercise=getSVExercise(), n=Number(target.dataset.setIndex);
+        if(exercise?.id===target.dataset.exerciseId && [1,2].includes(n)) setCount(svCounterId(exercise), "set"+n, target.checked?1:0);
+        return;
+      }
       if (target.dataset.action === "toggle-set") {
         toggleSet(target.dataset.exerciseId);
         return;
@@ -3192,6 +3216,8 @@
 
     function handleWorkoutClick(event) {
       const target = event.target;
+      const dayRest=target.closest("[data-day7-rest]");
+      if(dayRest){startRest(dayRest.dataset.exerciseId,Number(dayRest.dataset.setIndex),120);return;}
       const emomButton = target.closest("[data-action='start-emom']");
       if (emomButton) {
         event.preventDefault();
@@ -3229,7 +3255,7 @@
     els.trainTabBtn.addEventListener("click", () => switchView("train"));
     els.settingsTabBtn.addEventListener("click", () => switchView("settings"));
     els.completedBtn.addEventListener("click", () => {
-      if (advanceSuccess() === true) launchConfetti();
+      advanceSuccess();
     });
     els.repeatBtn.addEventListener("click", repeatSession);
     els.undoBtn.addEventListener("click", undoLastAction);
@@ -3281,12 +3307,25 @@
       }
     });
 
-    if ("serviceWorker" in navigator) {
+    if (!window.TheSixAndroid && "serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("./sw.js").catch(() => {});
       });
     }
 
+    setupDay7UI();
+    setupFlatSettings();
+    setupStandardUI();
+    setupMilestonesUI();
+    setupSkillPractice();
+    window.refreshReminderStatus = function () {
+      if (!window.TheSixAndroid) return;
+      document.getElementById("reminderPanel").hidden = false;
+      document.getElementById("reminderStatus").textContent = window.TheSixAndroid.status();
+    };
+    document.getElementById("reminderSettingsBtn").addEventListener("click", () => window.TheSixAndroid?.settings());
+    document.getElementById("notificationSettingsBtn").addEventListener("click", () => window.TheSixAndroid?.notificationSettings());
+    window.refreshReminderStatus();
     ensureLessonState();
     ensureCounterBucket();
     completeExpiredRestTimer({ notify: false });
