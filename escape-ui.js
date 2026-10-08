@@ -4,7 +4,7 @@ function renderEscapeSettings(){
  const s=state.standard,e=s.escape,offer=Standard.escapeOffer(s);
  box.hidden=!e&&!offer;
  if(e){box.innerHTML='<p class="small-copy"><strong>Temporary split</strong><br>'+escapeName(e.lag)+(e.catchingUp?' is now joining the others at '+e.target+' kg.':' keeps its current build. The other five build to '+e.target+' kg.')+' Everyone must finish at '+e.target+' kg before the next increase. No second escape while catching up.</p>';return;}
- if(offer)box.innerHTML='<p class="small-copy">'+escapeName(offer.id)+' · '+offer.count+' unsuccessful focus attempts on this step.</p><button class="secondary" id="openEscapeBtn">Review one-step escape</button>';
+ if(offer)box.innerHTML='<p class="small-copy">'+escapeName(offer.id)+' · '+offer.count+' attempts since the last improvement, including that attempt.</p><button class="secondary" id="openEscapeBtn">Review one-step escape</button>';
 }
 function maybeOfferEscape(){
  if(state.milestones.active||isSkippingProgressToday())return;
@@ -17,9 +17,9 @@ function openEscapeDialog(offer=Standard.escapeOffer(state.standard)){
  dialog.dataset.offer=offer.key;
  // Mark it seen before opening, so closing/restarting never repeats this prompt.
  state.standard.escapeDismissed=offer.key;saveState();
- document.getElementById('escapeMessage').textContent=escapeName(offer.id)+' has repeated the same step without completing it '+offer.count+' times. Keep this lift on its current build and let the other five start building from '+offer.from+' to '+offer.suggested+' kg?';
+ document.getElementById('escapeMessage').textContent=escapeName(offer.id)+' has logged '+offer.count+' attempts on this step, including the last improvement. No new best since then. Keep this lift on its current build and let the other five start building from '+offer.from+' to '+offer.suggested+' kg?';
  document.getElementById('escapeLimit').textContent='The stalled lift keeps training. All six must reach '+offer.suggested+' kg before anyone goes higher.';
- if(!day7Active()&&standardCompletion().done>0)document.getElementById('escapeLimit').textContent+=' Changing weights clears checks for the current unfinished session; Undo can restore them.';
+ if(!day7Active()&&standardCompletion().done>0)document.getElementById('escapeLimit').textContent+=' Changing weights clears reps and checks for the current unfinished session; Undo can restore them.';
  dialog.showModal();
 }
 function setupEscapeUI(){

@@ -69,6 +69,6 @@ function setupFlatSettings(){
     app.append(section);
   }
   panel.prepend(day);panel.prepend(tp);panel.append(app);
-  const warmup=other.find(x=>x.matches('details'));if(warmup)document.getElementById('trainPanel').append(warmup);
+  const warmup=other.find(x=>x.matches('details'));if(warmup)document.querySelector('#trainPanel > .lesson').after(warmup);
   const rest=document.getElementById('restPresetGroup').closest('.setting-row');rest.hidden=true;
 }
