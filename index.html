@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#06130f" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="logo.png" />
-  <title>The Six 3.5.2</title>
+  <title>The Six 3.6</title>
   <style>
     :root {
       --ink: #171410;
@@ -2232,6 +2232,7 @@
   <script src="tp-engine.js"></script>
   <script src="day7.js"></script>
   <script src="standard-engine.js"></script>
+  <script src="escape-ui.js"></script>
   <script src="standard-ui.js"></script>
   <script src="skill-practice.js"></script>
   <script src="milestones-engine.js"></script>
@@ -2663,7 +2664,7 @@
     }
     function svOption(exercise) { return SV_OPTIONS[exercise.id].find(o=>o.id===state.sv.choices[exercise.id]); }
     function svCounterId(exercise) { return exercise.id + ":sv:" + svOption(exercise).id; }
-    function baseDescription(exercise){return exercise.reps+' · '+state.standard.base+' kg'+(['clean','squat'].includes(exercise.id)?' per bell':'');}
+    function baseDescription(exercise){return exercise.reps+' · '+Standard.loads(state.standard,exercise.id).base+' kg'+(['clean','squat'].includes(exercise.id)?' per bell':'');}
 
     function renderBaseExercise(exercise,index) {
       if (getSVExercise()?.id !== exercise.id) return `
@@ -3316,6 +3317,7 @@
     setupDay7UI();
     setupFlatSettings();
     setupStandardUI();
+    setupEscapeUI();
     setupMilestonesUI();
     setupSkillPractice();
     window.refreshReminderStatus = function () {
@@ -3335,6 +3337,7 @@
     scheduleRestTick();
     requestWakeLock();
     updateInstallPrompt();
+    setTimeout(maybeOfferEscape,0);
   </script>
 </body>
 </html>

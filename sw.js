@@ -1,4 +1,4 @@
-const CACHE_NAME = "the-six-pwa-v352";
+const CACHE_NAME = "the-six-pwa-v36";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -14,7 +14,7 @@ const APP_SHELL = [
   "./badge-super-sfg.png",
   "./badge-sfg-plus.png",
   "./badge-sfg.png",
-  "./standard-ui.js",
+  "./standard-ui.js", "./escape-ui.js",
   "./standard-engine.js",
   "./tp-engine.js",
   "./compact-ui.js",
