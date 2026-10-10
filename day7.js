@@ -28,8 +28,8 @@ function finishDay7(skipped){
   if(!day7Active()||(!skipped&&!day7Completion().complete))return false;
   rememberUndo(skipped?'skip Day 7':'complete Day 7');
   state.day7.history.push({date:getLocalDateKey(),cycle:state.day7.pending,skipped,format:'circuit',order:Day7.exercises.map(e=>e.id),sets:state.day7.sets,targets:clone(state.day7.legacyTargets??state.day7.targets),carry:state.day7.carry,supported:state.day7.supported,weights:clone(state.day7.weights),counters:clone(ensureCounterBucket())});
-  if(!skipped)state.lastTrainingDate=getLocalDateKey();
-  state.day7.pending=null;state.day7.legacyTargets=null;clearRestTimerSilently();saveState();render();toast(skipped?'Day 7 skipped. Your next Big Six session is ready.':'Day 7 saved. Your next Big Six session is ready.');return true;
+  if(!skipped){state.lastTrainingDate=getLocalDateKey();markDoneToday();}
+  state.day7.pending=null;state.day7.legacyTargets=null;clearRestTimerSilently();saveState();render();toast(skipped?'Day 7 skipped. Your next Big Six session is ready.':'Day 7 saved.');return true;
 }
 function renderDay7Settings(){
   const d=state.day7;document.getElementById('day7Toggle').checked=d.enabled;document.getElementById('day7Options').hidden=!d.enabled;

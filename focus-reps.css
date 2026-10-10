@@ -13,3 +13,6 @@
 .rep-side output small{font-weight:400;opacity:.6;font-size:.7rem}
 .focus-rep-set .rep-rest{display:block;margin:5px 0 0 auto;padding:4px 10px;font-size:.75rem;background:transparent;border-color:transparent;min-height:36px}
 @media(max-width:360px){.rep-controls{gap:4px}.rep-side{gap:1px}.rep-side button{min-width:32px;width:32px}.rep-heading{font-size:.8rem}}
+
+.done-today #trainPanel > :not(#doneTodayCard),.done-today #trainControls{display:none!important}
+#doneTodayCard{padding:28px 22px}#doneTodayCard h2{margin:12px 0}#doneTodayCard button{display:block;width:100%;margin-top:12px}
