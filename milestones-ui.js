@@ -25,7 +25,7 @@ function renderMilestones(){
  if(m.active){renderMilestoneAttempt();renderMilestoneNudge();return;}
  if(milestoneDetail){renderMilestoneDetail();renderMilestoneNudge();return;}
  const ready=Milestones.profileReady(m.profile);
- panel.innerHTML='<header><p class="eyebrow">The Six 3.7</p><h2>Milestones</h2><p class="small-copy">Earned through practice. Tested when you choose.</p></header>'+msProfileMarkup()+
+ panel.innerHTML='<header><p class="eyebrow">The Six 3.7.2</p><h2>Milestones</h2><p class="small-copy">Earned through practice. Tested when you choose.</p></header>'+msProfileMarkup()+
  '<div class="ms-grid">'+Milestones.ids.map(id=>{const r=Milestones.requirements(m,state.standard.history,id),d=r.goal,award=Milestones.awards(m,id).at(-1);return '<button type="button" class="ms-badge '+(award?'earned':r.available?'available':'locked')+'" data-ms-detail="'+id+'"><img src="'+msImage(id)+'" alt="'+msEscape(msTitle(d))+' badge" loading="lazy"><strong>'+msEscape(msTitle(d))+'</strong><span>'+(!ready&&!award?'Set up profile':award?'Achieved · '+new Date(award.finishedAt).toLocaleDateString('en-GB'):r.available?'Available':'In progress')+'</span></button>';}).join('')+'</div><p class="small-copy">Personal, self-reported achievements. SFG I tiers include the skills and snatch test. SFG II has a separate skill and press check. These do not represent instructor certification. SFG+, Super SFG, Solid and Super Sinister are personal extensions.</p><p class="small-copy">Badge artwork shows the men’s example weights. Your requirements are shown in each milestone.</p>';
  renderMilestoneNudge();
 }

@@ -1,13 +1,13 @@
-# The Six 3.7
+# The Six 3.7.2
 
-Standalone GitHub Pages / PWA edition, updated from the original TheSix-main repository to the web application used by The Six Android 3.7. All application code and images are included. No build step, account, backend or external dependency is required.
+Standalone GitHub Pages / PWA edition, updated from the original TheSix-main repository to the web application used by The Six Android 3.7.2. All application code and images are included. No build step, account, backend or external dependency is required.
 
 ## Publish / update
 
 1. Export a backup from the existing installation before updating.
 2. Copy **all files inside this directory** to the repository root, replacing the existing files. Keep the existing repository and Pages URL to retain browser-local progress.
 3. Keep GitHub Pages configured for the branch and root folder containing `index.html`.
-4. Once the deployment finishes, open the site online. The service worker installs the 3.7 offline cache; reload once after installation to display the new version. Do not clear site data unless you have exported a backup.
+4. Once the deployment finishes, open the site online. The service worker installs the 3.7.2 offline cache; reload once after installation to display the new version. Do not clear site data unless you have exported a backup.
 5. Open the site in the browser and choose Install / Add to Home screen if desired.
 
 Do not upload only index.html: all JavaScript, CSS and badge images are required. The app works at either a domain root or a repository subdirectory. The relative manifest and service-worker URLs preserve the GitHub Pages path.
@@ -52,3 +52,15 @@ Yes lets the other five build one configured weight increment higher. The laggin
 The prominent programme-start button and lesson → mobility warm-up → training order are retained. Day 7, skill practice, milestone criteria and work/rest timers are unchanged. Timer completion never awards reps.
 
 For a small update from 3.6.1, replace all files in the update ZIP at the existing repository root. The PNG images are byte-identical and do not need re-uploading. Keep the existing APK installation / Pages URL to preserve local data.
+
+## Bug fixes in 3.7.1
+
+Double Clean now prescribes 5 reps in base and focus sets, with the Full set shortcut and progression target aligned. Existing saved history is preserved. Clean stagnation starts a new comparison under the 5-rep target; old 10-rep attempts are not mixed with the new prescription. An unfinished Clean set is capped at the new 5-rep target.
+
+Saving a regular session, repeat result, easy practice or completed Day 7 shows Done for today. It persists on reopening the app that local calendar day. View next session makes the upcoming session accessible without advancing or completing it; another session can still be performed voluntarily. Undo remains available. The next day restores the ordinary training screen, including on resume from the background. Skipping Day 7 does not count as finishing a training. The normal progression and next-session rotation are unchanged.
+
+The small update ZIP contains all non-image web files; replace them in the existing repository root. All PNG images are unchanged.
+
+## Get-Up timer in 3.7.2
+
+Optional Get-Up intervals follow the current focus prescription: 2–10 intervals, one full Get-Up on one side per interval, alternating left and right. Settings → Training has seconds per side, default 75, adjustable from 15 to 300. Complete the Get-Up and rest for the remainder of the interval. Five sets per side at 75 seconds take 12:30. The timer beeps according to the existing Sound setting, advances automatically, supports pause/resume and stop, and preserves its duration snapshot if settings change while running. It never logs reps or advances progression. Existing swing/snatch timers are unchanged.

@@ -6,6 +6,7 @@ var Standard = (()=>{
   const base=num(raw?.base,num(legacy.kbWeight,16,0.5,500),0.5,500);
   const stage=['breakin','baseline','build'].includes(raw?.stage)?raw.stage:legacy.phase>0?'build':'breakin';
   const s={version:1,base,next:num(raw?.next,Math.min(500,base+4),base+0.5,500),stage,cycle:integer(raw?.cycle,1,1,100000),revision:integer(raw?.revision,1,1,100000),setupRequired:raw?raw.setupRequired===true:true,steps:{},ready:{},ratios:{swing:[1,2,3].includes(raw?.ratios?.swing)?raw.ratios.swing:3,snatch:[1,2,3].includes(raw?.ratios?.snatch)?raw.ratios.snatch:3},history:Array.isArray(raw?.history)?raw.history.filter(x=>x&&ids.includes(x.id)&&typeof x.date==='string'):[],assessment:['achieved','repeat'].includes(raw?.assessment)?raw.assessment:'',assessmentKey:typeof raw?.assessmentKey==='string'?raw.assessmentKey:''};
+  s.getupInterval=integer(raw?.getupInterval,75,15,300);
   s.escape=null;
   const e=raw?.escape;
   if(e&&ids.includes(e.lag)&&e.stage===s.stage&&e.target<=(e.stage==='build'?s.next+(s.next-s.base):s.next)&&e.base===s.base&&e.next===s.next&&num(e.target,0,e.stage==='build'?s.next+0.5:s.base+0.5,500)>0){
@@ -27,7 +28,7 @@ var Standard = (()=>{
  }
  function record(s,id,passed,entry){
   const l=loads(s,id);
-  s.history.push({...entry,id,passed,...l,revision:s.revision,step:s.steps[id],plan:plan(s,id)});
+  s.history.push({...entry,id,passed,...l,revision:s.revision,targetReps:repTarget(id),step:s.steps[id],plan:plan(s,id)});
   if(!passed)s.ready[id]=false;
   if(passed&&!s.ready[id]){if(s.steps[id]<5)s.steps[id]++;else s.ready[id]=true;}
   if(s.escape&&id===s.escape.lag&&!s.escape.catchingUp&&s.ready[id]){
@@ -39,9 +40,10 @@ var Standard = (()=>{
   s.assessment='';s.assessmentKey='';
  }
  const allReady=s=>!s.escape&&ids.every(id=>s.ready[id]);
- const repTarget=id=>({getup:1,swing:10,press:5,clean:10,squat:5,snatch:10})[id];
+ const repTarget=id=>({getup:1,swing:10,press:5,clean:5,squat:5,snatch:10})[id];
  const repSides=id=>['clean','squat'].includes(id)?['both']:['left','right'];
  function repVector(h,id,rows){
+  if((h.targetReps??(id==='clean'?10:repTarget(id)))!==repTarget(id))return null;
   if(!Array.isArray(h.reps)||h.reps.length!==rows.length||!Array.isArray(h.plan)||h.plan.length!==rows.length)return null;
   const values=[];
   for(let i=0;i<rows.length;i++){
@@ -93,7 +95,8 @@ var Standard = (()=>{
  function timer(raw){
   if(!raw||!Number.isFinite(raw.endsAt)||raw.mode==='emom')return null;
   if(raw.mode!=='interval')return raw;
-  if(!['swing','snatch'].includes(raw.exerciseId)||raw.work!==(raw.exerciseId==='swing'?18:22)||![1,2,3].includes(raw.ratio)||!Number.isFinite(raw.startedAt)||!Array.isArray(raw.sets)||raw.sets.length<1||raw.sets.length>5||raw.sets.some(x=>!x||!Number.isFinite(x.weight)||x.weight<=0||x.weight>500)||raw.pausedAt!==undefined&&!Number.isFinite(raw.pausedAt))return null;
+  const timingValid=raw.exerciseId==='getup'?Number.isInteger(raw.work)&&raw.work>=15&&raw.work<=300&&raw.ratio===0:['swing','snatch'].includes(raw.exerciseId)&&raw.work===(raw.exerciseId==='swing'?18:22)&&[1,2,3].includes(raw.ratio);
+  if(!timingValid||!Number.isFinite(raw.startedAt)||!Array.isArray(raw.sets)||raw.sets.length<1||raw.sets.length>5||raw.sets.some(x=>!x||!Number.isFinite(x.weight)||x.weight<=0||x.weight>500)||raw.pausedAt!==undefined&&!Number.isFinite(raw.pausedAt))return null;
   const extra={};for(const [k,v]of Object.entries(raw.extra||{}))if(Number.isInteger(Number(k))&&Number(k)>=0&&Number(k)<raw.sets.length*2&&Number.isFinite(v)&&v>=0)extra[k]=v;
   return {...raw,extra};
  }

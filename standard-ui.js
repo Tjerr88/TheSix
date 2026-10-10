@@ -4,6 +4,7 @@ function standardPlan(){return isSkippingProgressToday()?[{index:1,weight:Standa
 function assessment(){return standardPlan().every(row=>isLastSetChecked(standardFocus().id,row.index))?'achieved':'repeat';}
 function renderStandardSettings(){
  const s=state.standard;
+ document.getElementById('getupInterval').value=s.getupInterval;
  document.querySelector('#tpPanel > h2').textContent=s.setupRequired?'Set up your training':'Training';
  document.getElementById('programWeights').hidden=s.setupRequired;
  document.getElementById('liftProgress').hidden=s.setupRequired;
@@ -28,6 +29,7 @@ function standardWorkout(){
  const base='<article class="workout-card panel"><div class="check-list">'+getCurrentWorkout().slice(0,5).map(renderBaseExercise).join('')+'</div></article>';
  const last='<article class="workout-card panel"><h2>'+e.name+'</h2><p class="small-copy">'+e.reps+' · '+(isSkippingProgressToday()?'Easy practice':standardStepLabel(e.id))+'</p>'+
  (ballistic?'<button class="secondary" data-start-interval="'+e.id+'">Start intervals · 1:'+state.standard.ratios[e.id]+'</button><p class="small-copy">'+(e.id==='swing'?18:22)+' sec work · '+((e.id==='swing'?18:22)*state.standard.ratios[e.id])+' sec rest. Alternate sides.</p>':'')+
+ (e.id==='getup'?'<button class="secondary" data-start-interval="getup">Start intervals · '+state.standard.getupInterval+' sec</button><p class="small-copy">'+(plan.length*2)+' intervals · alternate sides. One Get-Up, then rest until the beep.</p>':'')+
  plan.map(set=>renderFocusSet(e,set,ballistic)).join('')+
  '<p class="small-copy">Log controlled reps. Full set fills both sides where shown.</p></article>';
  els.workoutList.innerHTML=CompactUI.workout(base,last);
@@ -48,21 +50,22 @@ function standardProgress(){
  els.repeatBtn.disabled=state.standard.setupRequired;els.resetCountersBtn.disabled=state.standard.setupRequired||easy;els.resetCountersBtn.textContent='Easy practice today';els.undoBtn.disabled=!state.undo;
 }
 function saveStandardSession(){
+ if(doneForToday())return false;
  if(day7Active())return finishDay7(false);
  if(!standardCompletion().complete)return false;
  rememberUndo('session');
- if(isSkippingProgressToday()){state.skipProgressDay.completed=true;state.lastTrainingDate=getLocalDateKey();clearRestTimerSilently();saveState();render();return true;}
+ if(isSkippingProgressToday()){state.skipProgressDay.completed=true;state.lastTrainingDate=getLocalDateKey();markDoneToday();clearRestTimerSilently();saveState();render();return true;}
  SkillPractice.close(state.skillPractice);
  const e=standardFocus();Standard.record(state.standard,e.id,assessment()==='achieved',{date:getLocalDateKey(),session:getSessionKey(),reps:focusRepSnapshot(),checked:standardPlan().filter(x=>isLastSetChecked(e.id,x.index)).map(x=>x.index)});
  state.kbWeight=state.standard.base;state.lastTrainingDate=getLocalDateKey();markSessionSuccessful();
  if(isWeekComplete()){const cycle=getWeekKey();advanceWeekOrPhase();state.standard.cycle++;if(state.day7.enabled)state.day7.pending=cycle;}else moveToNextSessionOnly();
- clearRestTimerSilently();advanceLesson();saveState();render();toast('Session saved.');setTimeout(maybeOfferEscape,0);return true;
+ clearRestTimerSilently();advanceLesson();markDoneToday();saveState();render();toast('Session saved.');setTimeout(maybeOfferEscape,0);return true;
 }
 function startIntervals(id){
- if(day7Active()||state.standard.setupRequired||id!==standardFocus().id||!['swing','snatch'].includes(id))return;
+ if(day7Active()||state.standard.setupRequired||id!==standardFocus().id||!['swing','snatch','getup'].includes(id))return;
  if(state.restTimer&&!confirm('Replace the current timer?'))return;
- const now=Date.now(),work=id==='swing'?18:22,sets=standardPlan();
- state.restTimer={mode:'interval',exerciseId:id,sets,work,ratio:state.standard.ratios[id],extra:{},startedAt:now,endsAt:now+sets.length*2*work*(1+state.standard.ratios[id])*1000,seconds:sets.length*2*work*(1+state.standard.ratios[id]),lastCue:'0-work'};
+ const now=Date.now(),work=id==='getup'?state.standard.getupInterval:id==='swing'?18:22,ratio=id==='getup'?0:state.standard.ratios[id],sets=standardPlan();
+ state.restTimer={mode:'interval',exerciseId:id,sets,work,ratio,extra:{},startedAt:now,endsAt:now+sets.length*2*work*(1+ratio)*1000,seconds:sets.length*2*work*(1+ratio),lastCue:'0-work'};
  saveState();render();scheduleRestTick();requestWakeLock();beep();
 }
 function intervalRemaining(){return Standard.frame(state.restTimer).totalRemaining;}
@@ -72,12 +75,13 @@ function intervalTick(){
 }
 function renderIntervalTimer(){
  const t=state.restTimer,f=Standard.frame(t);els.timerPanel.classList.toggle('show',!f.done);
- els.timerLabel.textContent=f.done?'Intervals complete':(t.pausedAt?'Paused · ':f.phase==='work'?'Work · ':'Rest · ')+'Set '+f.set+' · '+f.side+' · '+f.weight+' kg';els.timerTime.textContent=formatTime(f.remaining);els.cancelTimerBtn.textContent='Stop';
+ els.timerLabel.textContent=f.done?'Intervals complete':(t.pausedAt?'Paused · ':t.exerciseId==='getup'?'Get-Up · ':f.phase==='work'?'Work · ':'Rest · ')+(t.exerciseId==='getup'?'Interval '+(f.index+1)+' / '+(t.sets.length*2):'Set '+f.set)+' · '+f.side+' · '+f.weight+' kg';els.timerTime.textContent=formatTime(f.remaining);els.cancelTimerBtn.textContent='Stop';
  document.getElementById('pauseIntervalBtn').hidden=false;document.getElementById('pauseIntervalBtn').textContent=t.pausedAt?'Resume':'Pause';
  document.getElementById('extraIntervalBtn').hidden=f.phase!=='rest';
 }
 function setupStandardUI(){
  els.workoutList.addEventListener('click',handleFocusReps);
+ document.getElementById('getupInterval').addEventListener('change',event=>{const seconds=Number(event.target.value);if(!Number.isInteger(seconds)||seconds<15||seconds>300){event.target.value=state.standard.getupInterval;toast('Choose 15–300 seconds.');return;}state.standard.getupInterval=seconds;saveState();render();});
  document.getElementById('trainingCode').previousElementSibling.textContent='Stage';document.getElementById('weekLabel').previousElementSibling.textContent='Cycle';
  const group=document.createElement('button');group.id='groupAdvanceBtn';group.className='secondary';group.type='button';group.textContent='All six ready · next level';els.completedBtn.after(group);
  group.addEventListener('click',()=>{
@@ -91,8 +95,8 @@ function setupStandardUI(){
   const base=Number(document.getElementById('baseWeight').value),next=Number(document.getElementById('nextWeight').value),mode=document.getElementById('startMode').value;
   if(!Number.isFinite(base)||base<=0||!Number.isFinite(next)||next<=base||next>500){toast('Choose a positive weight and a higher target.');return;}
   rememberUndo('program setup');const old=state.standard;
-  state.standard=Standard.normalize({base,next,stage:mode,steps:Object.fromEntries(Standard.ids.map(id=>[id,mode==='baseline'?5:1])),ratios:old.ratios,history:old.history,revision:old.revision+1,setupRequired:false});
-  SkillPractice.close(state.skillPractice);state.kbWeight=base;state.phase++;state.week=1;state.session=1;state.day7.pending=null;state.skipProgressDay=null;clearRestTimerSilently();saveState();render();switchView('train');toast('Training is ready.');
+  state.standard=Standard.normalize({base,next,stage:mode,steps:Object.fromEntries(Standard.ids.map(id=>[id,mode==='baseline'?5:1])),ratios:old.ratios,getupInterval:old.getupInterval,history:old.history,revision:old.revision+1,setupRequired:false});
+  state.doneToday='';nextSessionPreviewDate='';SkillPractice.close(state.skillPractice);state.kbWeight=base;state.phase++;state.week=1;state.session=1;state.day7.pending=null;state.skipProgressDay=null;clearRestTimerSilently();saveState();render();switchView('train');toast('Training is ready.');
  });
  document.getElementById('resetProgramBtn').addEventListener('click',()=>{if(!confirm('Choose a new starting point? Saved results stay in your backup.'))return;rememberUndo('new starting point');state.standard.setupRequired=true;clearRestTimerSilently();saveState();render();});
  for(const id of ['swing','snatch'])document.getElementById(id+'Ratio').addEventListener('change',event=>{const ratio=Number(event.target.value);if(![1,2,3].includes(ratio))return;state.standard.ratios[id]=ratio;saveState();render();});
